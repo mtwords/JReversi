@@ -1,9 +1,6 @@
 .metadata/
-.classpath
 JReversi/target/
 JReversi/build/
-JReversi/.classpath
-JReversi/.project
 JReversi/.settings/
 bin/
 ZKs/
