@@ -1,0 +1,7 @@
+.metadata/
+JReversi/target/
+JReversi/build/
+JReversi/.settings/
+bin/
+ZKs/
+

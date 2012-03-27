@@ -1,0 +1,14 @@
+JReversi
+-----------
+A reversi (also known as Othello) game.
+
+Written by Oli and René.
+
+Import into Eclipse IDE
+-----------------------
+Using Import Wizard: "File" -> "Import..." -> "Existings Projects into Workspace" then select root folder "JReversi"
+
+Play the game
+--------------
+Start the StarterApplet
+
