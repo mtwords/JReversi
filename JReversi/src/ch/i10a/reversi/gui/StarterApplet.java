@@ -48,7 +48,6 @@ public class StarterApplet extends JApplet {
 		private void initComponents() {
 			setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 			setSize(new Dimension(8 * 50, 25));
-			setPreferredSize(getSize());
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
 
@@ -78,7 +77,6 @@ public class StarterApplet extends JApplet {
 		private void initComponents() {
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			setSize(new Dimension(25, 8 * 50));
-			setPreferredSize(getSize());
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
 
