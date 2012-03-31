@@ -140,11 +140,23 @@ public class StarterApplet extends JApplet {
 			setBackground(Color.lightGray);
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
-
 			add(GuiUtil.getLabel("Player 1",300, 1 * 25));
 			
 			
 		}
+		public void paint(Graphics g) {
+			super.paint(g);
+			
+			//Put in a switch. If Player 2 is on, draw the Rectangle
+			g.setColor(Color.RED);
+			g.fillRect(0, 0, 50, 50);
+			//end switch
+			
+			g.setColor(Color.BLACK);
+			g.fillOval(4, 4, 40, 40);
+			
+		}
+		
 
 	}
 	
@@ -154,8 +166,6 @@ public class StarterApplet extends JApplet {
 	 * Player Two (White Player)
 	 */
 	private class PlayerTwoInfoPane extends JPanel {
-
-		int value = -1;
 		
 		public PlayerTwoInfoPane() {
 			initComponents();
@@ -169,6 +179,23 @@ public class StarterApplet extends JApplet {
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
 			add(GuiUtil.getLabel("Player 2",300, 1 * 25));
+		}
+		
+		public void paint(Graphics g) {
+			super.paint(g);
+			
+			//Put in a switch. If Player 2 is on, draw the Rectangle
+			g.setColor(Color.RED);
+			g.fillRect(0, 0, 50, 50);
+			//end switch
+			
+			g.setColor(Color.BLACK);
+			g.drawOval(4, 4, 40, 40);
+			g.setColor(Color.WHITE);
+			g.fillOval(4, 4, 40, 40);
+			
+			
+
 			
 			
 		}
