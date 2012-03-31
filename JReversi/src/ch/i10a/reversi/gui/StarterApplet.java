@@ -1,12 +1,16 @@
 package ch.i10a.reversi.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JApplet;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 
 /**
  * Starter class of the game. It is implemented as a JApplet,
@@ -22,6 +26,7 @@ public class StarterApplet extends JApplet {
 		add(new LetterPane(), BorderLayout.NORTH);
 		add(new CipherPane(), BorderLayout.WEST);
 		add(board, BorderLayout.CENTER);
+		add(new GeneralInfoPane(), BorderLayout.EAST);
 	}
 
 	/**
@@ -31,8 +36,9 @@ public class StarterApplet extends JApplet {
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		setSize(new Dimension(25 + (8 * Field.WIDTH), 25 + (8 * Field.WIDTH)));
+		setSize(new Dimension(325 + (8 * Field.WIDTH), 25 + (8 * Field.WIDTH)));
 	}
+	
 
 	// --------------- inner classes ------------------
 	/**
@@ -91,4 +97,84 @@ public class StarterApplet extends JApplet {
 		}
 
 	}
+	
+	/**
+	 * A JPanel, which contains the two Informations for 
+	 * the Players. The Player that's on has a Frame
+	 * Around his Info Pane
+	 */
+	private class GeneralInfoPane extends JPanel {
+
+		public GeneralInfoPane() {
+			initComponents();
+		}
+
+		private void initComponents() {
+			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+			setSize(new Dimension(300, 4 * 50));
+			setMaximumSize(getSize());
+			setMinimumSize(getSize());
+
+			add(new PlayerOneInfoPane(), BorderLayout.WEST); //Info Pane Player One
+			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
+			add(new PlayerTwoInfoPane(), BorderLayout.WEST); //Info Pane Player Two
+			
+		}
+
+	}
+	
+	
+	/**
+	 * A JPanel, which contains Informations for 
+	 * Player One (Black Player)
+	 */
+	private class PlayerOneInfoPane extends JPanel {
+
+		public PlayerOneInfoPane() {
+			initComponents();
+		}
+
+		private void initComponents() {
+			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+			setSize(new Dimension(300, 2 * 50));
+			setBackground(Color.lightGray);
+			setMaximumSize(getSize());
+			setMinimumSize(getSize());
+
+			add(GuiUtil.getLabel("Player 1",300, 1 * 25));
+			
+			
+		}
+
+	}
+	
+	
+	/**
+	 * A JPanel, which contains Informations for 
+	 * Player Two (White Player)
+	 */
+	private class PlayerTwoInfoPane extends JPanel {
+
+		int value = -1;
+		
+		public PlayerTwoInfoPane() {
+			initComponents();
+			
+		}
+
+		private void initComponents() {
+			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+			setSize(new Dimension(300, 2 * 50));
+			setBackground(Color.lightGray);
+			setMaximumSize(getSize());
+			setMinimumSize(getSize());
+			add(GuiUtil.getLabel("Player 2",300, 1 * 25));
+			
+			
+		}
+
+	}
+	
+	
+	
 }
