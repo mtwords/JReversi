@@ -50,6 +50,7 @@ public class Field extends JPanel {
 			super.mouseClicked(e);
 			// TODO value = -1 / 1;
 			System.out.println(value);
+			
 		}
 	}
 }
