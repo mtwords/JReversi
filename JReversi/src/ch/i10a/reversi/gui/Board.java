@@ -483,7 +483,7 @@ public class Board extends JPanel {
 			field = getNeighbourBottom(field);
 			if (field.getValue() == player.getValue()){
 				hit = true;
-				System.out.println("hit");
+				//System.out.println("hit");
 			}
 		}
 		return hit;
@@ -512,7 +512,7 @@ public class Board extends JPanel {
 			field = getNeighbourBottomLeft(field);
 			if (field.getValue() == player.getValue()){
 				hit = true;
-				System.out.println("hit");
+				//System.out.println("hit");
 			}
 		}
 		return hit;
@@ -541,12 +541,13 @@ public class Board extends JPanel {
 			field = getNeighbourLeft(field);
 			if (field.getValue() == player.getValue()){
 				hit = true;
-				System.out.println("hit");
+				//System.out.println("hit");
 			}
 		}
 		return hit;
 	}
 	
+
 	/**
 	 * Returns true if hit(s) are possible towards the Top Left.
 	 * Example (a is the active field, r is the place the enemy is, i is where your stone is):
@@ -570,7 +571,7 @@ public class Board extends JPanel {
 			field = getNeighbourTopLeft(field);
 			if (field.getValue() == player.getValue()){
 				hit = true;
-				System.out.println("hit");
+				//System.out.println("hit");
 			}
 		}
 		return hit;
@@ -599,7 +600,7 @@ public class Board extends JPanel {
 			field = getNeighbourTop(field);
 			if (field.getValue() == player.getValue()){
 				hit = true;
-				System.out.println("hit");
+				//System.out.println("hit");
 			}
 		}
 		return hit;
@@ -628,11 +629,14 @@ public class Board extends JPanel {
 			field = getNeighbourTopRight(field);
 			if (field.getValue() == player.getValue()){
 				hit = true;
-				System.out.println("hit");
+				//System.out.println("hit");
 			}
 		}
 		return hit;
 	}
+	
+	
+	
 	
 	/**
 	 * Returns true if hit(s) are possible towards the  right.
@@ -655,7 +659,7 @@ public class Board extends JPanel {
 			field = getNeighbourRight(field);
 			if (field.getValue() == player.getValue()){
 				hit = true;
-				System.out.println("hit");
+				//System.out.println("hit");
 			}
 		}
 		return hit;
@@ -684,10 +688,77 @@ public class Board extends JPanel {
 			field = getNeighbourBottomRight(field);
 			if (field.getValue() == player.getValue()){
 				hit = true;
-				System.out.println("hit");
+				//System.out.println("hit");
 			}
 		}
 		return hit;
+	}
+
+	/**
+	 * Returns true if hit(s) are possible 
+	 * Example (a is the active field, r is the place the enemy is, i is where your stone is):
+	 * |-----|-----|-----|-----|
+	 * |  a  |     |     |     |
+	 * |-----|-----|-----|-----|
+	 * |     |  r  |     |     |
+	 * |-----|-----|-----|-----|
+	 * |     |     |  r  |     |
+	 * |-----|-----|-----|-----|
+	 * |     |     |     |  i  |
+	 * |-----|-----|-----|-----|
+	 * @return false if no stones can be hitten
+	 */
+	public boolean checkHit(Field field, PlayerI player){
+		boolean hit = false;
+		if(checkBottomHit(field, player)){
+			return true;
+		}
+		if(checkBottomLeftHit(field, player)){
+			return true;
+		}
+		if(checkLeftHit(field, player)){
+			return true;
+		}
+		if(checkTopLeftHit(field, player)){
+			return true;
+		}
+		if(checkTopHit(field, player)){
+			return true;
+		}
+		if(checkTopRightHit(field, player)){
+			return true;
+		}
+		if(checkRightHit(field, player)){
+			return true;
+		}
+		if(checkBottomRightHit(field, player)){
+			return true;
+		}
+		return hit;
+	}
+	
+	/**
+	 * Returns a MovieList, which represents the beaten stones in bottom direction 
+	 * @return MovieList of beaten stones
+	 */
+	
+	public MoveList<Move> hitBottom(Field field, PlayerI player){
+		MoveList<Move> hitMoves = new MoveList<Move>();
+		//If the neighbour is an enemy, iterate towards direction till an own stone appears
+		if(checkBottomHit(field, player)){
+			while(checkNeighbourEnemiesBottom(field, player)){
+				hitMoves.add(Move.getMove(field.getRowNum(), field.getColNum()));
+				field = getNeighbourBottom(field);
+			}
+		}
+
+		int j = 0;
+		while (j < hitMoves.size()) {
+			System.out.println(hitMoves.get(j));
+			j++;
+		}
+
+		return hitMoves;	
 	}
 
 
@@ -705,15 +776,19 @@ public class Board extends JPanel {
 			if(activeField.getValue() == 0){
 				//check on enemies in the surrounding fields, no enemy, no further check
 				if(checkNeighbourEnemies(activeField, activePlayer)){
-					checkBottomRightHit(activeField, activePlayer);
-					// updates the value depending on the player
-					activeField.setValue(activePlayer.getColor() == Color.WHITE ? -1 : 1);
-					// add this move to list
-					moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
-					// updates
-					activeField.repaint();
-					infoPane.repaint();
-					PlayerManager.nextPlayer();
+					if(checkHit(activeField, activePlayer)){
+						// updates the value depending on the player
+						activeField.setValue(activePlayer.getColor() == Color.WHITE ? -1 : 1);
+						// add this move to list
+						moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
+						hitBottom(activeField,activePlayer);
+						
+						
+						// updates
+						activeField.repaint();
+						infoPane.repaint();
+						PlayerManager.nextPlayer();
+					}
 				}
 			}
 			
