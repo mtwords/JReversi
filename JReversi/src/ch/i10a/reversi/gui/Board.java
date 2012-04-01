@@ -250,63 +250,120 @@ public class Board extends JPanel {
 	 * |-----|-----|-----|
 	 * @return false no neighbour is an enemy
 	 */
-	public boolean checkNeighbourEnemies(Field field, PlayerI player){
-		boolean enemysDetected = false;
+	public boolean checkNeighbourEnemiesBottom(Field field, PlayerI player){
+		boolean enemyDetected = false;
 		
-		//Check in every neighbour, if it is an enemy. If its an enemy, detection is positive.
+		//Check in on every neighbour, if it is an enemy. If its an enemy, detection is positive.
 		//Sysouts commented out. To Debug, uncomment
 		if(getNeighbourBottom(field) != null){
 			if(getNeighbourBottom(field).getValue() != player.getValue() && getNeighbourBottom(field).getValue() != 0){
-				enemysDetected = true;
+				enemyDetected = true;
 				//System.out.println("1");
 			}
 		}
+		return enemyDetected;
+	}
+	public boolean checkNeighbourEnemiesBottomLeft(Field field, PlayerI player){
+		boolean enemyDetected = false;
 		if(getNeighbourBottomLeft(field) != null){
 			if(getNeighbourBottomLeft(field).getValue() != player.getValue() && getNeighbourBottomLeft(field).getValue() != 0){
-				enemysDetected = true;
+				enemyDetected = true;
 				//System.out.println("2");
 			}
 		}
+		return enemyDetected;
+	}
+	public boolean checkNeighbourEnemiesLeft(Field field, PlayerI player){
+		boolean enemyDetected = false;
 		if(getNeighbourLeft(field) != null){
 			if(getNeighbourLeft(field).getValue() != player.getValue() && getNeighbourLeft(field).getValue() != 0){
-				enemysDetected = true;
+				enemyDetected = true;
 				//System.out.println("3");
 			}
 		}
+		return enemyDetected;
+	}
+	public boolean checkNeighbourEnemiesTopLeft(Field field, PlayerI player){
+		boolean enemyDetected = false;
 		if(getNeighbourTopLeft(field) != null){
 			if(getNeighbourTopLeft(field).getValue() != player.getValue() && getNeighbourTopLeft(field).getValue() != 0){
-				enemysDetected = true;
+				enemyDetected = true;
 				//System.out.println("4");
 			}
 		}
-
+		return enemyDetected;
+	}
+	public boolean checkNeighbourEnemiesTop(Field field, PlayerI player){
+		boolean enemyDetected = false;
 		if(getNeighbourTop(field) != null){
 			if(getNeighbourTop(field).getValue() != player.getValue() && getNeighbourTop(field).getValue() != 0){
-				enemysDetected = true;
+				enemyDetected = true;
 				//System.out.println("5");
 			}
 		}
+		return enemyDetected;
+	}
+	public boolean checkNeighbourEnemiesTopRight(Field field, PlayerI player){
+		boolean enemyDetected = false;
 		if(getNeighbourTopRight(field) != null){
 			if(getNeighbourTopRight(field).getValue() != player.getValue() && getNeighbourTopRight(field).getValue() != 0){
-				enemysDetected = true;
+				enemyDetected = true;
 				//System.out.println("6");
 			}
 		}
+		return enemyDetected;
+	}
+	public boolean checkNeighbourEnemiesRight(Field field, PlayerI player){
+		boolean enemyDetected = false;
 		if(getNeighbourRight(field) != null){
 			if(getNeighbourRight(field).getValue() != player.getValue() && getNeighbourRight(field).getValue() != 0){
-				enemysDetected = true;
+				enemyDetected = true;
 				//System.out.println("7");
 			}
 		}
+		return enemyDetected;
+	}
+	public boolean checkNeighbourEnemiesBottomRight(Field field, PlayerI player){
+		boolean enemyDetected = false;
 		if(getNeighbourBottomRight(field) != null){
 			if(getNeighbourBottomRight(field).getValue() != player.getValue() && getNeighbourBottomRight(field).getValue() != 0){
-				enemysDetected = true;
+				enemyDetected = true;
 				//System.out.println("8");
 			}
 		}
-
-		return enemysDetected;
+		return enemyDetected;
 	}
+	public boolean checkNeighbourEnemies(Field field, PlayerI player){
+		boolean enemiesDetected = false;
+		if(checkNeighbourEnemiesBottom(field, player)){
+			return true;
+		}
+		if(checkNeighbourEnemiesBottomLeft(field, player)){
+			return true;
+		}
+		if(checkNeighbourEnemiesLeft(field, player)){
+			return true;
+		}
+		if(checkNeighbourEnemiesTopLeft(field, player)){
+			return true;
+		}
+		if(checkNeighbourEnemiesTop(field, player)){
+			return true;
+		}
+		if(checkNeighbourEnemiesTopRight(field, player)){
+			return true;
+		}
+		if(checkNeighbourEnemiesRight(field, player)){
+			return true;
+		}
+		if(checkNeighbourEnemiesBottomRight(field, player)){
+			return true;
+		}
+		
+		return enemiesDetected;
+	}
+
+
 
 	// ----------------- inner classes --------------------
 	private class MouseListener extends MouseAdapter {
@@ -319,7 +376,7 @@ public class Board extends JPanel {
 			
 			//check on empty Field
 			if(activeField.getValue() == 0){
-				//check on enemies in the surrounding fields
+				//check on enemies in the surrounding fields, no enemy, no further check
 				if(checkNeighbourEnemies(activeField, activePlayer)){
 					// updates the value depending on the player
 					activeField.setValue(activePlayer.getColor() == Color.WHITE ? -1 : 1);
