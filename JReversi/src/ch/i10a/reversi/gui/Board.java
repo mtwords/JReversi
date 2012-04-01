@@ -239,6 +239,184 @@ public class Board extends JPanel {
 	}
 	
 	/**
+	 * Returns true if the bottom neighbour is an enemy.
+	 * Example (a is the active field, r is the place an enemy could be on):
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * |     |  a  |     |
+	 * |-----|-----|-----|
+	 * |     |  r  |     |
+	 * |-----|-----|-----|
+	 * @return false no neighbour is an enemy at the bottom
+	 */
+	public boolean checkNeighbourEnemiesBottom(Field field, PlayerI player){
+		boolean enemyDetected = false;
+		if(getNeighbourBottom(field) != null){
+			if(getNeighbourBottom(field).getValue() != player.getValue() && getNeighbourBottom(field).getValue() != 0){
+				enemyDetected = true;
+				//System.out.println("1");
+			}
+		}
+		return enemyDetected;
+	}
+	/**
+	 * Returns true if the bottom left neighbour is an enemy.
+	 * Example (a is the active field, r is the place an enemy could be on):
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * |     |  a  |     |
+	 * |-----|-----|-----|
+	 * |  r  |     |     |
+	 * |-----|-----|-----|
+	 * @return false no neighbour is an enemy at the bottom left
+	 */
+	public boolean checkNeighbourEnemiesBottomLeft(Field field, PlayerI player){
+		boolean enemyDetected = false;
+		if(getNeighbourBottomLeft(field) != null){
+			if(getNeighbourBottomLeft(field).getValue() != player.getValue() && getNeighbourBottomLeft(field).getValue() != 0){
+				enemyDetected = true;
+				//System.out.println("2");
+			}
+		}
+		return enemyDetected;
+	}
+	/**
+	 * Returns true if the left neighbour is an enemy.
+	 * Example (a is the active field, r is the place an enemy could be on):
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * |  r  |  a  |     |
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * @return false no neighbour is an enemy at the left
+	 */
+	public boolean checkNeighbourEnemiesLeft(Field field, PlayerI player){
+		boolean enemyDetected = false;
+		if(getNeighbourLeft(field) != null){
+			if(getNeighbourLeft(field).getValue() != player.getValue() && getNeighbourLeft(field).getValue() != 0){
+				enemyDetected = true;
+				//System.out.println("3");
+			}
+		}
+		return enemyDetected;
+	}
+	/**
+	 * Returns true if the top left neighbour is an enemy.
+	 * Example (a is the active field, r is the place an enemy could be on):
+	 * |-----|-----|-----|
+	 * |  r  |     |     |
+	 * |-----|-----|-----|
+	 * |     |  a  |     |
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * @return false no neighbour is an enemy at the top left
+	 */
+	public boolean checkNeighbourEnemiesTopLeft(Field field, PlayerI player){
+		boolean enemyDetected = false;
+		if(getNeighbourTopLeft(field) != null){
+			if(getNeighbourTopLeft(field).getValue() != player.getValue() && getNeighbourTopLeft(field).getValue() != 0){
+				enemyDetected = true;
+				//System.out.println("4");
+			}
+		}
+		return enemyDetected;
+	}
+	/**
+	 * Returns true if the top neighbour is an enemy.
+	 * Example (a is the active field, r is the place an enemy could be on):
+	 * |-----|-----|-----|
+	 * |     |  r  |     |
+	 * |-----|-----|-----|
+	 * |     |  a  |     |
+	 * |-----|-----|-----|
+	 * |     |  r  |     |
+	 * |-----|-----|-----|
+	 * @return false no neighbour is an enemy at the top
+	 */
+	public boolean checkNeighbourEnemiesTop(Field field, PlayerI player){
+		boolean enemyDetected = false;
+		if(getNeighbourTop(field) != null){
+			if(getNeighbourTop(field).getValue() != player.getValue() && getNeighbourTop(field).getValue() != 0){
+				enemyDetected = true;
+				//System.out.println("5");
+			}
+		}
+		return enemyDetected;
+	}
+	/**
+	 * Returns true if the top right neighbour is an enemy.
+	 * Example (a is the active field, r is the place an enemy could be on):
+	 * |-----|-----|-----|
+	 * |     |     |  r  |
+	 * |-----|-----|-----|
+	 * |     |  a  |     |
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * @return false no neighbour is an enemy at the top right 
+	 */
+	public boolean checkNeighbourEnemiesTopRight(Field field, PlayerI player){
+		boolean enemyDetected = false;
+		if(getNeighbourTopRight(field) != null){
+			if(getNeighbourTopRight(field).getValue() != player.getValue() && getNeighbourTopRight(field).getValue() != 0){
+				enemyDetected = true;
+				//System.out.println("6");
+			}
+		}
+		return enemyDetected;
+	}
+	/**
+	 * Returns true if the right neighbour is an enemy.
+	 * Example (a is the active field, r is the place an enemy could be on):
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * |     |  a  |  r  |
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * @return false no neighbour is an enemy at the bottom right
+	 */
+	public boolean checkNeighbourEnemiesRight(Field field, PlayerI player){
+		boolean enemyDetected = false;
+		if(getNeighbourRight(field) != null){
+			if(getNeighbourRight(field).getValue() != player.getValue() && getNeighbourRight(field).getValue() != 0){
+				enemyDetected = true;
+				//System.out.println("7");
+			}
+		}
+		return enemyDetected;
+	}
+	/**
+	 * Returns true if the bottom right neighbour is an enemy.
+	 * Example (a is the active field, r is the place an enemy could be on):
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * |     |  a  |     |
+	 * |-----|-----|-----|
+	 * |     |     |  r  |
+	 * |-----|-----|-----|
+	 * @return false no neighbour is an enemy at the bottom  right
+	 */
+	public boolean checkNeighbourEnemiesBottomRight(Field field, PlayerI player){
+		boolean enemyDetected = false;
+		if(getNeighbourBottomRight(field) != null){
+			if(getNeighbourBottomRight(field).getValue() != player.getValue() && getNeighbourBottomRight(field).getValue() != 0){
+				enemyDetected = true;
+				//System.out.println("8");
+			}
+		}
+		return enemyDetected;
+	}
+	
+	
+	/**
 	 * Returns true if a neighbour is an enemy.
 	 * Example (a is the active field, r is any place an enemy could be on):
 	 * |-----|-----|-----|
@@ -250,89 +428,6 @@ public class Board extends JPanel {
 	 * |-----|-----|-----|
 	 * @return false no neighbour is an enemy
 	 */
-	public boolean checkNeighbourEnemiesBottom(Field field, PlayerI player){
-		boolean enemyDetected = false;
-		
-		//Check in on every neighbour, if it is an enemy. If its an enemy, detection is positive.
-		//Sysouts commented out. To Debug, uncomment
-		if(getNeighbourBottom(field) != null){
-			if(getNeighbourBottom(field).getValue() != player.getValue() && getNeighbourBottom(field).getValue() != 0){
-				enemyDetected = true;
-				//System.out.println("1");
-			}
-		}
-		return enemyDetected;
-	}
-	public boolean checkNeighbourEnemiesBottomLeft(Field field, PlayerI player){
-		boolean enemyDetected = false;
-		if(getNeighbourBottomLeft(field) != null){
-			if(getNeighbourBottomLeft(field).getValue() != player.getValue() && getNeighbourBottomLeft(field).getValue() != 0){
-				enemyDetected = true;
-				//System.out.println("2");
-			}
-		}
-		return enemyDetected;
-	}
-	public boolean checkNeighbourEnemiesLeft(Field field, PlayerI player){
-		boolean enemyDetected = false;
-		if(getNeighbourLeft(field) != null){
-			if(getNeighbourLeft(field).getValue() != player.getValue() && getNeighbourLeft(field).getValue() != 0){
-				enemyDetected = true;
-				//System.out.println("3");
-			}
-		}
-		return enemyDetected;
-	}
-	public boolean checkNeighbourEnemiesTopLeft(Field field, PlayerI player){
-		boolean enemyDetected = false;
-		if(getNeighbourTopLeft(field) != null){
-			if(getNeighbourTopLeft(field).getValue() != player.getValue() && getNeighbourTopLeft(field).getValue() != 0){
-				enemyDetected = true;
-				//System.out.println("4");
-			}
-		}
-		return enemyDetected;
-	}
-	public boolean checkNeighbourEnemiesTop(Field field, PlayerI player){
-		boolean enemyDetected = false;
-		if(getNeighbourTop(field) != null){
-			if(getNeighbourTop(field).getValue() != player.getValue() && getNeighbourTop(field).getValue() != 0){
-				enemyDetected = true;
-				//System.out.println("5");
-			}
-		}
-		return enemyDetected;
-	}
-	public boolean checkNeighbourEnemiesTopRight(Field field, PlayerI player){
-		boolean enemyDetected = false;
-		if(getNeighbourTopRight(field) != null){
-			if(getNeighbourTopRight(field).getValue() != player.getValue() && getNeighbourTopRight(field).getValue() != 0){
-				enemyDetected = true;
-				//System.out.println("6");
-			}
-		}
-		return enemyDetected;
-	}
-	public boolean checkNeighbourEnemiesRight(Field field, PlayerI player){
-		boolean enemyDetected = false;
-		if(getNeighbourRight(field) != null){
-			if(getNeighbourRight(field).getValue() != player.getValue() && getNeighbourRight(field).getValue() != 0){
-				enemyDetected = true;
-				//System.out.println("7");
-			}
-		}
-		return enemyDetected;
-	}
-	public boolean checkNeighbourEnemiesBottomRight(Field field, PlayerI player){
-		boolean enemyDetected = false;
-		if(getNeighbourBottomRight(field) != null){
-			if(getNeighbourBottomRight(field).getValue() != player.getValue() && getNeighbourBottomRight(field).getValue() != 0){
-				enemyDetected = true;
-				//System.out.println("8");
-			}
-		}
-		return enemyDetected;
-	}
 	public boolean checkNeighbourEnemies(Field field, PlayerI player){
 		boolean enemiesDetected = false;
 		if(checkNeighbourEnemiesBottom(field, player)){
