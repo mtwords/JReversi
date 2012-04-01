@@ -237,6 +237,76 @@ public class Board extends JPanel {
 		}
 		return fields[activeFieldColNum - 1][activeFieldRowNum + 1];
 	}
+	
+	/**
+	 * Returns true if a neighbour is an enemy.
+	 * Example (a is the active field, r is any place an enemy could be on):
+	 * |-----|-----|-----|
+	 * |  r  |  r  |  r  |
+	 * |-----|-----|-----|
+	 * |  r  |  a  |  r  |
+	 * |-----|-----|-----|
+	 * |  r  |  r  |  r  |
+	 * |-----|-----|-----|
+	 * @return false no neighbour is an enemy
+	 */
+	public boolean checkNeighbourEnemies(Field field, PlayerI player){
+		boolean enemysDetected = false;
+		
+		//Check in every neighbour, if it is an enemy. If its an enemy, detection is positive.
+		//Sysouts commented out. To Debug, uncomment
+		if(getNeighbourBottom(field) != null){
+			if(getNeighbourBottom(field).getValue() != player.getValue() && getNeighbourBottom(field).getValue() != 0){
+				enemysDetected = true;
+				//System.out.println("1");
+			}
+		}
+		if(getNeighbourBottomLeft(field) != null){
+			if(getNeighbourBottomLeft(field).getValue() != player.getValue() && getNeighbourBottomLeft(field).getValue() != 0){
+				enemysDetected = true;
+				//System.out.println("2");
+			}
+		}
+		if(getNeighbourLeft(field) != null){
+			if(getNeighbourLeft(field).getValue() != player.getValue() && getNeighbourLeft(field).getValue() != 0){
+				enemysDetected = true;
+				//System.out.println("3");
+			}
+		}
+		if(getNeighbourTopLeft(field) != null){
+			if(getNeighbourTopLeft(field).getValue() != player.getValue() && getNeighbourTopLeft(field).getValue() != 0){
+				enemysDetected = true;
+				//System.out.println("4");
+			}
+		}
+
+		if(getNeighbourTop(field) != null){
+			if(getNeighbourTop(field).getValue() != player.getValue() && getNeighbourTop(field).getValue() != 0){
+				enemysDetected = true;
+				//System.out.println("5");
+			}
+		}
+		if(getNeighbourTopRight(field) != null){
+			if(getNeighbourTopRight(field).getValue() != player.getValue() && getNeighbourTopRight(field).getValue() != 0){
+				enemysDetected = true;
+				//System.out.println("6");
+			}
+		}
+		if(getNeighbourRight(field) != null){
+			if(getNeighbourRight(field).getValue() != player.getValue() && getNeighbourRight(field).getValue() != 0){
+				enemysDetected = true;
+				//System.out.println("7");
+			}
+		}
+		if(getNeighbourBottomRight(field) != null){
+			if(getNeighbourBottomRight(field).getValue() != player.getValue() && getNeighbourBottomRight(field).getValue() != 0){
+				enemysDetected = true;
+				//System.out.println("8");
+			}
+		}
+
+		return enemysDetected;
+	}
 
 	// ----------------- inner classes --------------------
 	private class MouseListener extends MouseAdapter {
@@ -246,15 +316,24 @@ public class Board extends JPanel {
 			super.mouseClicked(e);
 			activeField = (Field) e.getComponent();
 			activePlayer = PlayerManager.getActivePlayer();
-			// updates the value depending on the player
-			activeField.setValue(activePlayer.getColor() == Color.WHITE ? -1 : 1);
-			// add this move to list
-			moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
+			
+			//check on empty Field
+			if(activeField.getValue() == 0){
+				//check on enemies in the surrounding fields
+				if(checkNeighbourEnemies(activeField, activePlayer)){
+					// updates the value depending on the player
+					activeField.setValue(activePlayer.getColor() == Color.WHITE ? -1 : 1);
+					// add this move to list
+					moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
+					// updates
+					activeField.repaint();
+					infoPane.repaint();
+					PlayerManager.nextPlayer();
+				}
+			}
+			
 
-			// updates
-			activeField.repaint();
-			infoPane.repaint();
-			PlayerManager.nextPlayer();
+			
 		}
 
 		@Override

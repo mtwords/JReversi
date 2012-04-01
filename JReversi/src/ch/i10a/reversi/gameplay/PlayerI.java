@@ -13,5 +13,7 @@ public interface PlayerI {
 	public void move();
 
 	public Color getColor();
+	
+	public int getValue();
 
 }

@@ -5,15 +5,17 @@ import java.awt.Color;
 public class HumanPlayer implements PlayerI {
 
 	private Color color = null;
+	private int value = -1;
 
 	/**
 	 * Default color of a human player is white 
 	 */
 	public HumanPlayer() {
-		this(Color.WHITE);
+		color = Color.WHITE;
 	}
-	public HumanPlayer(Color color) {
+	public HumanPlayer(Color color, int value) {
 		this.color = color;
+		this.value = value;
 	}
 
 	@Override
@@ -25,4 +27,8 @@ public class HumanPlayer implements PlayerI {
 	public Color getColor() {
 		return color;
 	}
+	public int getValue() {
+		return value;
+	}
+
 }

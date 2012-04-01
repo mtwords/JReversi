@@ -14,7 +14,7 @@ public class PlayerManager {
 
 	static {
 		activePlayer = new HumanPlayer();
-		players = new PlayerI[] {activePlayer, new HumanPlayer(Color.BLACK)};
+		players = new PlayerI[] {activePlayer, new HumanPlayer(Color.BLACK, 1)};
 	}
 
 	public static PlayerI getActivePlayer() {
