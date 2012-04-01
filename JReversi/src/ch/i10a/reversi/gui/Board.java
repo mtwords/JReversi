@@ -1,9 +1,18 @@
 package ch.i10a.reversi.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
+
+import ch.i10a.reversi.gameplay.MoveList;
+import ch.i10a.reversi.gameplay.MoveList.Move;
+import ch.i10a.reversi.gameplay.PlayerI;
+import ch.i10a.reversi.gameplay.PlayerManager;
+import ch.i10a.reversi.gui.StarterApplet.GeneralInfoPane;
 
 /**
  * A JPanel which represents the Reversi board.
@@ -11,9 +20,16 @@ import javax.swing.JPanel;
  */
 public class Board extends JPanel {
 
-	private Field[][] fields;
+	private MouseListener mouseListener = new MouseListener();
+	private GeneralInfoPane infoPane;
 
-	public Board() {
+	private Field[][] fields;
+	private Field activeField = null;
+	private PlayerI activePlayer = null;
+	private MoveList<Move> moves = new MoveList<Move>();
+
+	public Board(GeneralInfoPane infoPane) {
+		this.infoPane = infoPane;
 		initFields();
 		initComponents();
 	}
@@ -22,13 +38,14 @@ public class Board extends JPanel {
 		fields = new Field[8][8];
 		for (int i = 0; i < fields.length; i++) {
 			for (int j = 0; j < fields[i].length; j++) {
+				int fieldValue = 0;
 				if ((i == 3 && j == 3) || (i == 4 && j == 4)) {
-					fields[j][i] = new Field(-1);
+					fieldValue = -1;
 				} else if ((i == 3 && j == 4) || (i == 4 && j == 3)) {
-					fields[j][i] = new Field(1);
-				} else {
-					fields[j][i] = new Field(0);
+					fieldValue = 1;
 				}
+				fields[j][i] = new Field(fieldValue, i, j);
+				fields[j][i].addMouseListener(mouseListener);
 			}
 		}
 	}
@@ -47,4 +64,212 @@ public class Board extends JPanel {
 		}
 	}
 	
+	// ----------------- helper methods --------------------
+	/**
+	 * Returns the neighbour top of the active field. If 
+	 * the field is at the top border of the board, this method will
+	 * return null.
+	 * Example (a is the active field, r is the one to be returned):
+	 * |-----|-----|-----|
+	 * |     |  r  |     |
+	 * |-----|-----|-----|
+	 * |     |  a  |     |
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * @return null if field falls out of board, the corresponding field otherwise
+	 */
+	public Field getNeighbourTop() {
+		int activeFieldRowNum = activeField.getRowNum();
+		if (activeFieldRowNum == 0) {
+			return null;
+		}
+		return fields[activeField.getColNum()][activeFieldRowNum - 1];
+	}
+	/**
+	 * Returns the neighbour bottom to the active field. If 
+	 * the field is at the bottom border of the board, this method will
+	 * return null.
+	 * Example (a is the active field, r is the one to be returned):
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * |     |  a  |     |
+	 * |-----|-----|-----|
+	 * |     |  r  |     |
+	 * |-----|-----|-----|
+	 * @return null if field falls out of board, the corresponding field otherwise
+	 */
+	public Field getNeighbourBottom() {
+		int activeFieldRowNum = activeField.getRowNum();
+		if (activeFieldRowNum == 7) {
+			return null;
+		}
+		return fields[activeField.getColNum()][activeFieldRowNum + 1];
+	}
+	/**
+	 * Returns the neighbour left to the active field. If 
+	 * the field is at the left border of the board, this method will
+	 * return null.
+	 * Example (a is the active field, r is the one to be returned):
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * |  r  |  a  |     |
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * @return null if field falls out of board, the corresponding field otherwise
+	 */
+	public Field getNeighbourLeft() {
+		int activeFieldColNum = activeField.getColNum();
+		if (activeFieldColNum == 0) {
+			return null;
+		}
+		return fields[activeFieldColNum - 1][activeField.getRowNum()];
+	}
+	/**
+	 * Returns the neighbour right to the active field. If 
+	 * the field is at the right border of the board, this method will
+	 * return null.
+	 * Example (a is the active field, r is the one to be returned):
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * |     |  a  |  r  |
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * @return null if field falls out of board, the corresponding field otherwise
+	 */
+	public Field getNeighbourRight() {
+		int activeFieldColNum = activeField.getColNum();
+		if (activeFieldColNum == 7) {
+			return null;
+		}
+		return fields[activeFieldColNum + 1][activeField.getRowNum()];
+	}
+	/**
+	 * Returns the neighbour top left to the active field. If 
+	 * the field is at the top or left border of the board, this method will
+	 * return null.
+	 * Example (a is the active field, r is the one to be returned):
+	 * |-----|-----|-----|
+	 * |  r  |     |     |
+	 * |-----|-----|-----|
+	 * |     |  a  |     |
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * @return null if field falls out of board, the corresponding field otherwise
+	 */
+	public Field getNeighbourTopLeft() {
+		int activeFieldColNum = activeField.getColNum();
+		int activeFieldRowNum = activeField.getRowNum();
+		if (activeFieldColNum == 0 || activeFieldRowNum == 0) {
+			return null;
+		}
+		return fields[activeFieldColNum - 1][activeFieldRowNum - 1];
+	}
+	/**
+	 * Returns the neighbour top right to the active field. If 
+	 * the field is at the right or top border of the board, this method will
+	 * return null.
+	 * Example (a is the active field, r is the one to be returned):
+	 * |-----|-----|-----|
+	 * |     |     |  r  |
+	 * |-----|-----|-----|
+	 * |     |  a  |     |
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * @return null if field falls out of board, the corresponding field otherwise
+	 */
+	public Field getNeighbourTopRight() {
+		int activeFieldColNum = activeField.getColNum();
+		int activeFieldRowNum = activeField.getRowNum();
+		if (activeFieldColNum == 7 || activeFieldRowNum == 0) {
+			return null;
+		}
+		return fields[activeFieldColNum + 1][activeFieldRowNum - 1];
+	}
+	/**
+	 * Returns the neighbour at bottom right to the active field. If 
+	 * the field is at the right or bottom border of the board, this method will
+	 * return null.
+	 * Example (a is the active field, r is the one to be returned):
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * |     |  a  |     |
+	 * |-----|-----|-----|
+	 * |     |     |  r  |
+	 * |-----|-----|-----|
+	 * @return null if field falls out of board, the corresponding field otherwise
+	 */
+	public Field getNeighbourBottomRight() {
+		int activeFieldColNum = activeField.getColNum();
+		int activeFieldRowNum = activeField.getRowNum();
+		if (activeFieldColNum == 7 || activeFieldRowNum == 7) {
+			return null;
+		}
+		return fields[activeFieldColNum + 1][activeFieldRowNum + 1];
+	}
+	/**
+	 * Returns the neighbour at bottom left to the active field. If 
+	 * the field is at the left or bottom border of the board, this method will
+	 * return null.
+	 * Example (a is the active field, r is the one to be returned):
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * |     |  a  |     |
+	 * |-----|-----|-----|
+	 * |  r  |     |     |
+	 * |-----|-----|-----|
+	 * @return null if field falls out of board, the corresponding field otherwise
+	 */
+	public Field getNeighbourBottomLeft() {
+		int activeFieldColNum = activeField.getColNum();
+		int activeFieldRowNum = activeField.getRowNum();
+		if (activeFieldColNum == 0 || activeFieldRowNum == 7) {
+			return null;
+		}
+		return fields[activeFieldColNum - 1][activeFieldRowNum + 1];
+	}
+
+	// ----------------- inner classes --------------------
+	private class MouseListener extends MouseAdapter {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			super.mouseClicked(e);
+			activeField = (Field) e.getComponent();
+			activePlayer = PlayerManager.getActivePlayer();
+			// updates the value depending on the player
+			activeField.setValue(activePlayer.getColor() == Color.WHITE ? -1 : 1);
+			// add this move to list
+			moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
+
+			// updates
+			activeField.repaint();
+			infoPane.repaint();
+			PlayerManager.nextPlayer();
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			super.mouseEntered(e);
+			activeField = (Field) e.getComponent();
+			activeField.setBackground(Color.YELLOW);
+			activeField.repaint();
+		}
+		@Override
+		public void mouseExited(MouseEvent e) {
+			super.mouseExited(e);
+			activeField = (Field) e.getComponent();
+			activeField.setBackground(Color.GREEN);
+			activeField.repaint();
+		}
+	}
 }

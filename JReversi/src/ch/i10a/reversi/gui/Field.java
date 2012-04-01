@@ -3,8 +3,6 @@ package ch.i10a.reversi.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -18,18 +16,21 @@ public class Field extends JPanel {
 	public static final int WIDTH = 50;
 
 	private int value;
+	private int rowNum;
+	private int colNum;
 
-	public Field(int value) {
+	public Field(int value, int rowNum, int colNum) {
 		this.value = value;
-		addMouseListener(new MouseListener());
+		this.rowNum = rowNum;
+		this.colNum = colNum;
+		setBackground(Color.GREEN);
+		setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+		setSize(new Dimension(WIDTH, WIDTH));
 	}
 
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		setBackground(Color.GREEN);
-		setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-		setSize(new Dimension(WIDTH, WIDTH));
 
 		if (value < 0) {
 			g.setColor(Color.BLACK);
@@ -42,15 +43,28 @@ public class Field extends JPanel {
 		}
 	}
 
-	// ----------------- inner classes --------------------
-	private class MouseListener extends MouseAdapter {
+	public int getValue() {
+		return value;
+	}
+	public void setValue(int value) {
+		this.value = value;
+	}
 
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			super.mouseClicked(e);
-			// TODO value = -1 / 1;
-			System.out.println(value);
-			
-		}
+	public int getRowNum() {
+		return rowNum;
+	}
+	public int getColNum() {
+		return colNum;
+	}
+
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer("Field:\n");
+		sb.append("value: " + value);
+		sb.append("\n");
+		sb.append("col: " + colNum);
+		sb.append("\n");
+		sb.append("row: " + rowNum);
+		return sb.toString();
 	}
 }

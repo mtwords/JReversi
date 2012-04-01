@@ -5,12 +5,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JApplet;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
+
+import ch.i10a.reversi.gameplay.MoveList;
+import ch.i10a.reversi.gameplay.PlayerManager;
 
 /**
  * Starter class of the game. It is implemented as a JApplet,
@@ -18,7 +18,8 @@ import javax.swing.border.BevelBorder;
  */
 public class StarterApplet extends JApplet {
 
-	Board board = new Board();
+	GeneralInfoPane infoPane = new GeneralInfoPane();
+	Board board = new Board(infoPane);
 
 	@Override
 	public void init() {
@@ -26,7 +27,7 @@ public class StarterApplet extends JApplet {
 		add(new LetterPane(), BorderLayout.NORTH);
 		add(new CipherPane(), BorderLayout.WEST);
 		add(board, BorderLayout.CENTER);
-		add(new GeneralInfoPane(), BorderLayout.EAST);
+		add(infoPane, BorderLayout.EAST);
 	}
 
 	/**
@@ -58,14 +59,9 @@ public class StarterApplet extends JApplet {
 			setMinimumSize(getSize());
 
 			add(GuiUtil.getLabel("", 25, 25));
-			add(GuiUtil.getXOrientedFieldLabel("a"));
-			add(GuiUtil.getXOrientedFieldLabel("b"));
-			add(GuiUtil.getXOrientedFieldLabel("c"));
-			add(GuiUtil.getXOrientedFieldLabel("d"));
-			add(GuiUtil.getXOrientedFieldLabel("e"));
-			add(GuiUtil.getXOrientedFieldLabel("f"));
-			add(GuiUtil.getXOrientedFieldLabel("g"));
-			add(GuiUtil.getXOrientedFieldLabel("h"));
+			for (int i = 0; i < MoveList.letters.length; i++) {
+				add(GuiUtil.getXOrientedFieldLabel(MoveList.letters[i]));
+			}
 		}
 
 	}
@@ -86,14 +82,10 @@ public class StarterApplet extends JApplet {
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
 
-			add(GuiUtil.getYOrientedFieldLabel("1"));
-			add(GuiUtil.getYOrientedFieldLabel("2"));
-			add(GuiUtil.getYOrientedFieldLabel("3"));
-			add(GuiUtil.getYOrientedFieldLabel("4"));
-			add(GuiUtil.getYOrientedFieldLabel("5"));
-			add(GuiUtil.getYOrientedFieldLabel("6"));
-			add(GuiUtil.getYOrientedFieldLabel("7"));
-			add(GuiUtil.getYOrientedFieldLabel("8"));
+			for (int i = 0; i < MoveList.numbers.length; i++) {
+				add(GuiUtil.getYOrientedFieldLabel(MoveList.numbers[i]));
+				
+			}
 		}
 
 	}
@@ -103,7 +95,7 @@ public class StarterApplet extends JApplet {
 	 * the Players. The Player that's on has a Frame
 	 * Around his Info Pane
 	 */
-	private class GeneralInfoPane extends JPanel {
+	protected class GeneralInfoPane extends JPanel {
 
 		public GeneralInfoPane() {
 			initComponents();
@@ -118,7 +110,6 @@ public class StarterApplet extends JApplet {
 			add(new PlayerOneInfoPane(), BorderLayout.WEST); //Info Pane Player One
 			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
 			add(new PlayerTwoInfoPane(), BorderLayout.WEST); //Info Pane Player Two
-			
 		}
 
 	}
@@ -141,23 +132,21 @@ public class StarterApplet extends JApplet {
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
 			add(GuiUtil.getLabel("Player 1",300, 1 * 25));
-			
-			
 		}
 		public void paint(Graphics g) {
 			super.paint(g);
 			
-			//Put in a switch. If Player 2 is on, draw the Rectangle
-			g.setColor(Color.RED);
-			g.fillRect(0, 0, 50, 50);
-			//end switch
+			if (PlayerManager.getActivePlayer().getColor() == Color.WHITE) {
+				g.setColor(Color.RED);
+				g.fillRect(0, 0, 50, 50);
+			}
 			
 			g.setColor(Color.BLACK);
+			g.drawOval(4, 4, 40, 40);
+			g.setColor(Color.WHITE);
 			g.fillOval(4, 4, 40, 40);
-			
 		}
 		
-
 	}
 	
 	
@@ -169,7 +158,6 @@ public class StarterApplet extends JApplet {
 		
 		public PlayerTwoInfoPane() {
 			initComponents();
-			
 		}
 
 		private void initComponents() {
@@ -184,24 +172,15 @@ public class StarterApplet extends JApplet {
 		public void paint(Graphics g) {
 			super.paint(g);
 			
-			//Put in a switch. If Player 2 is on, draw the Rectangle
-			g.setColor(Color.RED);
-			g.fillRect(0, 0, 50, 50);
-			//end switch
+			if (PlayerManager.getActivePlayer().getColor() == Color.BLACK) {
+				g.setColor(Color.RED);
+				g.fillRect(0, 0, 50, 50);
+			}
 			
 			g.setColor(Color.BLACK);
-			g.drawOval(4, 4, 40, 40);
-			g.setColor(Color.WHITE);
 			g.fillOval(4, 4, 40, 40);
-			
-			
-
-			
-			
 		}
 
 	}
-	
-	
 	
 }
