@@ -79,12 +79,12 @@ public class Board extends JPanel {
 	 * |-----|-----|-----|
 	 * @return null if field falls out of board, the corresponding field otherwise
 	 */
-	public Field getNeighbourTop() {
-		int activeFieldRowNum = activeField.getRowNum();
+	public Field getNeighbourTop(Field field) {
+		int activeFieldRowNum = field.getRowNum();
 		if (activeFieldRowNum == 0) {
 			return null;
 		}
-		return fields[activeField.getColNum()][activeFieldRowNum - 1];
+		return fields[field.getColNum()][activeFieldRowNum - 1];
 	}
 	/**
 	 * Returns the neighbour bottom to the active field. If 
@@ -100,12 +100,12 @@ public class Board extends JPanel {
 	 * |-----|-----|-----|
 	 * @return null if field falls out of board, the corresponding field otherwise
 	 */
-	public Field getNeighbourBottom() {
-		int activeFieldRowNum = activeField.getRowNum();
+	public Field getNeighbourBottom(Field field) {
+		int activeFieldRowNum = field.getRowNum();
 		if (activeFieldRowNum == 7) {
 			return null;
 		}
-		return fields[activeField.getColNum()][activeFieldRowNum + 1];
+		return fields[field.getColNum()][activeFieldRowNum + 1];
 	}
 	/**
 	 * Returns the neighbour left to the active field. If 
@@ -121,12 +121,12 @@ public class Board extends JPanel {
 	 * |-----|-----|-----|
 	 * @return null if field falls out of board, the corresponding field otherwise
 	 */
-	public Field getNeighbourLeft() {
-		int activeFieldColNum = activeField.getColNum();
+	public Field getNeighbourLeft(Field field) {
+		int activeFieldColNum = field.getColNum();
 		if (activeFieldColNum == 0) {
 			return null;
 		}
-		return fields[activeFieldColNum - 1][activeField.getRowNum()];
+		return fields[activeFieldColNum - 1][field.getRowNum()];
 	}
 	/**
 	 * Returns the neighbour right to the active field. If 
@@ -142,12 +142,12 @@ public class Board extends JPanel {
 	 * |-----|-----|-----|
 	 * @return null if field falls out of board, the corresponding field otherwise
 	 */
-	public Field getNeighbourRight() {
-		int activeFieldColNum = activeField.getColNum();
+	public Field getNeighbourRight(Field field) {
+		int activeFieldColNum = field.getColNum();
 		if (activeFieldColNum == 7) {
 			return null;
 		}
-		return fields[activeFieldColNum + 1][activeField.getRowNum()];
+		return fields[activeFieldColNum + 1][field.getRowNum()];
 	}
 	/**
 	 * Returns the neighbour top left to the active field. If 
@@ -163,9 +163,9 @@ public class Board extends JPanel {
 	 * |-----|-----|-----|
 	 * @return null if field falls out of board, the corresponding field otherwise
 	 */
-	public Field getNeighbourTopLeft() {
-		int activeFieldColNum = activeField.getColNum();
-		int activeFieldRowNum = activeField.getRowNum();
+	public Field getNeighbourTopLeft(Field field) {
+		int activeFieldColNum = field.getColNum();
+		int activeFieldRowNum = field.getRowNum();
 		if (activeFieldColNum == 0 || activeFieldRowNum == 0) {
 			return null;
 		}
@@ -185,9 +185,9 @@ public class Board extends JPanel {
 	 * |-----|-----|-----|
 	 * @return null if field falls out of board, the corresponding field otherwise
 	 */
-	public Field getNeighbourTopRight() {
-		int activeFieldColNum = activeField.getColNum();
-		int activeFieldRowNum = activeField.getRowNum();
+	public Field getNeighbourTopRight(Field field) {
+		int activeFieldColNum = field.getColNum();
+		int activeFieldRowNum = field.getRowNum();
 		if (activeFieldColNum == 7 || activeFieldRowNum == 0) {
 			return null;
 		}
@@ -207,9 +207,9 @@ public class Board extends JPanel {
 	 * |-----|-----|-----|
 	 * @return null if field falls out of board, the corresponding field otherwise
 	 */
-	public Field getNeighbourBottomRight() {
-		int activeFieldColNum = activeField.getColNum();
-		int activeFieldRowNum = activeField.getRowNum();
+	public Field getNeighbourBottomRight(Field field) {
+		int activeFieldColNum = field.getColNum();
+		int activeFieldRowNum = field.getRowNum();
 		if (activeFieldColNum == 7 || activeFieldRowNum == 7) {
 			return null;
 		}
@@ -229,9 +229,9 @@ public class Board extends JPanel {
 	 * |-----|-----|-----|
 	 * @return null if field falls out of board, the corresponding field otherwise
 	 */
-	public Field getNeighbourBottomLeft() {
-		int activeFieldColNum = activeField.getColNum();
-		int activeFieldRowNum = activeField.getRowNum();
+	public Field getNeighbourBottomLeft(Field field) {
+		int activeFieldColNum = field.getColNum();
+		int activeFieldRowNum = field.getRowNum();
 		if (activeFieldColNum == 0 || activeFieldRowNum == 7) {
 			return null;
 		}
