@@ -457,6 +457,238 @@ public class Board extends JPanel {
 		
 		return enemiesDetected;
 	}
+	
+	/**
+	 * Returns true if hit(s) are possible towards the bottom.
+	 * Example (a is the active field, r is the place the enemy is, i is where your stone is):
+	 * |-----|-----|-----|
+	 * |     |     |     |
+	 * |-----|-----|-----|
+	 * |     |  a  |     |
+	 * |-----|-----|-----|
+	 * |     |  r  |     |
+	 * |-----|-----|-----|
+	 * |     |  r  |     |
+	 * |-----|-----|-----|
+	 * |     |  i  |     |
+	 * |-----|-----|-----|
+	 * @return false if no stones can be hitten
+	 */
+	public boolean checkBottomHit(Field field, PlayerI player){
+		boolean hit = false;
+		if(checkNeighbourEnemiesBottom(field, player)){
+			while(checkNeighbourEnemiesBottom(field, player)){
+				field = getNeighbourBottom(field);
+			}
+			field = getNeighbourBottom(field);
+			if (field.getValue() == player.getValue()){
+				hit = true;
+				System.out.println("hit");
+			}
+		}
+		return hit;
+	}
+	
+	/**
+	 * Returns true if hit(s) are possible towards the bottom left.
+	 * Example (a is the active field, r is the place the enemy is, i is where your stone is):
+	 * |-----|-----|-----|-----|-----|
+	 * |     |     |     |  a  |     |
+	 * |-----|-----|-----|-----|-----|
+	 * |     |     |  r  |     |     |
+	 * |-----|-----|-----|-----|-----|
+	 * |     |  r  |     |     |     |
+	 * |-----|-----|-----|-----|-----|
+	 * |  i  |     |     |     |     |
+	 * |-----|-----|-----|-----|-----|
+	 * @return false if no stones can be hitten
+	 */
+	public boolean checkBottomLeftHit(Field field, PlayerI player){
+		boolean hit = false;
+		if(checkNeighbourEnemiesBottomLeft(field, player)){
+			while(checkNeighbourEnemiesBottomLeft(field, player)){
+				field = getNeighbourBottomLeft(field);
+			}
+			field = getNeighbourBottomLeft(field);
+			if (field.getValue() == player.getValue()){
+				hit = true;
+				System.out.println("hit");
+			}
+		}
+		return hit;
+	}
+	
+	/**
+	 * Returns true if hit(s) are possible towards the Left.
+	 * Example (a is the active field, r is the place the enemy is, i is where your stone is):
+	 * |-----|-----|-----|-----|
+	 * |     |     |     |     |
+	 * |-----|-----|-----|-----|
+	 * |  i  |  r  |  r  |  a  |
+	 * |-----|-----|-----|-----|
+	 * |     |     |     |     |
+	 * |-----|-----|-----|-----|
+	 * |     |     |     |     |
+	 * |-----|-----|-----|-----|
+	 * @return false if no stones can be hitten
+	 */
+	public boolean checkLeftHit(Field field, PlayerI player){
+		boolean hit = false;
+		if(checkNeighbourEnemiesLeft(field, player)){
+			while(checkNeighbourEnemiesLeft(field, player)){
+				field = getNeighbourLeft(field);
+			}
+			field = getNeighbourLeft(field);
+			if (field.getValue() == player.getValue()){
+				hit = true;
+				System.out.println("hit");
+			}
+		}
+		return hit;
+	}
+	
+	/**
+	 * Returns true if hit(s) are possible towards the Top Left.
+	 * Example (a is the active field, r is the place the enemy is, i is where your stone is):
+	 * |-----|-----|-----|-----|
+	 * |  i  |     |     |     |
+	 * |-----|-----|-----|-----|
+	 * |     |  r  |     |     |
+	 * |-----|-----|-----|-----|
+	 * |     |     |  r  |     |
+	 * |-----|-----|-----|-----|
+	 * |     |     |     |  a  |
+	 * |-----|-----|-----|-----|
+	 * @return false if no stones can be hitten
+	 */
+	public boolean checkTopLeftHit(Field field, PlayerI player){
+		boolean hit = false;
+		if(checkNeighbourEnemiesTopLeft(field, player)){
+			while(checkNeighbourEnemiesTopLeft(field, player)){
+				field = getNeighbourTopLeft(field);
+			}
+			field = getNeighbourTopLeft(field);
+			if (field.getValue() == player.getValue()){
+				hit = true;
+				System.out.println("hit");
+			}
+		}
+		return hit;
+	}
+	
+	/**
+	 * Returns true if hit(s) are possible towards the Top.
+	 * Example (a is the active field, r is the place the enemy is, i is where your stone is):
+	 * |-----|-----|-----|-----|
+	 * |     |     |     |  i  |
+	 * |-----|-----|-----|-----|
+	 * |     |     |     |  r  |
+	 * |-----|-----|-----|-----|
+	 * |     |     |     |  r  |
+	 * |-----|-----|-----|-----|
+	 * |     |     |     |  a  |
+	 * |-----|-----|-----|-----|
+	 * @return false if no stones can be hitten
+	 */
+	public boolean checkTopHit(Field field, PlayerI player){
+		boolean hit = false;
+		if(checkNeighbourEnemiesTop(field, player)){
+			while(checkNeighbourEnemiesTop(field, player)){
+				field = getNeighbourTop(field);
+			}
+			field = getNeighbourTop(field);
+			if (field.getValue() == player.getValue()){
+				hit = true;
+				System.out.println("hit");
+			}
+		}
+		return hit;
+	}
+	
+	/**
+	 * Returns true if hit(s) are possible towards the Top right.
+	 * Example (a is the active field, r is the place the enemy is, i is where your stone is):
+	 * |-----|-----|-----|-----|
+	 * |     |     |     |  i  |
+	 * |-----|-----|-----|-----|
+	 * |     |     |  r  |     |
+	 * |-----|-----|-----|-----|
+	 * |     |  r  |     |     |
+	 * |-----|-----|-----|-----|
+	 * |  a  |     |     |     |
+	 * |-----|-----|-----|-----|-----|
+	 * @return false if no stones can be hitten
+	 */
+	public boolean checkTopRightHit(Field field, PlayerI player){
+		boolean hit = false;
+		if(checkNeighbourEnemiesTopRight(field, player)){
+			while(checkNeighbourEnemiesTopRight(field, player)){
+				field = getNeighbourTopRight(field);
+			}
+			field = getNeighbourTopRight(field);
+			if (field.getValue() == player.getValue()){
+				hit = true;
+				System.out.println("hit");
+			}
+		}
+		return hit;
+	}
+	
+	/**
+	 * Returns true if hit(s) are possible towards the  right.
+	 * Example (a is the active field, r is the place the enemy is, i is where your stone is):
+	 * |-----|-----|-----|-----|-----|
+	 * |     |     |     |     |     |
+	 * |-----|-----|-----|-----|-----|
+	 * |     |  a  |  r  |  r  |  i  |
+	 * |-----|-----|-----|-----|-----|
+	 * |     |     |     |     |     |
+	 * |-----|-----|-----|-----|-----|
+	 * @return false if no stones can be hitten
+	 */
+	public boolean checkRightHit(Field field, PlayerI player){
+		boolean hit = false;
+		if(checkNeighbourEnemiesRight(field, player)){
+			while(checkNeighbourEnemiesRight(field, player)){
+				field = getNeighbourRight(field);
+			}
+			field = getNeighbourRight(field);
+			if (field.getValue() == player.getValue()){
+				hit = true;
+				System.out.println("hit");
+			}
+		}
+		return hit;
+	}
+	
+	/**
+	 * Returns true if hit(s) are possible towards the bottom right.
+	 * Example (a is the active field, r is the place the enemy is, i is where your stone is):
+	 * |-----|-----|-----|-----|
+	 * |  a  |     |     |     |
+	 * |-----|-----|-----|-----|
+	 * |     |  r  |     |     |
+	 * |-----|-----|-----|-----|
+	 * |     |     |  r  |     |
+	 * |-----|-----|-----|-----|
+	 * |     |     |     |  i  |
+	 * |-----|-----|-----|-----|
+	 * @return false if no stones can be hitten
+	 */
+	public boolean checkBottomRightHit(Field field, PlayerI player){
+		boolean hit = false;
+		if(checkNeighbourEnemiesBottomRight(field, player)){
+			while(checkNeighbourEnemiesBottomRight(field, player)){
+				field = getNeighbourBottomRight(field);
+			}
+			field = getNeighbourBottomRight(field);
+			if (field.getValue() == player.getValue()){
+				hit = true;
+				System.out.println("hit");
+			}
+		}
+		return hit;
+	}
 
 
 
@@ -473,6 +705,7 @@ public class Board extends JPanel {
 			if(activeField.getValue() == 0){
 				//check on enemies in the surrounding fields, no enemy, no further check
 				if(checkNeighbourEnemies(activeField, activePlayer)){
+					checkBottomRightHit(activeField, activePlayer);
 					// updates the value depending on the player
 					activeField.setValue(activePlayer.getColor() == Color.WHITE ? -1 : 1);
 					// add this move to list
