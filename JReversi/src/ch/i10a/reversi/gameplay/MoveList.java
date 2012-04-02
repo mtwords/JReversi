@@ -39,7 +39,7 @@ public class MoveList<Move> extends ArrayList<Move> {
 		}
 
 		private String resolveMove(int row, int col) {
-			return new String(letters[col] + numbers[row+1]);
+			return new String(letters[col] + numbers[row]);
 		}
 
 		@Override

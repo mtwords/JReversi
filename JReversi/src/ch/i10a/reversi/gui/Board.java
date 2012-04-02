@@ -747,8 +747,8 @@ public class Board extends JPanel {
 		//If the neighbour is an enemy, iterate towards direction till an own stone appears
 		if(checkBottomHit(field, player)){
 			while(checkNeighbourEnemiesBottom(field, player)){
-				hitMoves.add(Move.getMove(field.getRowNum(), field.getColNum()));
 				field = getNeighbourBottom(field);
+				hitMoves.add(Move.getMove(field.getRowNum(), field.getColNum()));
 			}
 		}
 
@@ -760,6 +760,8 @@ public class Board extends JPanel {
 
 		return hitMoves;	
 	}
+	
+	
 
 
 
