@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -738,28 +739,212 @@ public class Board extends JPanel {
 	}
 	
 	/**
-	 * Returns a MovieList, which represents the beaten stones in bottom direction 
-	 * @return MovieList of beaten stones
+	 * Returns an ArrayList of Fields, which represents the beaten stones in bottom direction 
+	 * @return ArrayList of Fields which stones are beaten
 	 */
 	
-	public MoveList<Move> hitBottom(Field field, PlayerI player){
-		MoveList<Move> hitMoves = new MoveList<Move>();
+	public ArrayList<Field> hitBottom(Field field, PlayerI player){
+		ArrayList<Field> hitFields = new ArrayList<Field>();
 		//If the neighbour is an enemy, iterate towards direction till an own stone appears
 		if(checkBottomHit(field, player)){
 			while(checkNeighbourEnemiesBottom(field, player)){
 				field = getNeighbourBottom(field);
-				hitMoves.add(Move.getMove(field.getRowNum(), field.getColNum()));
+				hitFields.add(field);
 			}
 		}
 
-		int j = 0;
-		while (j < hitMoves.size()) {
-			System.out.println(hitMoves.get(j));
-			j++;
+//		int j = 0;
+//		while (j < hitFields.size()) {
+//			System.out.println(hitFields.get(j));
+//			j++;
+//		}
+		return hitFields;	
+	}
+	/**
+	 * Returns an ArrayList of Fields, which represents the beaten stones in bottom left direction 
+	 * @return ArrayList of Fields which stones are beaten
+	 */
+	
+	public ArrayList<Field> hitBottomLeft(Field field, PlayerI player){
+		ArrayList<Field> hitFields = new ArrayList<Field>();
+		//If the neighbour is an enemy, iterate towards direction till an own stone appears
+		if(checkBottomLeftHit(field, player)){
+			while(checkNeighbourEnemiesBottomLeft(field, player)){
+				field = getNeighbourBottomLeft(field);
+				hitFields.add(field);
+			}
 		}
 
-		return hitMoves;	
+//		int j = 0;
+//		while (j < hitFields.size()) {
+//			System.out.println(hitFields.get(j));
+//			j++;
+//		}
+		return hitFields;	
 	}
+	/**
+	 * Returns an ArrayList of Fields, which represents the beaten stones in left direction 
+	 * @return ArrayList of Fields which stones are beaten
+	 */
+	
+	public ArrayList<Field> hitLeft(Field field, PlayerI player){
+		ArrayList<Field> hitFields = new ArrayList<Field>();
+		//If the neighbour is an enemy, iterate towards direction till an own stone appears
+		if(checkLeftHit(field, player)){
+			while(checkNeighbourEnemiesLeft(field, player)){
+				field = getNeighbourLeft(field);
+				hitFields.add(field);
+			}
+		}
+
+//		int j = 0;
+//		while (j < hitFields.size()) {
+//			System.out.println(hitFields.get(j));
+//			j++;
+//		}
+		return hitFields;	
+	}
+	
+	/**
+	 * Returns an ArrayList of Fields, which represents the beaten stones in top left direction 
+	 * @return ArrayList of Fields which stones are beaten
+	 */
+	
+	public ArrayList<Field> hitTopLeft(Field field, PlayerI player){
+		ArrayList<Field> hitFields = new ArrayList<Field>();
+		//If the neighbour is an enemy, iterate towards direction till an own stone appears
+		if(checkTopLeftHit(field, player)){
+			while(checkNeighbourEnemiesTopLeft(field, player)){
+				field = getNeighbourTopLeft(field);
+				hitFields.add(field);
+			}
+		}
+
+//		int j = 0;
+//		while (j < hitFields.size()) {
+//			System.out.println(hitFields.get(j));
+//			j++;
+//		}
+		return hitFields;	
+	}
+	
+	/**
+	 * Returns an ArrayList of Fields, which represents the beaten stones in top direction 
+	 * @return ArrayList of Fields which stones are beaten
+	 */
+	
+	public ArrayList<Field> hitTop(Field field, PlayerI player){
+		ArrayList<Field> hitFields = new ArrayList<Field>();
+		//If the neighbour is an enemy, iterate towards direction till an own stone appears
+		if(checkTopHit(field, player)){
+			while(checkNeighbourEnemiesTop(field, player)){
+				field = getNeighbourTop(field);
+				hitFields.add(field);
+			}
+		}
+
+//		int j = 0;
+//		while (j < hitFields.size()) {
+//			System.out.println(hitFields.get(j));
+//			j++;
+//		}
+		return hitFields;	
+	}
+	
+	/**
+	 * Returns an ArrayList of Fields, which represents the beaten stones in top right direction 
+	 * @return ArrayList of Fields which stones are beaten
+	 */
+	
+	public ArrayList<Field> hitTopRight(Field field, PlayerI player){
+		ArrayList<Field> hitFields = new ArrayList<Field>();
+		//If the neighbour is an enemy, iterate towards direction till an own stone appears
+		if(checkTopRightHit(field, player)){
+			while(checkNeighbourEnemiesTopRight(field, player)){
+				field = getNeighbourTopRight(field);
+				hitFields.add(field);
+			}
+		}
+
+//		int j = 0;
+//		while (j < hitFields.size()) {
+//			System.out.println(hitFields.get(j));
+//			j++;
+//		}
+		return hitFields;	
+	}
+	
+	/**
+	 * Returns an ArrayList of Fields, which represents the beaten stones in right direction 
+	 * @return ArrayList of Fields which stones are beaten
+	 */
+	
+	public ArrayList<Field> hitRight(Field field, PlayerI player){
+		ArrayList<Field> hitFields = new ArrayList<Field>();
+		//If the neighbour is an enemy, iterate towards direction till an own stone appears
+		if(checkRightHit(field, player)){
+			while(checkNeighbourEnemiesRight(field, player)){
+				field = getNeighbourRight(field);
+				hitFields.add(field);
+			}
+		}
+
+//		int j = 0;
+//		while (j < hitFields.size()) {
+//			System.out.println(hitFields.get(j));
+//			j++;
+//		}
+		return hitFields;	
+	}
+	/**
+	 * Returns an ArrayList of Fields, which represents the beaten stones in bottom right direction 
+	 * @return ArrayList of Fields which stones are beaten
+	 */
+	
+	public ArrayList<Field> hitBottomRight(Field field, PlayerI player){
+		ArrayList<Field> hitFields = new ArrayList<Field>();
+		//If the neighbour is an enemy, iterate towards direction till an own stone appears
+		if(checkBottomRightHit(field, player)){
+			while(checkNeighbourEnemiesBottomRight(field, player)){
+				field = getNeighbourBottomRight(field);
+				hitFields.add(field);
+			}
+		}
+
+//		int j = 0;
+//		while (j < hitFields.size()) {
+//			System.out.println(hitFields.get(j));
+//			j++;
+//		}
+		return hitFields;	
+	}
+	
+	
+	/**
+	 * Returns an ArrayList of Fields, which represents the beaten stones in bottom right direction 
+	 * @return ArrayList of Fields which stones are beaten
+	 */
+	public void hitEnemyStones(Field field, PlayerI player){
+		ArrayList<Field> hitFields = new ArrayList<Field>();
+		hitFields.addAll(hitBottomLeft(field, player));
+		hitFields.addAll(hitLeft(field, player));
+		hitFields.addAll(hitTopLeft(field, player));
+		hitFields.addAll(hitTop(field, player));
+		hitFields.addAll(hitTopRight(field, player));
+		hitFields.addAll(hitRight(field, player));
+		hitFields.addAll(hitBottomRight(field, player));
+		hitFields.addAll(hitBottom(field, player));
+		
+		int j = 0;
+		while (j < hitFields.size()) {
+			this.fields[hitFields.get(j).getColNum()][hitFields.get(j).getRowNum()].setValue(player.getValue()*2);
+			System.out.println(hitFields.get(j));
+			j++;
+		}
+		
+	}
+	
+	
 	
 	
 
@@ -783,7 +968,7 @@ public class Board extends JPanel {
 						activeField.setValue(activePlayer.getColor() == Color.WHITE ? -1 : 1);
 						// add this move to list
 						moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
-						hitBottom(activeField,activePlayer);
+						hitEnemyStones(activeField,activePlayer);
 						
 						
 						// updates
