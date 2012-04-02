@@ -944,11 +944,6 @@ public class Board extends JPanel {
 		
 	}
 	
-	
-	
-	
-
-
 
 	// ----------------- inner classes --------------------
 	private class MouseListener extends MouseAdapter {
