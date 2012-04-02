@@ -12,10 +12,11 @@ public class ComputerPlayer implements PlayerI {
 	 * Default color of a computer player is black
 	 */
 	public ComputerPlayer() {
-		this(Color.BLACK);
+		this(Color.BLACK, 1);
 	}
-	public ComputerPlayer(Color color) {
+	public ComputerPlayer(Color color, int value) {
 		this.color = color;
+		this.value = value;
 	}
 
 	@Override

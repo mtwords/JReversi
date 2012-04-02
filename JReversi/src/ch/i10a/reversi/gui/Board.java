@@ -938,7 +938,7 @@ public class Board extends JPanel {
 		int j = 0;
 		while (j < hitFields.size()) {
 			this.fields[hitFields.get(j).getColNum()][hitFields.get(j).getRowNum()].setValue(player.getValue()*2);
-			System.out.println(hitFields.get(j));
+			hitFields.get(j).update();
 			j++;
 		}
 		
@@ -965,7 +965,6 @@ public class Board extends JPanel {
 						moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
 						hitEnemyStones(activeField,activePlayer);
 						
-						
 						// updates
 						activeField.repaint();
 						infoPane.repaint();
@@ -974,16 +973,22 @@ public class Board extends JPanel {
 				}
 			}
 			
-
-			
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			super.mouseEntered(e);
 			activeField = (Field) e.getComponent();
-			activeField.setBackground(Color.YELLOW);
-			activeField.repaint();
+			activePlayer = PlayerManager.getActivePlayer();
+
+			if (activeField.getValue() != 0) {
+				return;
+			}
+			if (checkNeighbourEnemies(activeField, activePlayer) 
+					&& checkHit(activeField, activePlayer)) {
+				activeField.setBackground(Color.YELLOW);
+				activeField.repaint();
+			}
 		}
 		@Override
 		public void mouseExited(MouseEvent e) {

@@ -11,7 +11,7 @@ public class HumanPlayer implements PlayerI {
 	 * Default color of a human player is white 
 	 */
 	public HumanPlayer() {
-		color = Color.WHITE;
+		this(Color.WHITE, -1);
 	}
 	public HumanPlayer(Color color, int value) {
 		this.color = color;

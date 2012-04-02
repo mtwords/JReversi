@@ -4,9 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JApplet;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import ch.i10a.reversi.gameplay.MoveList;
@@ -97,6 +100,8 @@ public class StarterApplet extends JApplet {
 	 */
 	protected class GeneralInfoPane extends JPanel {
 
+		JButton pass;
+
 		public GeneralInfoPane() {
 			initComponents();
 		}
@@ -107,11 +112,25 @@ public class StarterApplet extends JApplet {
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
 
+			pass = new JButton("Pass");
+			pass.addActionListener(new ActPass());
+
 			add(new PlayerOneInfoPane(), BorderLayout.WEST); //Info Pane Player One
 			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
 			add(new PlayerTwoInfoPane(), BorderLayout.WEST); //Info Pane Player Two
+			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
+			add(pass);
 		}
 
+		class ActPass implements ActionListener {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				PlayerManager.nextPlayer();
+				repaint();
+			}
+
+		}
 	}
 	
 	
