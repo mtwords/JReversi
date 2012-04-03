@@ -10,9 +10,11 @@ import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
 import javax.swing.JApplet;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import ch.i10a.reversi.gameplay.MoveList;
+import ch.i10a.reversi.gameplay.PlayerI;
 import ch.i10a.reversi.gameplay.PlayerManager;
 
 /**
@@ -101,12 +103,16 @@ public class StarterApplet extends JApplet {
 	protected class GeneralInfoPane extends JPanel {
 
 		JButton pass;
+		PlayerOneInfoPane playerOne;
+		PlayerTwoInfoPane playerTwo;
 
 		public GeneralInfoPane() {
 			initComponents();
 		}
 
 		private void initComponents() {
+			playerOne = new PlayerOneInfoPane();
+			playerTwo = new PlayerTwoInfoPane();
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			setSize(new Dimension(300, 4 * 50));
 			setMaximumSize(getSize());
@@ -115,17 +121,29 @@ public class StarterApplet extends JApplet {
 			pass = new JButton("Pass");
 			pass.addActionListener(new ActPass());
 
-			add(new PlayerOneInfoPane(), BorderLayout.WEST); //Info Pane Player One
+			add(playerOne, BorderLayout.WEST); //Info Pane Player One
 			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
-			add(new PlayerTwoInfoPane(), BorderLayout.WEST); //Info Pane Player Two
+			add(playerTwo, BorderLayout.WEST); //Info Pane Player Two
 			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
 			add(pass);
+			
 		}
 
 		class ActPass implements ActionListener {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				
+				playerOne.unsetPassLabel();
+				playerTwo.unsetPassLabel();
+				
+				if(PlayerManager.getActivePlayer().getValue() == -1){
+					playerOne.setPassLabel();
+				}
+				else{
+					playerTwo.setPassLabel();
+				}
+				
 				PlayerManager.nextPlayer();
 				repaint();
 			}
@@ -139,18 +157,22 @@ public class StarterApplet extends JApplet {
 	 * Player One (Black Player)
 	 */
 	private class PlayerOneInfoPane extends JPanel {
-
+		
+		JLabel passLabel = GuiUtil.getLabel("", 300, 1*25);
+		
 		public PlayerOneInfoPane() {
 			initComponents();
 		}
 
 		private void initComponents() {
+			
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			setSize(new Dimension(300, 2 * 50));
 			setBackground(Color.lightGray);
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
 			add(GuiUtil.getLabel("Player 1",300, 1 * 25));
+			add(passLabel);
 		}
 		public void paint(Graphics g) {
 			super.paint(g);
@@ -166,6 +188,14 @@ public class StarterApplet extends JApplet {
 			g.fillOval(4, 4, 40, 40);
 		}
 		
+		public void setPassLabel(){
+			passLabel.setText("Pass");
+		}
+		
+		public void unsetPassLabel(){
+			passLabel.setText("");
+		}
+		
 	}
 	
 	
@@ -175,17 +205,21 @@ public class StarterApplet extends JApplet {
 	 */
 	private class PlayerTwoInfoPane extends JPanel {
 		
+		JLabel passLabel = GuiUtil.getLabel("", 300, 1*25);
+		
 		public PlayerTwoInfoPane() {
 			initComponents();
 		}
 
 		private void initComponents() {
+			
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			setSize(new Dimension(300, 2 * 50));
 			setBackground(Color.lightGray);
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
 			add(GuiUtil.getLabel("Player 2",300, 1 * 25));
+			add(passLabel);
 		}
 		
 		public void paint(Graphics g) {
@@ -198,6 +232,14 @@ public class StarterApplet extends JApplet {
 			
 			g.setColor(Color.BLACK);
 			g.fillOval(4, 4, 40, 40);
+		}
+		
+		public void setPassLabel(){
+			passLabel.setText("Pass");
+		}
+		
+		public void unsetPassLabel(){
+			passLabel.setText("");
 		}
 
 	}
