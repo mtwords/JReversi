@@ -953,22 +953,24 @@ public class Board extends JPanel {
 			super.mouseClicked(e);
 			activeField = (Field) e.getComponent();
 			activePlayer = PlayerManager.getActivePlayer();
-			
-			//check on empty Field
-			if(activeField.getValue() == 0){
-				//check on enemies in the surrounding fields, no enemy, no further check
-				if(checkNeighbourEnemies(activeField, activePlayer)){
-					if(checkHit(activeField, activePlayer)){
-						// updates the value depending on the player
-						activeField.setValue(activePlayer.getColor() == Color.WHITE ? -1 : 1);
-						// add this move to list
-						moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
-						hitEnemyStones(activeField,activePlayer);
-						
-						// updates
-						activeField.repaint();
-						infoPane.repaint();
-						PlayerManager.nextPlayer();
+
+			synchronized (Board.this) {
+				//check on empty Field
+				if(activeField.getValue() == 0){
+					//check on enemies in the surrounding fields, no enemy, no further check
+					if(checkNeighbourEnemies(activeField, activePlayer)){
+						if(checkHit(activeField, activePlayer)){
+							// updates the value depending on the player
+							activeField.setValue(activePlayer.getColor() == Color.WHITE ? -1 : 1);
+							// add this move to list
+							moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
+							hitEnemyStones(activeField,activePlayer);
+							
+							// updates
+							activeField.repaint();
+							infoPane.repaint();
+							PlayerManager.nextPlayer();
+						}
 					}
 				}
 			}
