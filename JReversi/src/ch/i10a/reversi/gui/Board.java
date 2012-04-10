@@ -482,6 +482,9 @@ public class Board extends JPanel {
 				field = getNeighbourBottom(field);
 			}
 			field = getNeighbourBottom(field);
+			if (field == null) {
+				return false;
+			}
 			if (field.getValue() == player.getValue()){
 				hit = true;
 				//System.out.println("hit");
@@ -511,6 +514,9 @@ public class Board extends JPanel {
 				field = getNeighbourBottomLeft(field);
 			}
 			field = getNeighbourBottomLeft(field);
+			if (field == null) {
+				return false;
+			}
 			if (field.getValue() == player.getValue()){
 				hit = true;
 				//System.out.println("hit");
@@ -540,6 +546,9 @@ public class Board extends JPanel {
 				field = getNeighbourLeft(field);
 			}
 			field = getNeighbourLeft(field);
+			if (field == null) {
+				return false;
+			}
 			if (field.getValue() == player.getValue()){
 				hit = true;
 				//System.out.println("hit");
@@ -570,6 +579,9 @@ public class Board extends JPanel {
 				field = getNeighbourTopLeft(field);
 			}
 			field = getNeighbourTopLeft(field);
+			if (field == null) {
+				return false;
+			}
 			if (field.getValue() == player.getValue()){
 				hit = true;
 				//System.out.println("hit");
@@ -599,6 +611,9 @@ public class Board extends JPanel {
 				field = getNeighbourTop(field);
 			}
 			field = getNeighbourTop(field);
+			if (field == null) {
+				return false;
+			}
 			if (field.getValue() == player.getValue()){
 				hit = true;
 				//System.out.println("hit");
@@ -628,6 +643,9 @@ public class Board extends JPanel {
 				field = getNeighbourTopRight(field);
 			}
 			field = getNeighbourTopRight(field);
+			if (field == null) {
+				return false;
+			}
 			if (field.getValue() == player.getValue()){
 				hit = true;
 				//System.out.println("hit");
@@ -658,6 +676,9 @@ public class Board extends JPanel {
 				field = getNeighbourRight(field);
 			}
 			field = getNeighbourRight(field);
+			if (field == null) {
+				return false;
+			}
 			if (field.getValue() == player.getValue()){
 				hit = true;
 				//System.out.println("hit");
@@ -687,6 +708,9 @@ public class Board extends JPanel {
 				field = getNeighbourBottomRight(field);
 			}
 			field = getNeighbourBottomRight(field);
+			if (field == null) {
+				return false;
+			}
 			if (field.getValue() == player.getValue()){
 				hit = true;
 				//System.out.println("hit");
