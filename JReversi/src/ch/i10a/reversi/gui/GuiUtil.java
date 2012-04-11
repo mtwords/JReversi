@@ -1,6 +1,9 @@
 package ch.i10a.reversi.gui;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Window;
 
 import javax.swing.JLabel;
 
@@ -43,6 +46,19 @@ public class GuiUtil {
 		l.setHorizontalAlignment(JLabel.CENTER);
 		return l;
 	}
-	
+
+	public static void closeAncestorWindow(Component cmp) {
+		Container parent = cmp.getParent();
+		while (parent != null) {
+			parent = parent.getParent();
+
+			if (parent instanceof Window) {
+				((Window) parent).setVisible(false);
+				((Window) parent).dispose();
+				return;
+			}
+		}
+
+	}
 	
 }

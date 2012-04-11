@@ -3,6 +3,7 @@ package ch.i10a.reversi.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,12 +11,16 @@ import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
 import javax.swing.JApplet;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import ch.i10a.reversi.gameplay.MoveList;
-import ch.i10a.reversi.gameplay.PlayerI;
 import ch.i10a.reversi.gameplay.PlayerManager;
+import ch.i10a.reversi.settings.SettingsPanel;
 
 /**
  * Starter class of the game. It is implemented as a JApplet,
@@ -29,10 +34,21 @@ public class StarterApplet extends JApplet {
 	@Override
 	public void init() {
 		super.init();
+		getRootPane().setJMenuBar(createMenuBar());
 		add(new LetterPane(), BorderLayout.NORTH);
 		add(new CipherPane(), BorderLayout.WEST);
 		add(board, BorderLayout.CENTER);
 		add(infoPane, BorderLayout.EAST);
+	}
+
+	private JMenuBar createMenuBar() {
+		JMenuBar menuBar = new JMenuBar();
+		JMenu menu = new JMenu("Settings");
+		JMenuItem settingsItem = new JMenuItem("Settings...");
+		settingsItem.addActionListener(new SettingsAction());
+		menu.add(settingsItem);
+		menuBar.add(menu);
+		return menuBar;
 	}
 
 	/**
@@ -42,7 +58,7 @@ public class StarterApplet extends JApplet {
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		setSize(new Dimension(325 + (8 * Field.WIDTH), 25 + (8 * Field.WIDTH)));
+		setSize(new Dimension(325 + (8 * Field.WIDTH), 25 + 25 + (8 * Field.WIDTH)));
 	}
 	
 
@@ -165,7 +181,6 @@ public class StarterApplet extends JApplet {
 		}
 
 		private void initComponents() {
-			
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			setSize(new Dimension(300, 2 * 50));
 			setBackground(Color.lightGray);
@@ -174,6 +189,7 @@ public class StarterApplet extends JApplet {
 			add(GuiUtil.getLabel("Player 1",300, 1 * 25));
 			add(passLabel);
 		}
+
 		public void paint(Graphics g) {
 			super.paint(g);
 			
@@ -243,5 +259,17 @@ public class StarterApplet extends JApplet {
 		}
 
 	}
-	
+
+	private class SettingsAction implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			SettingsPanel settingsPanel = new SettingsPanel();
+			JDialog settingsDialog = new JDialog((Frame) null, "Settings");
+			settingsDialog.add(settingsPanel);
+			settingsDialog.pack();
+			settingsDialog.setVisible(true);
+		}
+		
+	}
 }
