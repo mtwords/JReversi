@@ -968,6 +968,20 @@ public class Board extends JPanel {
 		
 	}
 	
+	public boolean checkWholeFieldHit(Field[][] fields){
+		activePlayer = PlayerManager.getActivePlayer();
+		for(int i = 0; i < 8; i++){
+			for(int j = 0; j < 8; j++){
+				if(fields[i][j].getValue() == 0){
+					if(checkHit(fields[i][j], activePlayer)){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
 
 	// ----------------- inner classes --------------------
 	private class MouseListener extends MouseAdapter {
@@ -995,9 +1009,15 @@ public class Board extends JPanel {
 							infoPane.repaint();
 							PlayerManager.setUnPass();
 							PlayerManager.nextPlayer();
+							
+							
 						}
 					}
 				}
+			}
+			if(!checkWholeFieldHit(fields)){
+				PlayerManager.setPass();
+				PlayerManager.nextPlayer();
 			}
 			
 		}
