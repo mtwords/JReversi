@@ -993,6 +993,7 @@ public class Board extends JPanel {
 							// updates
 							activeField.repaint();
 							infoPane.repaint();
+							PlayerManager.setUnPass();
 							PlayerManager.nextPlayer();
 						}
 					}
