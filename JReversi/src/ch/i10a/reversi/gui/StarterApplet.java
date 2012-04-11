@@ -30,6 +30,7 @@ public class StarterApplet extends JApplet {
 
 	GeneralInfoPane infoPane = new GeneralInfoPane();
 	Board board = new Board(infoPane);
+	
 
 	@Override
 	public void init() {
@@ -39,6 +40,7 @@ public class StarterApplet extends JApplet {
 		add(new CipherPane(), BorderLayout.WEST);
 		add(board, BorderLayout.CENTER);
 		add(infoPane, BorderLayout.EAST);
+
 	}
 
 	private JMenuBar createMenuBar() {
@@ -150,15 +152,7 @@ public class StarterApplet extends JApplet {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				playerOne.unsetPassLabel();
-				playerTwo.unsetPassLabel();
-				
-				if(PlayerManager.getActivePlayer().getValue() == -1){
-					playerOne.setPassLabel();
-				}
-				else{
-					playerTwo.setPassLabel();
-				}
+				PlayerManager.setPass();
 				
 				PlayerManager.nextPlayer();
 				repaint();
@@ -202,15 +196,15 @@ public class StarterApplet extends JApplet {
 			g.drawOval(4, 4, 40, 40);
 			g.setColor(Color.WHITE);
 			g.fillOval(4, 4, 40, 40);
+			
+			if(PlayerManager.getPass() == -1){
+				passLabel.setText("pass");
+			}
+			else{
+				passLabel.setText("");
+			}
 		}
 		
-		public void setPassLabel(){
-			passLabel.setText("Pass");
-		}
-		
-		public void unsetPassLabel(){
-			passLabel.setText("");
-		}
 		
 	}
 	
@@ -248,16 +242,15 @@ public class StarterApplet extends JApplet {
 			
 			g.setColor(Color.BLACK);
 			g.fillOval(4, 4, 40, 40);
+			
+			if(PlayerManager.getPass() == 1){
+				passLabel.setText("pass");
+			}
+			else{
+				passLabel.setText("");
+			}
 		}
 		
-		public void setPassLabel(){
-			passLabel.setText("Pass");
-		}
-		
-		public void unsetPassLabel(){
-			passLabel.setText("");
-		}
-
 	}
 
 	private class SettingsAction implements ActionListener {
