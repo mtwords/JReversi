@@ -12,9 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-
 import ch.i10a.reversi.gui.GuiUtil;
 
 public class SettingsPanel extends JPanel {
@@ -23,11 +20,7 @@ public class SettingsPanel extends JPanel {
 	JRadioButton humanOpposite;
 	JRadioButton computerOpposite;
 
-	// Data
-	PropertiesConfiguration settings;
-
 	public SettingsPanel() {
-		initSettings();
 		initComponents();
 	}
 
@@ -36,15 +29,6 @@ public class SettingsPanel extends JPanel {
 
 		add(new OppositePanel(), BorderLayout.NORTH);
 		add(new ButtonPanel(), BorderLayout.SOUTH);
-	}
-
-	private void initSettings() {
-		try {
-			settings = new PropertiesConfiguration("config/reversi.properties");
-		} catch (ConfigurationException e) {
-			e.printStackTrace();
-		}
-		
 	}
 
 	// --------------- inner classes ----------------
@@ -70,7 +54,7 @@ public class SettingsPanel extends JPanel {
 			group.add(computerOpposite);
 
 			// make selection
-			int white = settings.getInt(SettingsConst.PROP_KEY_WHITE);
+			int white = ReversiProperties.inst().getIntProperty(SettingsConst.PROP_KEY_WHITE);
 			if (white == SettingsConst.PROP_VALUE_HUMAN) {
 				humanOpposite.setSelected(true);
 			} else {
@@ -100,12 +84,8 @@ public class SettingsPanel extends JPanel {
 					if (computerOpposite.isSelected()) {
 						white = 2;
 					}
-					settings.setProperty(SettingsConst.PROP_KEY_WHITE, white);
-					try {
-						settings.save();
-					} catch (ConfigurationException e) {
-						throw new RuntimeException(e);
-					}
+					ReversiProperties.inst().setProperty(SettingsConst.PROP_KEY_WHITE, white);
+					ReversiProperties.inst().save();
 				}
 			});
 			add(save);
