@@ -777,11 +777,6 @@ public class Board extends JPanel {
 			}
 		}
 
-//		int j = 0;
-//		while (j < hitFields.size()) {
-//			System.out.println(hitFields.get(j));
-//			j++;
-//		}
 		return hitFields;	
 	}
 	/**
@@ -799,11 +794,6 @@ public class Board extends JPanel {
 			}
 		}
 
-//		int j = 0;
-//		while (j < hitFields.size()) {
-//			System.out.println(hitFields.get(j));
-//			j++;
-//		}
 		return hitFields;	
 	}
 	/**
@@ -821,11 +811,6 @@ public class Board extends JPanel {
 			}
 		}
 
-//		int j = 0;
-//		while (j < hitFields.size()) {
-//			System.out.println(hitFields.get(j));
-//			j++;
-//		}
 		return hitFields;	
 	}
 	
@@ -844,11 +829,6 @@ public class Board extends JPanel {
 			}
 		}
 
-//		int j = 0;
-//		while (j < hitFields.size()) {
-//			System.out.println(hitFields.get(j));
-//			j++;
-//		}
 		return hitFields;	
 	}
 	
@@ -867,11 +847,6 @@ public class Board extends JPanel {
 			}
 		}
 
-//		int j = 0;
-//		while (j < hitFields.size()) {
-//			System.out.println(hitFields.get(j));
-//			j++;
-//		}
 		return hitFields;	
 	}
 	
@@ -890,11 +865,6 @@ public class Board extends JPanel {
 			}
 		}
 
-//		int j = 0;
-//		while (j < hitFields.size()) {
-//			System.out.println(hitFields.get(j));
-//			j++;
-//		}
 		return hitFields;	
 	}
 	
@@ -913,11 +883,6 @@ public class Board extends JPanel {
 			}
 		}
 
-//		int j = 0;
-//		while (j < hitFields.size()) {
-//			System.out.println(hitFields.get(j));
-//			j++;
-//		}
 		return hitFields;	
 	}
 	/**
@@ -935,17 +900,12 @@ public class Board extends JPanel {
 			}
 		}
 
-//		int j = 0;
-//		while (j < hitFields.size()) {
-//			System.out.println(hitFields.get(j));
-//			j++;
-//		}
 		return hitFields;	
 	}
 	
 	
 	/**
-	 * Returns an ArrayList of Fields, which represents the beaten stones in bottom right direction 
+	 * Returns an ArrayList of Fields, which represents the beaten stones in all directions 
 	 * @return ArrayList of Fields which stones are beaten
 	 */
 	public void hitEnemyStones(Field field, PlayerI player){
@@ -958,7 +918,11 @@ public class Board extends JPanel {
 		hitFields.addAll(hitRight(field, player));
 		hitFields.addAll(hitBottomRight(field, player));
 		hitFields.addAll(hitBottom(field, player));
-		
+
+		// update the stones count of this player
+		// "+ 1" because one stone is set by the player!
+		PlayerManager.updateStones(hitFields.size() + 1);
+
 		int j = 0;
 		while (j < hitFields.size()) {
 			this.fields[hitFields.get(j).getColNum()][hitFields.get(j).getRowNum()].setValue(player.getValue()*2);

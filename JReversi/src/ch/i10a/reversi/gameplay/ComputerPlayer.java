@@ -3,7 +3,7 @@ package ch.i10a.reversi.gameplay;
 import java.awt.Color;
 
 
-public class ComputerPlayer implements PlayerI {
+public class ComputerPlayer extends PlayerAdapter {
 
 	private Color color = null;
 	private int value = 1;

@@ -169,6 +169,7 @@ public class StarterApplet extends JApplet {
 	private class PlayerOneInfoPane extends JPanel {
 		
 		JLabel passLabel = GuiUtil.getLabel("", 300, 1*25);
+		JLabel stonesLabel = GuiUtil.getLabel("Stones: " + PlayerManager.getWhitePlayer().getStonesCount(), 300, 1*25);
 		
 		public PlayerOneInfoPane() {
 			initComponents();
@@ -182,6 +183,7 @@ public class StarterApplet extends JApplet {
 			setMinimumSize(getSize());
 			add(GuiUtil.getLabel("Player 1",300, 1 * 25));
 			add(passLabel);
+			add(stonesLabel);
 		}
 
 		public void paint(Graphics g) {
@@ -203,6 +205,8 @@ public class StarterApplet extends JApplet {
 			else{
 				passLabel.setText("");
 			}
+
+			stonesLabel.setText("Stones: " + PlayerManager.getWhitePlayer().getStonesCount());
 		}
 		
 		
@@ -216,7 +220,8 @@ public class StarterApplet extends JApplet {
 	private class PlayerTwoInfoPane extends JPanel {
 		
 		JLabel passLabel = GuiUtil.getLabel("", 300, 1*25);
-		
+		JLabel stonesLabel = GuiUtil.getLabel("Stones: " + PlayerManager.getBlackPlayer().getStonesCount(), 300, 1*25);
+
 		public PlayerTwoInfoPane() {
 			initComponents();
 		}
@@ -230,6 +235,7 @@ public class StarterApplet extends JApplet {
 			setMinimumSize(getSize());
 			add(GuiUtil.getLabel("Player 2",300, 1 * 25));
 			add(passLabel);
+			add(stonesLabel);
 		}
 		
 		public void paint(Graphics g) {
@@ -249,10 +255,13 @@ public class StarterApplet extends JApplet {
 			else{
 				passLabel.setText("");
 			}
+
+			stonesLabel.setText("Stones: " + PlayerManager.getBlackPlayer().getStonesCount());
 		}
 		
 	}
 
+	// --------------- menu classes ------------------
 	private class SettingsAction implements ActionListener {
 
 		@Override

@@ -39,7 +39,7 @@ public class Field extends JPanel {
 			blackStone = ImageIO.read(new File("images/black.gif"));
 			whiteStone = ImageIO.read(new File("images/white.gif"));
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException("couldn't load image-files!", e);
 		}
 	}
 

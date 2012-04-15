@@ -80,9 +80,9 @@ public class SettingsPanel extends JPanel {
 			save.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					int white = 1;
+					int white = SettingsConst.PROP_VALUE_HUMAN;
 					if (computerOpposite.isSelected()) {
-						white = 2;
+						white = SettingsConst.PROP_VALUE_COMPUTER;
 					}
 					ReversiProperties.inst().setProperty(SettingsConst.PROP_KEY_WHITE, white);
 					ReversiProperties.inst().save();
