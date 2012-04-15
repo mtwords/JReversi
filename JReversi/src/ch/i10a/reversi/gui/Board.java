@@ -953,10 +953,11 @@ public class Board extends JPanel {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			super.mouseClicked(e);
-			activeField = (Field) e.getComponent();
-			activePlayer = PlayerManager.getActivePlayer();
 
 			synchronized (Board.this) {
+				activeField = (Field) e.getComponent();
+				activePlayer = PlayerManager.getActivePlayer();
+
 				//check on empty Field
 				if(activeField.getValue() == 0){
 					//check on enemies in the surrounding fields, no enemy, no further check
@@ -978,10 +979,11 @@ public class Board extends JPanel {
 						}
 					}
 				}
-			}
-			if(!checkWholeFieldHit(fields)){
-				PlayerManager.setPass();
-				PlayerManager.nextPlayer();
+
+				if(!checkWholeFieldHit(fields)){
+					PlayerManager.setPass();
+					PlayerManager.nextPlayer();
+				}
 			}
 			
 		}
