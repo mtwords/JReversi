@@ -271,6 +271,7 @@ public class StarterApplet extends JApplet {
 			}
 
 			stonesLabel.setText("Stones: " + PlayerManager.getBlackPlayer().getStonesCount());
+			
 			if(board.getMoves().size() > 0){
 				if(PlayerManager.getActivePlayer().getColor() == Color.WHITE){
 					moveLabel.setText("Last Move: " + board.getLastMove());

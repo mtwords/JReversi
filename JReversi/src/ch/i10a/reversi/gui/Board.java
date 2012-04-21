@@ -951,10 +951,19 @@ public class Board extends JPanel {
 		return false;
 	}
 	
+	
+	/**
+	 * Returns a List of Moves that were made throughout the game 
+	 * @return MoveList<Move> of Moves made throughout the game
+	 */
 	public MoveList<Move> getMoves(){
 		return moves;
 	}
 	
+	/**
+	 * Returns the last Move made in the game 
+	 * @return the last made Move 
+	 */
 	public Move getLastMove(){
 		return moves.get(moves.size() - 1);
 	}
