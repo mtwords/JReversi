@@ -932,6 +932,11 @@ public class Board extends JPanel {
 		
 	}
 	
+	
+	/**
+	 * Returns true, if the actual Player can hit stones on the whole field, else it returns false 
+	 * @return Boolean that's true, if the actual player can beat at least one stone
+	 */
 	public boolean checkWholeFieldHit(Field[][] fields){
 		activePlayer = PlayerManager.getActivePlayer();
 		for(int i = 0; i < 8; i++){
