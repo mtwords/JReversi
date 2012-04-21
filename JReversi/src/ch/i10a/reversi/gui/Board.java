@@ -951,6 +951,14 @@ public class Board extends JPanel {
 		return false;
 	}
 	
+	public MoveList<Move> getMoves(){
+		return moves;
+	}
+	
+	public Move getLastMove(){
+		return moves.get(moves.size() - 1);
+	}
+	
 
 	// ----------------- inner classes --------------------
 	private class MouseListener extends MouseAdapter {

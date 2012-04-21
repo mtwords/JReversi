@@ -170,6 +170,7 @@ public class StarterApplet extends JApplet {
 		
 		JLabel passLabel = GuiUtil.getLabel("", 300, 1*25);
 		JLabel stonesLabel = GuiUtil.getLabel("Stones: " + PlayerManager.getWhitePlayer().getStonesCount(), 300, 1*25);
+		JLabel moveLabel = GuiUtil.getLabel("Last Move: ", 300, 1*25);
 		
 		public PlayerOneInfoPane() {
 			initComponents();
@@ -182,8 +183,9 @@ public class StarterApplet extends JApplet {
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
 			add(GuiUtil.getLabel("Player 1",300, 1 * 25));
-			add(passLabel);
 			add(stonesLabel);
+			add(moveLabel);
+			add(passLabel);
 		}
 
 		public void paint(Graphics g) {
@@ -207,6 +209,16 @@ public class StarterApplet extends JApplet {
 			}
 
 			stonesLabel.setText("Stones: " + PlayerManager.getWhitePlayer().getStonesCount());
+			
+			if(board.getMoves().size() > 0){
+				if(PlayerManager.getActivePlayer().getColor() == Color.BLACK){
+					moveLabel.setText("Last Move: " + board.getLastMove());
+				}
+				else{
+					moveLabel.setText("Last Move: ");
+				}
+			}
+			
 		}
 		
 		
@@ -221,6 +233,7 @@ public class StarterApplet extends JApplet {
 		
 		JLabel passLabel = GuiUtil.getLabel("", 300, 1*25);
 		JLabel stonesLabel = GuiUtil.getLabel("Stones: " + PlayerManager.getBlackPlayer().getStonesCount(), 300, 1*25);
+		JLabel moveLabel = GuiUtil.getLabel("Last Move: ", 300, 1*25);
 
 		public PlayerTwoInfoPane() {
 			initComponents();
@@ -234,8 +247,9 @@ public class StarterApplet extends JApplet {
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
 			add(GuiUtil.getLabel("Player 2",300, 1 * 25));
-			add(passLabel);
 			add(stonesLabel);
+			add(moveLabel);
+			add(passLabel);
 		}
 		
 		public void paint(Graphics g) {
@@ -257,6 +271,15 @@ public class StarterApplet extends JApplet {
 			}
 
 			stonesLabel.setText("Stones: " + PlayerManager.getBlackPlayer().getStonesCount());
+			if(board.getMoves().size() > 0){
+				if(PlayerManager.getActivePlayer().getColor() == Color.WHITE){
+					moveLabel.setText("Last Move: " + board.getLastMove());
+				}
+				else{
+					moveLabel.setText("Last Move: ");
+				}
+			}
+			
 		}
 		
 	}
