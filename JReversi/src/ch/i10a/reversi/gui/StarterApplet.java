@@ -3,6 +3,7 @@ package ch.i10a.reversi.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -20,6 +21,8 @@ import javax.swing.JPanel;
 
 import ch.i10a.reversi.gameplay.MoveList;
 import ch.i10a.reversi.gameplay.PlayerManager;
+import ch.i10a.reversi.settings.ReversiProperties;
+import ch.i10a.reversi.settings.SettingsConst;
 import ch.i10a.reversi.settings.SettingsPanel;
 
 /**
@@ -30,6 +33,8 @@ public class StarterApplet extends JApplet {
 
 	GeneralInfoPane infoPane = new GeneralInfoPane();
 	Board board = new Board(infoPane);
+	PlayerOneInfoPane playerOne;
+	PlayerTwoInfoPane playerTwo;
 	
 
 	@Override
@@ -62,7 +67,7 @@ public class StarterApplet extends JApplet {
 		super.paint(g);
 		setSize(new Dimension(325 + (8 * Field.WIDTH), 25 + 25 + (8 * Field.WIDTH)));
 	}
-	
+		
 
 	// --------------- inner classes ------------------
 	/**
@@ -120,9 +125,9 @@ public class StarterApplet extends JApplet {
 	 */
 	protected class GeneralInfoPane extends JPanel {
 
-		JButton pass;
-		PlayerOneInfoPane playerOne;
-		PlayerTwoInfoPane playerTwo;
+		JButton offerDrawButton;
+
+		GameInfoPane gameInfoPane;
 
 		public GeneralInfoPane() {
 			initComponents();
@@ -131,31 +136,32 @@ public class StarterApplet extends JApplet {
 		private void initComponents() {
 			playerOne = new PlayerOneInfoPane();
 			playerTwo = new PlayerTwoInfoPane();
+			gameInfoPane = new GameInfoPane();
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			setSize(new Dimension(300, 4 * 50));
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
 
-			pass = new JButton("Pass");
-			pass.addActionListener(new ActPass());
+			offerDrawButton = new JButton("Offer Draw");
+			offerDrawButton.addActionListener(new ActDraw());
 
 			add(playerOne, BorderLayout.WEST); //Info Pane Player One
 			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
 			add(playerTwo, BorderLayout.WEST); //Info Pane Player Two
 			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
-			add(pass);
+			add(gameInfoPane, BorderLayout.WEST); //Info Pane Player Two
+			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
+			add(offerDrawButton);
 			
 		}
 
-		class ActPass implements ActionListener {
+		private class ActDraw implements ActionListener {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
-				PlayerManager.setPass();
-				
-				PlayerManager.nextPlayer();
-				repaint();
+				gameInfoPane.offerDraw();
+
+			
 			}
 
 		}
@@ -208,8 +214,8 @@ public class StarterApplet extends JApplet {
 				passLabel.setText("");
 			}
 
-			stonesLabel.setText("Stones: " + PlayerManager.getWhitePlayer().getStonesCount());
 			
+			setStonesLabelText(PlayerManager.getWhitePlayer().getStonesCount());
 			if(board.getMoves().size() > 0){
 				if(PlayerManager.getActivePlayer().getColor() == Color.BLACK){
 					moveLabel.setText("Last Move: " + board.getLastMove());
@@ -219,6 +225,9 @@ public class StarterApplet extends JApplet {
 				}
 			}
 			
+		}
+		public void setStonesLabelText(int count){
+			stonesLabel.setText("Stones: " + count);
 		}
 		
 		
@@ -270,8 +279,8 @@ public class StarterApplet extends JApplet {
 				passLabel.setText("");
 			}
 
-			stonesLabel.setText("Stones: " + PlayerManager.getBlackPlayer().getStonesCount());
 			
+			setStonesLabelText(PlayerManager.getBlackPlayer().getStonesCount());
 			if(board.getMoves().size() > 0){
 				if(PlayerManager.getActivePlayer().getColor() == Color.WHITE){
 					moveLabel.setText("Last Move: " + board.getLastMove());
@@ -281,6 +290,115 @@ public class StarterApplet extends JApplet {
 				}
 			}
 			
+		}
+		public void setStonesLabelText(int count){
+			stonesLabel.setText("Stones: " + count);
+		}
+		
+	}
+	
+	/**
+	 * A JPanel, which contains Informations about 
+	 * The game (Stats, Draws, etc.)
+	 */
+	private class GameInfoPane extends JPanel {
+		JLabel drawInfo = GuiUtil.getLabel("",300, 1 * 25);
+		JButton sayYesToDraw = new JButton("Yes");
+		JButton sayNoToDraw = new JButton("No");
+
+		public GameInfoPane() {
+			initComponents();
+		}
+
+		private void initComponents() {
+			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+			setSize(new Dimension(300, 3 * 50));
+			setBackground(Color.lightGray);
+			setMaximumSize(getSize());
+			setMinimumSize(getSize());
+			add(GuiUtil.getLabel("Game Informations",300, 1 * 25));
+			add(drawInfo);
+			JPanel drawChoose = new JPanel();
+			add(drawChoose);
+			drawChoose.setLayout(new FlowLayout());
+			drawChoose.setBackground(Color.lightGray);
+			drawChoose.setSize(new Dimension(300, 1 * 50));
+			
+			/*Add ActionListener to Yes-Button */
+			sayYesToDraw.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+	
+					setDraw();
+				}
+			});
+			/*Add ActionListener to No-Button */
+			sayNoToDraw.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+	
+					unsetDrawOffer();
+				}
+			});
+			
+			drawChoose.add(sayYesToDraw);
+			drawChoose.add(sayNoToDraw);
+			sayYesToDraw.setVisible(false);
+			sayNoToDraw.setVisible(false);
+
+
+		
+		}
+		
+		public void paint(Graphics g) {
+			super.paint(g);	
+		}
+		
+		/*If a draw is offered, a dialog is shown in the GameInfoPane */
+		public void offerDraw(){
+			String setText = "";
+			if(PlayerManager.getActivePlayer().getColor() == Color.WHITE){
+				setText = "The WHITE Player offers you a draw. Accept?";
+			}
+			else{
+				setText = "The BLACK Player offers you a draw. Accept?";
+			}
+			drawInfo.setText(setText);
+			sayYesToDraw.setVisible(true);
+			sayNoToDraw.setVisible(true);
+			super.repaint();
+		}
+		
+		/*If a draw is accepted, update everyf field and show the message about the draw */
+		public void setDraw(){
+			Field [][]fields = new Field[8][8];
+			for (int i = 0; i < fields.length; i++) {
+				for (int j = 0; j < fields[i].length/2; j++) {
+					int fieldValue = 1;
+					fields[j][i] = new Field(fieldValue, i, j);	
+				}
+				for (int j = fields[i].length/2; j < fields[i].length; j++) {
+					int fieldValue = -1;
+					fields[j][i] = new Field(fieldValue, i, j);	
+				}
+			}
+			playerOne.setStonesLabelText(32);
+			playerTwo.setStonesLabelText(32);
+			PlayerManager.getBlackPlayer().setStonesCount(32);
+			PlayerManager.getWhitePlayer().setStonesCount(32);
+			board.setBoard(fields);
+			sayYesToDraw.setVisible(false);
+			sayNoToDraw.setVisible(false);
+			drawInfo.setText("This game was a draw!");
+			
+			repaint();
+		}
+		
+		/* if a draw is neglected, set the buttons and text invisible */
+		public void unsetDrawOffer(){
+			sayYesToDraw.setVisible(false);
+			sayNoToDraw.setVisible(false);
+			drawInfo.setText("");
 		}
 		
 	}

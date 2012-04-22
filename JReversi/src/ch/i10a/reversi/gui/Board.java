@@ -926,7 +926,7 @@ public class Board extends JPanel {
 		int j = 0;
 		while (j < hitFields.size()) {
 			this.fields[hitFields.get(j).getColNum()][hitFields.get(j).getRowNum()].setValue(player.getValue()*2);
-			hitFields.get(j).update();
+			hitFields.get(j).update(PlayerManager.getActivePlayer().getValue());
 			j++;
 		}
 		
@@ -968,6 +968,17 @@ public class Board extends JPanel {
 		return moves.get(moves.size() - 1);
 	}
 	
+	public void setBoard(Field fields[][]){
+		for (int i = 0; i < fields.length; i++) {
+			for (int j = 0; j < fields[i].length; j++) {
+				
+				this.fields[i][j].setValue(fields[i][j].getValue());
+				this.fields[i][j].update(this.fields[i][j].getValue());
+			}
+		}
+		
+		
+	}
 
 	// ----------------- inner classes --------------------
 	private class MouseListener extends MouseAdapter {
@@ -996,6 +1007,7 @@ public class Board extends JPanel {
 							infoPane.repaint();
 							PlayerManager.setUnPass();
 							PlayerManager.nextPlayer();
+							
 							
 							
 						}

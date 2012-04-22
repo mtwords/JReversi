@@ -66,8 +66,8 @@ public class Field extends JPanel {
 
 	}
 
-	public void update() {
-		Thread t = new Thread(new AnimationRunner(PlayerManager.getActivePlayer().getValue()));
+	public void update(int value) {
+		Thread t = new Thread(new AnimationRunner(value));
 		t.start();
 	}
 
