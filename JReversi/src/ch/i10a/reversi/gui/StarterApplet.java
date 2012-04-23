@@ -47,6 +47,16 @@ public class StarterApplet extends JApplet {
 		add(infoPane, BorderLayout.EAST);
 
 	}
+	
+	public void start() {
+		super.init();
+		getRootPane().setJMenuBar(createMenuBar());
+		add(new LetterPane(), BorderLayout.NORTH);
+		add(new CipherPane(), BorderLayout.WEST);
+		add(board, BorderLayout.CENTER);
+		add(infoPane, BorderLayout.EAST);
+
+	}
 
 	private JMenuBar createMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
@@ -126,6 +136,8 @@ public class StarterApplet extends JApplet {
 	protected class GeneralInfoPane extends JPanel {
 
 		JButton offerDrawButton;
+		JButton newGameButton;
+		JButton surrenderButton;
 
 		GameInfoPane gameInfoPane;
 
@@ -141,9 +153,13 @@ public class StarterApplet extends JApplet {
 			setSize(new Dimension(300, 4 * 50));
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
-
+			
 			offerDrawButton = new JButton("Offer Draw");
 			offerDrawButton.addActionListener(new ActDraw());
+			newGameButton = new JButton("New Game");
+			newGameButton.addActionListener(new StartNewGame());
+			surrenderButton = new JButton("Surrender");
+			surrenderButton.addActionListener(new SurrenderGame());
 
 			add(playerOne, BorderLayout.WEST); //Info Pane Player One
 			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
@@ -151,7 +167,12 @@ public class StarterApplet extends JApplet {
 			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
 			add(gameInfoPane, BorderLayout.WEST); //Info Pane Player Two
 			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
+			
 			add(offerDrawButton);
+			add(newGameButton);
+			add (surrenderButton);
+			
+			
 			
 		}
 
@@ -164,6 +185,25 @@ public class StarterApplet extends JApplet {
 			
 			}
 
+		}
+		private class StartNewGame implements ActionListener {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+
+			
+			}
+
+		}
+		private class SurrenderGame implements ActionListener{
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				gameInfoPane.surrender();
+
+			
+			}
 		}
 	}
 	
@@ -192,6 +232,7 @@ public class StarterApplet extends JApplet {
 			add(stonesLabel);
 			add(moveLabel);
 			add(passLabel);
+			
 		}
 
 		public void paint(Graphics g) {
@@ -321,8 +362,8 @@ public class StarterApplet extends JApplet {
 			add(gameInfo);
 			add(winnerInfo);
 			JPanel drawChoose = new JPanel();
-			add(drawChoose);
 			drawChoose.setLayout(new FlowLayout());
+			add(drawChoose);
 			drawChoose.setBackground(Color.lightGray);
 			drawChoose.setSize(new Dimension(300, 1 * 50));
 			
@@ -385,6 +426,32 @@ public class StarterApplet extends JApplet {
 			sayYesToDraw.setVisible(true);
 			sayNoToDraw.setVisible(true);
 			super.repaint();
+		}
+		
+		public void surrender(){
+			Field [][] fields = new Field[8][8];
+			for (int i = 0; i < fields.length; i++) {
+				for (int j = 0; j < fields[i].length; j++) {
+					int fieldValue = PlayerManager.getActivePlayer().getValue() * -1;
+					fields[j][i] = new Field(fieldValue, i, j);	
+				}
+				
+			}
+			if(PlayerManager.getActivePlayer().getValue() == 1){
+				playerOne.setStonesLabelText(0);
+				playerTwo.setStonesLabelText(64);
+				PlayerManager.getBlackPlayer().setStonesCount(0);
+				PlayerManager.getWhitePlayer().setStonesCount(64);
+			}
+			else{
+				playerOne.setStonesLabelText(64);
+				playerTwo.setStonesLabelText(0);
+				PlayerManager.getBlackPlayer().setStonesCount(64);
+				PlayerManager.getWhitePlayer().setStonesCount(0);
+			}
+			
+			board.setBoard(fields);
+			repaint();
 		}
 		
 		/*If a draw is accepted, update every field and show the message about the draw */
