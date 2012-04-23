@@ -979,6 +979,17 @@ public class Board extends JPanel {
 		
 		
 	}
+	
+	public boolean checkForFreeFields(){
+		for (int i = 0; i < fields.length; i++) {
+			for (int j = 0; j < fields[i].length; j++) {
+				if(fields[i][j].getValue() == 0){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
 	// ----------------- inner classes --------------------
 	private class MouseListener extends MouseAdapter {

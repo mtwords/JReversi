@@ -302,7 +302,8 @@ public class StarterApplet extends JApplet {
 	 * The game (Stats, Draws, etc.)
 	 */
 	private class GameInfoPane extends JPanel {
-		JLabel drawInfo = GuiUtil.getLabel("",300, 1 * 25);
+		JLabel winnerInfo = GuiUtil.getLabel("",300, 1 * 25);
+		JLabel gameInfo = GuiUtil.getLabel("", 300, 1 * 25);
 		JButton sayYesToDraw = new JButton("Yes");
 		JButton sayNoToDraw = new JButton("No");
 
@@ -311,13 +312,14 @@ public class StarterApplet extends JApplet {
 		}
 
 		private void initComponents() {
-			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); 
 			setSize(new Dimension(300, 3 * 50));
 			setBackground(Color.lightGray);
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
 			add(GuiUtil.getLabel("Game Informations",300, 1 * 25));
-			add(drawInfo);
+			add(gameInfo);
+			add(winnerInfo);
 			JPanel drawChoose = new JPanel();
 			add(drawChoose);
 			drawChoose.setLayout(new FlowLayout());
@@ -345,13 +347,26 @@ public class StarterApplet extends JApplet {
 			drawChoose.add(sayNoToDraw);
 			sayYesToDraw.setVisible(false);
 			sayNoToDraw.setVisible(false);
-
-
+			
+				
+			
 		
 		}
 		
 		public void paint(Graphics g) {
 			super.paint(g);	
+			if(!board.checkForFreeFields()){
+				gameInfo.setText("The game is over");
+				if(PlayerManager.getBlackPlayer().getStonesCount() > PlayerManager.getWhitePlayer().getStonesCount()){
+					winnerInfo.setText("BLACK Won the Game!");
+				}
+				else if(PlayerManager.getBlackPlayer().getStonesCount() < PlayerManager.getWhitePlayer().getStonesCount()){
+					winnerInfo.setText("WHITE Won the Game!");
+				}
+				else{
+					winnerInfo.setText("This game was a draw!");
+				}
+			}
 		}
 		
 		/*If a draw is offered, a dialog is shown in the GameInfoPane */
@@ -363,13 +378,13 @@ public class StarterApplet extends JApplet {
 			else{
 				setText = "The BLACK Player offers you a draw. Accept?";
 			}
-			drawInfo.setText(setText);
+			winnerInfo.setText(setText);
 			sayYesToDraw.setVisible(true);
 			sayNoToDraw.setVisible(true);
 			super.repaint();
 		}
 		
-		/*If a draw is accepted, update everyf field and show the message about the draw */
+		/*If a draw is accepted, update every field and show the message about the draw */
 		public void setDraw(){
 			Field [][]fields = new Field[8][8];
 			for (int i = 0; i < fields.length; i++) {
@@ -389,7 +404,7 @@ public class StarterApplet extends JApplet {
 			board.setBoard(fields);
 			sayYesToDraw.setVisible(false);
 			sayNoToDraw.setVisible(false);
-			drawInfo.setText("This game was a draw!");
+			winnerInfo.setText("This game was a draw!");
 			
 			repaint();
 		}
@@ -398,7 +413,7 @@ public class StarterApplet extends JApplet {
 		public void unsetDrawOffer(){
 			sayYesToDraw.setVisible(false);
 			sayNoToDraw.setVisible(false);
-			drawInfo.setText("");
+			winnerInfo.setText("");
 		}
 		
 	}
