@@ -968,6 +968,11 @@ public class Board extends JPanel {
 		return moves.get(moves.size() - 1);
 	}
 	
+
+	/**
+	 * sets the game fields to the values given in the parameter 
+	 *  
+	 */
 	public void setBoard(Field fields[][]){
 		for (int i = 0; i < fields.length; i++) {
 			for (int j = 0; j < fields[i].length; j++) {
@@ -980,6 +985,12 @@ public class Board extends JPanel {
 		
 	}
 	
+
+	/**
+	 * Checks if a free field is available on the board.
+	 * if not, the game is over. 
+	 * @return true if a free field is available, false if not 
+	 */
 	public boolean checkForFreeFields(){
 		for (int i = 0; i < fields.length; i++) {
 			for (int j = 0; j < fields[i].length; j++) {
