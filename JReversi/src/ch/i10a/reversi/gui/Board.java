@@ -1001,6 +1001,16 @@ public class Board extends JPanel {
 		}
 		return false;
 	}
+	
+	public boolean checkForDoublePass(){
+		if(!checkWholeFieldHit(fields)){
+			return true;
+		}
+		else{
+			return false;
+		}
+		
+	}
 
 	// ----------------- inner classes --------------------
 	private class MouseListener extends MouseAdapter {
@@ -1039,6 +1049,10 @@ public class Board extends JPanel {
 				if(!checkWholeFieldHit(fields)){
 					PlayerManager.setPass();
 					PlayerManager.nextPlayer();
+					if(!checkWholeFieldHit(fields)){
+						PlayerManager.setDoublePass();
+					}
+					
 				}
 			}
 			

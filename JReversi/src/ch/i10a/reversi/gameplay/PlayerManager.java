@@ -15,6 +15,7 @@ public class PlayerManager {
 	private static PlayerAdapter[] players;
 	private static PlayerAdapter activePlayer;
 	private static int passValue;
+	private static int doublePass;
 
 	static {
 		activePlayer = new HumanPlayer();
@@ -77,5 +78,19 @@ public class PlayerManager {
 		activePlayer.updateStonesCount(count);
 		// "- 1" because one stones was setted by the player
 		getNextPlayer().updateStonesCount(-(count - 1));
+	}
+	
+	public static void setDoublePass(){
+		doublePass = 1;
+	}
+	
+	public static boolean checkDoublePass(){
+		if(doublePass > 0){
+			return true;
+		}
+		else{
+			return false;
+		}
+		
 	}
 }

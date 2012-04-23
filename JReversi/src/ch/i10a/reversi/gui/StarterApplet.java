@@ -355,8 +355,10 @@ public class StarterApplet extends JApplet {
 		
 		public void paint(Graphics g) {
 			super.paint(g);	
-			if(!board.checkForFreeFields()){
+			if(!board.checkForFreeFields() || PlayerManager.checkDoublePass()){
+				
 				gameInfo.setText("The game is over");
+
 				if(PlayerManager.getBlackPlayer().getStonesCount() > PlayerManager.getWhitePlayer().getStonesCount()){
 					winnerInfo.setText("BLACK Won the Game!");
 				}
@@ -367,6 +369,7 @@ public class StarterApplet extends JApplet {
 					winnerInfo.setText("This game was a draw!");
 				}
 			}
+			
 		}
 		
 		/*If a draw is offered, a dialog is shown in the GameInfoPane */
