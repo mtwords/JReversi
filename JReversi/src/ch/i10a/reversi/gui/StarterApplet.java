@@ -17,12 +17,12 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import ch.i10a.reversi.gameplay.MoveHandler;
 import ch.i10a.reversi.gameplay.MoveList;
 import ch.i10a.reversi.gameplay.PlayerManager;
-import ch.i10a.reversi.settings.ReversiProperties;
-import ch.i10a.reversi.settings.SettingsConst;
 import ch.i10a.reversi.settings.SettingsPanel;
 
 /**
@@ -31,15 +31,34 @@ import ch.i10a.reversi.settings.SettingsPanel;
  */
 public class StarterApplet extends JApplet {
 
-	GeneralInfoPane infoPane = new GeneralInfoPane();
-	Board board = new Board(infoPane);
+	GeneralInfoPane infoPane;
+	Board board;
 	PlayerOneInfoPane playerOne;
 	PlayerTwoInfoPane playerTwo;
 	
 
-	@Override
-	public void init() {
+//	@Override
+//	public void init() {
+//		try {
+//            SwingUtilities.invokeAndWait(new Runnable() {
+//                public void run() {
+//                	getRootPane().setJMenuBar(createMenuBar());
+//                	add(new LetterPane(), BorderLayout.NORTH);
+//                	add(new CipherPane(), BorderLayout.WEST);
+//                	add(board, BorderLayout.CENTER);
+//                	add(infoPane, BorderLayout.EAST);
+//                }
+//            });
+//		} catch(Exception e) {
+//            System.err.println("createGUI didn't complete successfully");
+//        }
+//	}
+	
+	public void start() {
 		super.init();
+		infoPane = new GeneralInfoPane();
+		board = new Board(infoPane);
+
 		getRootPane().setJMenuBar(createMenuBar());
 		add(new LetterPane(), BorderLayout.NORTH);
 		add(new CipherPane(), BorderLayout.WEST);
@@ -47,15 +66,13 @@ public class StarterApplet extends JApplet {
 		add(infoPane, BorderLayout.EAST);
 
 	}
-	
-	public void start() {
-		super.init();
-		getRootPane().setJMenuBar(createMenuBar());
-		add(new LetterPane(), BorderLayout.NORTH);
-		add(new CipherPane(), BorderLayout.WEST);
-		add(board, BorderLayout.CENTER);
-		add(infoPane, BorderLayout.EAST);
-
+	@Override
+	public void stop() {
+		super.stop();
+//		remove(board);
+//		remove(infoPane);
+		board = null;
+		infoPane = null;
 	}
 
 	private JMenuBar createMenuBar() {
@@ -180,9 +197,12 @@ public class StarterApplet extends JApplet {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				gameInfoPane.offerDraw();
+//				gameInfoPane.offerDraw();
 
-			
+				int choice = JOptionPane.showConfirmDialog(board, "Draw?");
+				if (choice == JOptionPane.YES_OPTION) {
+					gameInfoPane.setDraw();
+				}
 			}
 
 		}
@@ -190,7 +210,8 @@ public class StarterApplet extends JApplet {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
+				stop();
+				start();
 
 			
 			}
@@ -396,7 +417,7 @@ public class StarterApplet extends JApplet {
 		
 		public void paint(Graphics g) {
 			super.paint(g);	
-			if(!board.checkForFreeFields() || PlayerManager.checkDoublePass()){
+			if(!MoveHandler.checkForFreeFields() || PlayerManager.checkDoublePass()){
 				
 				gameInfo.setText("The game is over");
 

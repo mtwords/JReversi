@@ -1,8 +1,14 @@
 package ch.i10a.reversi.gameplay;
 
-
+/**
+ * Abstract Player class.
+ * 
+ * Useful for general Player data and functions, which doesn't
+ * depend on the player itself.
+ */
 public abstract class PlayerAdapter implements PlayerI {
 
+	/** the game starts with 2 stones for each player **/
 	private int stonesCount = 2;
 
 	public int getStonesCount() {
