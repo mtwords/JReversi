@@ -199,7 +199,15 @@ public class StarterApplet extends JApplet {
 			public void actionPerformed(ActionEvent arg0) {
 //				gameInfoPane.offerDraw();
 
-				int choice = JOptionPane.showConfirmDialog(board, "Draw?");
+				String drawLabel = null;
+				if(PlayerManager.getActivePlayer().getColor() == Color.WHITE){
+					drawLabel = "The WHITE Player offers you a draw. Accept?";
+				}
+				else{
+					drawLabel = "The BLACK Player offers you a draw. Accept?";
+				}
+
+				int choice = JOptionPane.showConfirmDialog(board, drawLabel, "Offered draw", JOptionPane.YES_NO_OPTION);
 				if (choice == JOptionPane.YES_OPTION) {
 					gameInfoPane.setDraw();
 				}
