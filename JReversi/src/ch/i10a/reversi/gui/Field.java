@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -24,6 +25,7 @@ public class Field extends JPanel {
 	private int value;
 	private int rowNum;
 	private int colNum;
+	private ArrayList<Field> possibleHits = new ArrayList<Field>();
 
 	// Graphic things
 	static BufferedImage whiteStone;
@@ -56,6 +58,11 @@ public class Field extends JPanel {
 	public void paint(Graphics g) {
 		super.paint(g);
 
+		int hitCount = possibleHits.size();
+		if (hitCount > 0) {
+			g.drawString("" + hitCount, 20, 30);
+		}
+
 		if (value == -1) {
 			g.drawImage(whiteStone, x, y, width, height, null);
 		} else if (value == 1) {
@@ -66,7 +73,7 @@ public class Field extends JPanel {
 
 	}
 
-	public void update(int value) {
+	public void update(final int value) {
 		Thread t = new Thread(new AnimationRunner(value));
 		t.start();
 	}
@@ -94,6 +101,10 @@ public class Field extends JPanel {
 		return colNum;
 	}
 
+	public void setPossibleHits(ArrayList<Field> possibleHitsCount) {
+		this.possibleHits = possibleHitsCount;
+	}
+
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer("Field:\n");
@@ -102,6 +113,7 @@ public class Field extends JPanel {
 		sb.append("col: " + colNum);
 		sb.append("\n");
 		sb.append("row: " + rowNum);
+		sb.append("\n");
 		return sb.toString();
 	}
 
@@ -148,6 +160,8 @@ public class Field extends JPanel {
 			}
 
 			setValue(activePlayerValue);
+
+//			notify();
 		}
 
 	}

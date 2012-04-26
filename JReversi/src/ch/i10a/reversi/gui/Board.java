@@ -63,6 +63,8 @@ public class Board extends JPanel {
 				add(fields[j][i]);
 			}
 		}
+
+		MoveHandler.collectingPossibleFieldHits();
 	}
 	
 	// ----------------- helper methods --------------------
@@ -107,6 +109,7 @@ public class Board extends JPanel {
 			Field activeField = (Field) e.getComponent();
 			// synchronized call
 			MoveHandler.doMove(activeField);
+			MoveHandler.collectingPossibleFieldHits();
 
 			// updates
 			infoPane.repaint();

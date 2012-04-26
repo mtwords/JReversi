@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -22,6 +23,7 @@ import javax.swing.JPanel;
 
 import ch.i10a.reversi.gameplay.MoveHandler;
 import ch.i10a.reversi.gameplay.MoveList;
+import ch.i10a.reversi.gameplay.Openings;
 import ch.i10a.reversi.gameplay.PlayerManager;
 import ch.i10a.reversi.settings.SettingsPanel;
 
@@ -178,11 +180,11 @@ public class StarterApplet extends JApplet {
 			surrenderButton = new JButton("Surrender");
 			surrenderButton.addActionListener(new SurrenderGame());
 
-			add(playerOne, BorderLayout.WEST); //Info Pane Player One
+			add(playerOne); //Info Pane Player One
 			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
-			add(playerTwo, BorderLayout.WEST); //Info Pane Player Two
+			add(playerTwo); //Info Pane Player Two
 			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
-			add(gameInfoPane, BorderLayout.WEST); //Info Pane Player Two
+			add(gameInfoPane); //Info Pane Player Two
 			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
 			
 			add(offerDrawButton);
@@ -372,10 +374,9 @@ public class StarterApplet extends JApplet {
 	 * The game (Stats, Draws, etc.)
 	 */
 	private class GameInfoPane extends JPanel {
+		JLabel opening = GuiUtil.getLabel("Opening: ",300, 1 * 25);
 		JLabel winnerInfo = GuiUtil.getLabel("",300, 1 * 25);
 		JLabel gameInfo = GuiUtil.getLabel("", 300, 1 * 25);
-		JButton sayYesToDraw = new JButton("Yes");
-		JButton sayNoToDraw = new JButton("No");
 
 		public GameInfoPane() {
 			initComponents();
@@ -388,43 +389,18 @@ public class StarterApplet extends JApplet {
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
 			add(GuiUtil.getLabel("Game Informations",300, 1 * 25));
+			add(opening);
 			add(gameInfo);
 			add(winnerInfo);
-			JPanel drawChoose = new JPanel();
-			drawChoose.setLayout(new FlowLayout());
-			add(drawChoose);
-			drawChoose.setBackground(Color.lightGray);
-			drawChoose.setSize(new Dimension(300, 1 * 50));
-			
-			/*Add ActionListener to Yes-Button */
-			sayYesToDraw.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-	
-					setDraw();
-				}
-			});
-			/*Add ActionListener to No-Button */
-			sayNoToDraw.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-	
-					unsetDrawOffer();
-				}
-			});
-			
-			drawChoose.add(sayYesToDraw);
-			drawChoose.add(sayNoToDraw);
-			sayYesToDraw.setVisible(false);
-			sayNoToDraw.setVisible(false);
-			
-				
-			
-		
 		}
 		
 		public void paint(Graphics g) {
 			super.paint(g);	
+			// TODO oli
+			// check for existing opening!
+			//	opening.setText("Opening: " + [opening]);
+//			opening.setText("Opening: " + Openings.checkOpening(board.getMoves()));
+
 			if(!MoveHandler.checkForFreeFields() || PlayerManager.checkDoublePass()){
 				
 				gameInfo.setText("The game is over");
@@ -452,8 +428,6 @@ public class StarterApplet extends JApplet {
 				setText = "The BLACK Player offers you a draw. Accept?";
 			}
 			winnerInfo.setText(setText);
-			sayYesToDraw.setVisible(true);
-			sayNoToDraw.setVisible(true);
 			super.repaint();
 		}
 		
@@ -501,8 +475,6 @@ public class StarterApplet extends JApplet {
 			PlayerManager.getBlackPlayer().setStonesCount(32);
 			PlayerManager.getWhitePlayer().setStonesCount(32);
 			board.setBoard(fields);
-			sayYesToDraw.setVisible(false);
-			sayNoToDraw.setVisible(false);
 			winnerInfo.setText("This game was a draw!");
 			
 			repaint();
@@ -510,8 +482,6 @@ public class StarterApplet extends JApplet {
 		
 		/* if a draw is neglected, set the buttons and text invisible */
 		public void unsetDrawOffer(){
-			sayYesToDraw.setVisible(false);
-			sayNoToDraw.setVisible(false);
 			winnerInfo.setText("");
 		}
 		
@@ -526,6 +496,7 @@ public class StarterApplet extends JApplet {
 			JDialog settingsDialog = new JDialog((Frame) null, "Settings");
 			settingsDialog.add(settingsPanel);
 			settingsDialog.pack();
+			settingsDialog.setLocationRelativeTo(board);
 			settingsDialog.setVisible(true);
 		}
 		

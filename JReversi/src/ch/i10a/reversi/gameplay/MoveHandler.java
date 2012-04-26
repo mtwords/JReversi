@@ -62,15 +62,7 @@ public class MoveHandler {
 	 * @return ArrayList of Fields which stones are beaten
 	 */
 	public static void hitEnemyStones(Field field, PlayerI player){
-		ArrayList<Field> hitFields = new ArrayList<Field>();
-		hitFields.addAll(hitBottomLeft(field, player));
-		hitFields.addAll(hitLeft(field, player));
-		hitFields.addAll(hitTopLeft(field, player));
-		hitFields.addAll(hitTop(field, player));
-		hitFields.addAll(hitTopRight(field, player));
-		hitFields.addAll(hitRight(field, player));
-		hitFields.addAll(hitBottomRight(field, player));
-		hitFields.addAll(hitBottom(field, player));
+		ArrayList<Field> hitFields = getHits(field, player);
 
 		// update the stones count of this player
 		// "+ 1" because one stone is set by the player!
@@ -84,7 +76,22 @@ public class MoveHandler {
 		}
 		
 	}
-	
+
+	/**
+	 * Runs through the board and collects the possible 
+	 * fields to hit for every field.
+	 */
+	public static void collectingPossibleFieldHits() {
+		PlayerI activePlayer = PlayerManager.getActivePlayer();
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				Field f = fields[i][j];
+				f.setPossibleHits(getHits(f, activePlayer));
+				f.repaint();
+			}
+		}
+	}
+
 	/**
 	 * Returns true, if the actual Player can hit stones on the whole field, else it returns false 
 	 * @return Boolean that's true, if the actual player can beat at least one stone
@@ -211,6 +218,19 @@ public class MoveHandler {
 
 
 	// -------------------- !!! private methods !!! --------------------
+	private static ArrayList<Field> getHits(Field field, PlayerI player) {
+		ArrayList<Field> hitFields = new ArrayList<Field>();
+		hitFields.addAll(hitBottomLeft(field, player));
+		hitFields.addAll(hitLeft(field, player));
+		hitFields.addAll(hitTopLeft(field, player));
+		hitFields.addAll(hitTop(field, player));
+		hitFields.addAll(hitTopRight(field, player));
+		hitFields.addAll(hitRight(field, player));
+		hitFields.addAll(hitBottomRight(field, player));
+		hitFields.addAll(hitBottom(field, player));
+		return hitFields;
+	}
+
 	/**
 	 * Returns the neighbour top of the active field. If 
 	 * the field is at the top border of the board, this method will
