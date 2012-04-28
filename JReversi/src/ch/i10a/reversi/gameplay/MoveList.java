@@ -40,17 +40,20 @@ public class MoveList<T> extends ArrayList<Move> {
 		}
 
 		boolean equal = false;
-		for (int i = 0; i < size(); i++) {
-			if (get(i) == null || other.get(i) == null) {
-				return false;
-			}
-			Move m = (Move) get(i);
-			if (m.equals(other.get(i))) {
-				equal = true;
-			} else {
-				equal = false;
+		if(this.size() == other.size()){
+			for (int i = 0; i < size(); i++) {
+				if (get(i) == null || other.get(i) == null) {
+					return false;
+				}
+				Move m = (Move) get(i);
+				if (m.equals(other.get(i))) {
+					equal = true;
+				} else {
+					equal = false;
+				}
 			}
 		}
+		
 		return equal;
 	}
 

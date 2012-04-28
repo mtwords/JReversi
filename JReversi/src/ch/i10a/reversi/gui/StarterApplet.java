@@ -399,7 +399,7 @@ public class StarterApplet extends JApplet {
 			// TODO oli
 			// check for existing opening!
 			//	opening.setText("Opening: " + [opening]);
-//			opening.setText("Opening: " + Openings.checkOpening(board.getMoves()));
+			opening.setText("Opening: " + Openings.checkOpening(board.getMoves()));
 
 			if(!MoveHandler.checkForFreeFields() || PlayerManager.checkDoublePass()){
 				
