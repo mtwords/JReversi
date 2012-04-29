@@ -34,7 +34,10 @@ public class Board extends JPanel {
 		MoveHandler.registerFields(fields);
 		initComponents();
 	}
-
+	
+	/**
+	 * Initializes the Fields with the beginning table setup
+	 */
 	private void initFields() {
 		fields = new Field[8][8];
 		for (int i = 0; i < fields.length; i++) {
@@ -51,6 +54,9 @@ public class Board extends JPanel {
 		}
 	}
 
+	/**
+	 * Initializes the components of the board
+	 */
 	private void initComponents() {
 		setLayout(new GridLayout(8, 8));
 		setSize(new Dimension(8 * Field.WIDTH, 8 * Field.WIDTH));

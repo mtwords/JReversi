@@ -72,12 +72,16 @@ public class Field extends JPanel {
 		}
 
 	}
-
+	
+	/**
+	 * Updates the field with the value specified
+	 */
 	public void update(final int value) {
 		Thread t = new Thread(new AnimationRunner(value));
 		t.start();
 	}
-
+	
+	
 	private void chooseImageToPaint(int factor) {
 		int activePlayerValue = PlayerManager.getActivePlayer().getValue();
 		if (activePlayerValue * factor < 0) {
@@ -86,21 +90,42 @@ public class Field extends JPanel {
 			imageToPaint = blackStone;
 		}
 	}
-
+	
+	/**
+	 * Returns the value of this field
+	 * @return int value of the field 
+	 */
 	public int getValue() {
 		return value;
 	}
+	
+	/**
+	 * Sets given value on this field
+	 */
 	public void setValue(int value) {
 		this.value = value;
 	}
-
+	
+	/**
+	 * Returns the row number of this field
+	 * @return int row number of the field 
+	 */
 	public int getRowNum() {
 		return rowNum;
 	}
+	
+	/**
+	 * Returns the col number of this field
+	 * @return int col number of the field 
+	 */
 	public int getColNum() {
 		return colNum;
 	}
-
+	
+	/**
+	 * Sets the possible hits that can be achieved by playing
+	 * this field
+	 */
 	public void setPossibleHits(ArrayList<Field> possibleHitsCount) {
 		this.possibleHits = possibleHitsCount;
 	}

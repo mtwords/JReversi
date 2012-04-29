@@ -191,8 +191,7 @@ public class StarterApplet extends JApplet {
 			add(newGameButton);
 			add (surrenderButton);
 			
-			
-			
+
 		}
 
 		private class ActDraw implements ActionListener {

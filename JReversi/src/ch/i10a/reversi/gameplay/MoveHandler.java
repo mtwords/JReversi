@@ -213,10 +213,6 @@ public class MoveHandler {
 	
 
 
-
-
-
-
 	// -------------------- !!! private methods !!! --------------------
 	private static ArrayList<Field> getHits(Field field, PlayerI player) {
 		ArrayList<Field> hitFields = new ArrayList<Field>();
