@@ -29,6 +29,11 @@ public class Openings {
 	public static MoveList<Move> shamanOpeningNorth = initShamanOpeningNorth();
 	public static MoveList<Move> shamanOpeningWest = initShamanOpeningWest();
 
+	
+	/**
+	 * Returns the opening played 
+	 * @return String of the played opening 
+	 */
 	public static String checkOpening(MoveList<Move> moves) {
 		if (tigerOpeningSouth.equals(moves)) {
 			return "Tiger";
@@ -80,6 +85,10 @@ public class Openings {
 		return "";
 	}
 
+	/**
+	 * Returns the moves of the TigerOpening in South direction 
+	 * @return MoveList of Moves of the TigerOpening 
+	 */
 	private static MoveList<Move> initTigerOpeningSouth() {
 		MoveList<Move> tiger = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -96,6 +105,10 @@ public class Openings {
 		return tiger;
 	}
 	
+	/**
+	 * Returns the moves of the TigerOpening in East direction 
+	 * @return MoveList of Moves of the TigerOpening 
+	 */
 	private static MoveList<Move> initTigerOpeningEast() {
 		MoveList<Move> tiger = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -112,6 +125,10 @@ public class Openings {
 		return tiger;
 	}
 	
+	/**
+	 * Returns the moves of the TigerOpening in North direction 
+	 * @return MoveList of Moves of the TigerOpening 
+	 */
 	private static MoveList<Move> initTigerOpeningNorth() {
 		MoveList<Move> tiger = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -128,6 +145,10 @@ public class Openings {
 		return tiger;
 	}
 	
+	/**
+	 * Returns the moves of the TigerOpening in West direction 
+	 * @return MoveList of Moves of the TigerOpening 
+	 */
 	private static MoveList<Move> initTigerOpeningWest() {
 		MoveList<Move> tiger = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -144,6 +165,10 @@ public class Openings {
 		return tiger;
 	}
 
+	/**
+	 * Returns the moves of the RoseOpening in South direction 
+	 * @return MoveList of Moves of the RoseOpening 
+	 */
 	private static MoveList<Move> initRoseOpeningSouth() {
 		MoveList<Move> rose = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -170,6 +195,10 @@ public class Openings {
 		return rose;
 	}
 	
+	/**
+	 * Returns the moves of the RoseOpening in East direction 
+	 * @return MoveList of Moves of the RoseOpening 
+	 */
 	private static MoveList<Move> initRoseOpeningEast() {
 		MoveList<Move> rose = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -196,6 +225,10 @@ public class Openings {
 		return rose;
 	}
 	
+	/**
+	 * Returns the moves of the RoseOpening in North direction 
+	 * @return MoveList of Moves of the RoseOpening 
+	 */
 	private static MoveList<Move> initRoseOpeningNorth() {
 		MoveList<Move> rose = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -222,6 +255,10 @@ public class Openings {
 		return rose;
 	}
 	
+	/**
+	 * Returns the moves of the RoseOpening in West direction 
+	 * @return MoveList of Moves of the RoseOpening 
+	 */
 	private static MoveList<Move> initRoseOpeningWest() {
 		MoveList<Move> rose = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -248,7 +285,10 @@ public class Openings {
 		return rose;
 	}
 	
-
+	/**
+	 * Returns the moves of the BuffaloOpening in South direction 
+	 * @return MoveList of Moves of the BuffaloOpening 
+	 */
 	private static MoveList<Move> initBuffaloOpeningSouth() {
 		MoveList<Move> buffalo = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -265,6 +305,10 @@ public class Openings {
 		return buffalo;
 	}
 	
+	/**
+	 * Returns the moves of the BuffaloOpening in East direction 
+	 * @return MoveList of Moves of the BuffaloOpening 
+	 */
 	private static MoveList<Move> initBuffaloOpeningEast() {
 		MoveList<Move> buffalo = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -281,6 +325,10 @@ public class Openings {
 		return buffalo;
 	}
 	
+	/**
+	 * Returns the moves of the BuffaloOpening in North direction 
+	 * @return MoveList of Moves of the BuffaloOpening 
+	 */
 	private static MoveList<Move> initBuffaloOpeningNorth() {
 		MoveList<Move> buffalo = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -297,6 +345,10 @@ public class Openings {
 		return buffalo;
 	}
 	
+	/**
+	 * Returns the moves of the BuffaloOpening in West direction 
+	 * @return MoveList of Moves of the BuffaloOpening 
+	 */
 	private static MoveList<Move> initBuffaloOpeningWest() {
 		MoveList<Move> buffalo = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -313,6 +365,10 @@ public class Openings {
 		return buffalo;
 	}
 
+	/**
+	 * Returns the moves of the HeathOpening in South direction 
+	 * @return MoveList of Moves of the HeathOpening 
+	 */
 	private static MoveList<Move> initHeathOpeningSouth() {
 		MoveList<Move> heath = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -329,6 +385,10 @@ public class Openings {
 		return heath;
 	}
 	
+	/**
+	 * Returns the moves of the HeathOpening in East direction 
+	 * @return MoveList of Moves of the HeathOpening 
+	 */
 	private static MoveList<Move> initHeathOpeningEast() {
 		MoveList<Move> heath = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -345,6 +405,10 @@ public class Openings {
 		return heath;
 	}
 	
+	/**
+	 * Returns the moves of the HeathOpening in North direction 
+	 * @return MoveList of Moves of the HeathOpening 
+	 */
 	private static MoveList<Move> initHeathOpeningNorth() {
 		MoveList<Move> heath = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -361,6 +425,10 @@ public class Openings {
 		return heath;
 	}
 	
+	/**
+	 * Returns the moves of the HeathOpening in West direction 
+	 * @return MoveList of Moves of the HeathOpening 
+	 */
 	private static MoveList<Move> initHeathOpeningWest() {
 		MoveList<Move> heath = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -377,6 +445,10 @@ public class Openings {
 		return heath;
 	}
 
+	/**
+	 * Returns the moves of the InoueOpening in South direction 
+	 * @return MoveList of Moves of the InoueOpening 
+	 */
 	private static MoveList<Move> initInoueOpeningSouth() {
 		MoveList<Move> inoue = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -397,6 +469,10 @@ public class Openings {
 		return inoue;
 	}
 
+	/**
+	 * Returns the moves of the InoueOpening in East direction 
+	 * @return MoveList of Moves of the InoueOpening 
+	 */
 	private static MoveList<Move> initInoueOpeningEast() {
 		MoveList<Move> inoue = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -417,6 +493,10 @@ public class Openings {
 		return inoue;
 	}
 	
+	/**
+	 * Returns the moves of the InoueOpening in North direction 
+	 * @return MoveList of Moves of the InoueOpening 
+	 */
 	private static MoveList<Move> initInoueOpeningNorth() {
 		MoveList<Move> inoue = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -437,6 +517,10 @@ public class Openings {
 		return inoue;
 	}
 	
+	/**
+	 * Returns the moves of the InoueOpening in West direction 
+	 * @return MoveList of Moves of the InoueOpening 
+	 */
 	private static MoveList<Move> initInoueOpeningWest() {
 		MoveList<Move> inoue = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -457,6 +541,10 @@ public class Openings {
 		return inoue;
 	}
 	
+	/**
+	 * Returns the moves of the ShamanOpening in South direction 
+	 * @return MoveList of Moves of the ShamanOpening 
+	 */
 	private static MoveList<Move> initShamanOpeningSouth() {
 		MoveList<Move> shaman = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -477,6 +565,10 @@ public class Openings {
 		return shaman;
 	}
 	
+	/**
+	 * Returns the moves of the ShamanOpening in East direction 
+	 * @return MoveList of Moves of the ShamanOpening 
+	 */
 	private static MoveList<Move> initShamanOpeningEast() {
 		MoveList<Move> shaman = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -497,6 +589,10 @@ public class Openings {
 		return shaman;
 	}
 	
+	/**
+	 * Returns the moves of the ShamanOpening in North direction 
+	 * @return MoveList of Moves of the ShamanOpening 
+	 */
 	private static MoveList<Move> initShamanOpeningNorth() {
 		MoveList<Move> shaman = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
@@ -517,6 +613,10 @@ public class Openings {
 		return shaman;
 	}
 	
+	/**
+	 * Returns the moves of the ShamanOpening in West direction 
+	 * @return MoveList of Moves of the ShamanOpening 
+	 */
 	private static MoveList<Move> initShamanOpeningWest() {
 		MoveList<Move> shaman = new MoveList<MoveList.Move>();
 		// a:0 b:1 c:2 d:3 e:4 f:5 g:6 h:7
