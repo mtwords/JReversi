@@ -146,4 +146,6 @@ public class Board extends JPanel {
 			activeField.repaint();
 		}
 	}
+	
+	
 }

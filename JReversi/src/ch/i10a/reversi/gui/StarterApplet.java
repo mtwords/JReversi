@@ -368,7 +368,7 @@ public class StarterApplet extends JApplet {
 	 * The game (Stats, Draws, etc.)
 	 */
 	private class GameInfoPane extends JPanel {
-		JLabel opening = GuiUtil.getLabel("Opening: ",300, 1 * 25);
+		JLabel opening = GuiUtil.getLabel("",300, 1 * 25);
 		JLabel winnerInfo = GuiUtil.getLabel("",300, 1 * 25);
 		JLabel gameInfo = GuiUtil.getLabel("", 300, 1 * 25);
 
@@ -390,7 +390,10 @@ public class StarterApplet extends JApplet {
 		
 		public void paint(Graphics g) {
 			super.paint(g);	
-			opening.setText("Opening: " + Openings.checkOpening(board.getMoves()));
+			if(!Openings.checkOpening(board.getMoves()).isEmpty()){
+				opening.setText("Opening: " + Openings.checkOpening(board.getMoves()));
+			}
+			
 
 			if(!MoveHandler.checkForFreeFields() || PlayerManager.checkDoublePass()){
 				
