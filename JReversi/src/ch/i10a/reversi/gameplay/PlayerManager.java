@@ -18,9 +18,14 @@ public class PlayerManager {
 	private static int doublePass;
 
 	static {
+		init();
+	}
+
+	public static void init() {
 		activePlayer = new HumanPlayer();
 		players = new PlayerAdapter[] {activePlayer, getPlayerBySettings()};
 		passValue = 0;
+		doublePass = 0;
 	}
 
 	static PlayerAdapter getPlayerBySettings() {

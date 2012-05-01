@@ -3,10 +3,8 @@ package ch.i10a.reversi.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -38,28 +36,20 @@ public class StarterApplet extends JApplet {
 	PlayerOneInfoPane playerOne;
 	PlayerTwoInfoPane playerTwo;
 	
-
-//	@Override
-//	public void init() {
-//		try {
-//            SwingUtilities.invokeAndWait(new Runnable() {
-//                public void run() {
-//                	getRootPane().setJMenuBar(createMenuBar());
-//                	add(new LetterPane(), BorderLayout.NORTH);
-//                	add(new CipherPane(), BorderLayout.WEST);
-//                	add(board, BorderLayout.CENTER);
-//                	add(infoPane, BorderLayout.EAST);
-//                }
-//            });
-//		} catch(Exception e) {
-//            System.err.println("createGUI didn't complete successfully");
-//        }
-//	}
-	
-	public void start() {
+	@Override
+	public void init() {
 		super.init();
+
+		// Data initialisations
+		PlayerManager.init();
+
+		// GUI initialisations
 		infoPane = new GeneralInfoPane();
 		board = new Board(infoPane);
+	}
+
+	public void start() {
+		super.start();
 
 		getRootPane().setJMenuBar(createMenuBar());
 		add(new LetterPane(), BorderLayout.NORTH);
@@ -71,10 +61,22 @@ public class StarterApplet extends JApplet {
 	@Override
 	public void stop() {
 		super.stop();
-//		remove(board);
-//		remove(infoPane);
+
+		board.setVisible(false);
+		infoPane.setVisible(false);
 		board = null;
 		infoPane = null;
+	}
+
+	/**
+	 * Used to manually restart the applet. In this case
+	 * to start a new game from scratch.
+	 */
+	private void restart() {
+		stop();
+		destroy();
+		init();
+		start();
 	}
 
 	private JMenuBar createMenuBar() {
@@ -198,8 +200,6 @@ public class StarterApplet extends JApplet {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-//				gameInfoPane.offerDraw();
-
 				String drawLabel = null;
 				if(PlayerManager.getActivePlayer().getColor() == Color.WHITE){
 					drawLabel = "The WHITE Player offers you a draw. Accept?";
@@ -219,10 +219,7 @@ public class StarterApplet extends JApplet {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				stop();
-				start();
-
-			
+				restart();
 			}
 
 		}
@@ -231,8 +228,6 @@ public class StarterApplet extends JApplet {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				gameInfoPane.surrender();
-
-			
 			}
 		}
 	}
@@ -417,19 +412,6 @@ public class StarterApplet extends JApplet {
 			
 		}
 		
-		/*If a draw is offered, a dialog is shown in the GameInfoPane */
-		public void offerDraw(){
-			String setText = "";
-			if(PlayerManager.getActivePlayer().getColor() == Color.WHITE){
-				setText = "The WHITE Player offers you a draw. Accept?";
-			}
-			else{
-				setText = "The BLACK Player offers you a draw. Accept?";
-			}
-			winnerInfo.setText(setText);
-			super.repaint();
-		}
-		
 		public void surrender(){
 			Field [][] fields = new Field[8][8];
 			for (int i = 0; i < fields.length; i++) {
@@ -477,11 +459,6 @@ public class StarterApplet extends JApplet {
 			winnerInfo.setText("This game was a draw!");
 			
 			repaint();
-		}
-		
-		/* if a draw is neglected, set the buttons and text invisible */
-		public void unsetDrawOffer(){
-			winnerInfo.setText("");
 		}
 		
 	}
