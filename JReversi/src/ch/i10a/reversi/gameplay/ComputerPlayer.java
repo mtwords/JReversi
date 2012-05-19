@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import ch.i10a.reversi.gui.Field;
+import ch.i10a.reversi.settings.ReversiProperties;
+import ch.i10a.reversi.settings.SettingsConst;
 
 
 public class ComputerPlayer extends PlayerAdapter {
@@ -27,7 +29,14 @@ public class ComputerPlayer extends PlayerAdapter {
 	public void move() {
 		// TODO implement!
 		// ...
-		Field bestMovableField = MoveHandler.getBestMove();
+		Field bestMovableField = null;
+		if (ReversiProperties.inst().getIntProperty("difficulty") == SettingsConst.PROP_VALUE_EASY){
+			bestMovableField = MoveHandler.getRandomMove();
+		}
+		if (ReversiProperties.inst().getIntProperty("difficulty") == SettingsConst.PROP_VALUE_MEDIUM){
+			bestMovableField = MoveHandler.getBestMove();
+		}
+			
 		if (bestMovableField != null) {
 			MoveHandler.doMove(bestMovableField);
 		}
