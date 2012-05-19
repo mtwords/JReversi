@@ -12,6 +12,8 @@ import ch.i10a.reversi.settings.SettingsConst;
  */
 public class PlayerManager {
 
+	public static final Object playerLock = new Object();
+
 	private static PlayerAdapter[] players;
 	private static PlayerAdapter activePlayer;
 	private static int passValue;
@@ -44,7 +46,7 @@ public class PlayerManager {
 	public static void nextPlayer() {
 		activePlayer = getNextPlayer();
 	}
-	private static PlayerAdapter getNextPlayer() {
+	public static PlayerAdapter getNextPlayer() {
 		if (activePlayer.getColor() == Color.WHITE) {
 			return players[1];
 		} else {

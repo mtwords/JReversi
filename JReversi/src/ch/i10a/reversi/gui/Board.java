@@ -33,6 +33,7 @@ public class Board extends JPanel {
 		initFields();
 		MoveHandler.registerFields(fields);
 		initComponents();
+		MoveHandler.collectingPossibleFieldHits();
 	}
 	
 	/**
@@ -69,8 +70,6 @@ public class Board extends JPanel {
 				add(fields[j][i]);
 			}
 		}
-
-		MoveHandler.collectingPossibleFieldHits();
 	}
 	
 	// ----------------- helper methods --------------------
@@ -121,6 +120,19 @@ public class Board extends JPanel {
 			infoPane.repaint();
 			// add this move to list
 			moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
+
+//			try {
+//				Thread.sleep(1000);
+//			} catch (InterruptedException e1) {
+//				e1.printStackTrace();
+//			}
+			PlayerManager.getActivePlayer().move();
+
+			// updates
+			infoPane.repaint();
+			// add this move to list
+			moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
+
 		}
 
 		@Override

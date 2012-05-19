@@ -129,6 +129,9 @@ public class Field extends JPanel {
 	public void setPossibleHits(ArrayList<Field> possibleHitsCount) {
 		this.possibleHits = possibleHitsCount;
 	}
+	public ArrayList<Field> getPossibleHits() {
+		return possibleHits;
+	}
 
 	@Override
 	public String toString() {
@@ -186,6 +189,7 @@ public class Field extends JPanel {
 
 			setValue(activePlayerValue);
 
+//			PlayerManager.playerLock.notify();
 //			notify();
 		}
 

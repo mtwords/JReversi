@@ -2,6 +2,8 @@ package ch.i10a.reversi.gameplay;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import ch.i10a.reversi.gui.Field;
 
@@ -28,33 +30,36 @@ public class MoveHandler {
 	 * @param activeField the field on which the move is being performed.
 	 */
 	public synchronized static void doMove(Field activeField) {
-		PlayerI activePlayer = PlayerManager.getActivePlayer();
+//	public static void doMove(Field activeField) {
+//		synchronized (PlayerManager.playerLock) {
+			PlayerI activePlayer = PlayerManager.getActivePlayer();
 
-		//check on empty Field
-		if(activeField.getValue() == 0){
-			//check on enemies in the surrounding fields, no enemy, no further check
-			if(MoveHandler.checkNeighbourEnemies(activeField, activePlayer)){
-				if(MoveHandler.checkHit(activeField, activePlayer)){
-					// updates the value depending on the player
-					activeField.setValue(activePlayer.getColor() == Color.WHITE ? -1 : 1);
-					MoveHandler.hitEnemyStones(activeField,activePlayer);
-					
-					// updates
-					activeField.repaint();
-					PlayerManager.setUnPass();
-					PlayerManager.nextPlayer();
+			//check on empty Field
+			if(activeField.getValue() == 0){
+				//check on enemies in the surrounding fields, no enemy, no further check
+				if(MoveHandler.checkNeighbourEnemies(activeField, activePlayer)){
+					if(MoveHandler.checkHit(activeField, activePlayer)){
+						// updates the value depending on the player
+						activeField.setValue(activePlayer.getColor() == Color.WHITE ? -1 : 1);
+						MoveHandler.hitEnemyStones(activeField,activePlayer);
+						
+						// updates
+						activeField.repaint();
+						PlayerManager.setUnPass();
+						PlayerManager.nextPlayer();
+					}
 				}
 			}
-		}
 
-		if(!MoveHandler.checkWholeFieldHit()){
-			PlayerManager.setPass();
-			PlayerManager.nextPlayer();
 			if(!MoveHandler.checkWholeFieldHit()){
-				PlayerManager.setDoublePass();
+				PlayerManager.setPass();
+				PlayerManager.nextPlayer();
+				if(!MoveHandler.checkWholeFieldHit()){
+					PlayerManager.setDoublePass();
+				}
+				
 			}
-			
-		}
+//		}
 	}
 
 	/**
@@ -210,7 +215,58 @@ public class MoveHandler {
 		}
 		return false;
 	}
-	
+
+	public static Field getBestMove() {
+		List<Field> possibleFields = getPossibleFields();
+		int alpha = -Integer.MAX_VALUE; // not MIN_VALUE to invert it as beta
+		int check = -1;
+		Field bestMovableField = null;
+		for (Iterator<Field> iterator = possibleFields.iterator(); iterator.hasNext();) {
+			Field field = iterator.next();
+			check = alphaBeta(field, alpha, -alpha, 3, PlayerManager.getActivePlayer());
+			if (check > alpha) {
+				alpha = check;
+				bestMovableField = field;
+			}
+		}
+		return bestMovableField;
+	}
+	public static int alphaBeta(Field f, int alpha, int beta, int depth, PlayerI player) {
+		System.out.println("alpha-beta: depth " + depth);
+		if (depth == 0) {
+			return 0; // heuristic of f
+		}
+		if (player == PlayerManager.getActivePlayer()) {
+			for (Field childField : f.getPossibleHits()) {
+				alpha = Math.max(alpha, alphaBeta(childField, alpha, beta, depth - 1, PlayerManager.getNextPlayer()));
+				if (beta <= alpha) {
+					break; // beta cut-off
+				}
+				return alpha;
+			}
+		} else {
+			for (Field childField : f.getPossibleHits()) {
+				beta = Math.min(beta, alphaBeta(childField, alpha, beta, depth - 1, PlayerManager.getNextPlayer()));
+				if (beta <= alpha) {
+					break; // alpha cut-off
+				}
+				return beta;
+			}
+		}
+		return 0;
+	}
+
+	public static List<Field> getPossibleFields() {
+		List<Field> possibleFields = new ArrayList<Field>();
+		for (int i = 0; i < fields.length; i++) {
+			for (int j = 0; j < fields[i].length; j++) {
+				if (!fields[i][j].getPossibleHits().isEmpty()) {
+					possibleFields.add(fields[i][j]);
+				}
+			}
+		}
+		return possibleFields;
+	}
 
 
 	// -------------------- !!! private methods !!! --------------------
