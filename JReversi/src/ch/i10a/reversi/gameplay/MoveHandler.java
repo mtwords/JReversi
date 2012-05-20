@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import ch.i10a.reversi.gui.Field;
 
@@ -228,6 +229,15 @@ public class MoveHandler {
 		return false;
 	}
 
+	
+	public static Field getRandomMove() {
+		System.out.println("RandomMove");
+		List<Field> possibleFields = getPossibleFields();
+		Random randomGenerator = new Random();
+		
+		return possibleFields.get(randomGenerator.nextInt(possibleFields.size()));
+	}
+	
 	public static Field getBestMove() {
 		List<Field> possibleFields = getPossibleFields();
 		int alpha = -Integer.MAX_VALUE; // not MIN_VALUE to invert it as beta

@@ -3,6 +3,8 @@ package ch.i10a.reversi.gameplay;
 import java.awt.Color;
 
 import ch.i10a.reversi.gui.Field;
+import ch.i10a.reversi.settings.ReversiProperties;
+import ch.i10a.reversi.settings.SettingsConst;
 
 
 public class ComputerPlayer extends PlayerAdapter {
@@ -23,7 +25,14 @@ public class ComputerPlayer extends PlayerAdapter {
 
 	@Override
 	public void move() {
-		Field bestMovableField = MoveHandler.getBestMove();
+		Field bestMovableField = null;
+		if (ReversiProperties.inst().getIntProperty("difficulty") == SettingsConst.PROP_VALUE_EASY){
+			bestMovableField = MoveHandler.getRandomMove();
+		}
+		if (ReversiProperties.inst().getIntProperty("difficulty") == SettingsConst.PROP_VALUE_MEDIUM){
+			bestMovableField = MoveHandler.getBestMove();
+		}
+
 		if (bestMovableField != null) {
 			getBoard().doMove(bestMovableField);
 		}

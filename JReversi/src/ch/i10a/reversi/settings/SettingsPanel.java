@@ -19,6 +19,9 @@ public class SettingsPanel extends JPanel {
 	// Components
 	JRadioButton humanOpposite;
 	JRadioButton computerOpposite;
+	JRadioButton easyDifficulty;
+	JRadioButton mediumDifficulty;
+	JRadioButton hardDifficulty;
 
 	public SettingsPanel() {
 		initComponents();
@@ -39,27 +42,82 @@ public class SettingsPanel extends JPanel {
 		}
 
 		private void initComponents() {
-			setLayout(new GridLayout(3, 1));
+			setLayout(new GridLayout(0, 2));
 
 			JLabel oppositeLabel = new JLabel("Opposite");
+			JLabel difficultyLabel = new JLabel("Difficulty");
+			JLabel blankLabel = new JLabel("");
 			add(oppositeLabel);
+			add(difficultyLabel);
 
 			humanOpposite = new JRadioButton("Human");
+			humanOpposite.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					easyDifficulty.setVisible(false);
+					mediumDifficulty.setVisible(false);
+					hardDifficulty.setVisible(false);
+					
+				}
+				
+			});
 			computerOpposite = new JRadioButton("Computer");
+			computerOpposite.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					easyDifficulty.setVisible(true);
+					mediumDifficulty.setVisible(true);
+					hardDifficulty.setVisible(true);
+					
+				}
+				
+			});
+			easyDifficulty = new JRadioButton("Easy");
+			mediumDifficulty = new JRadioButton("Medium");
+			hardDifficulty = new JRadioButton("Hard");
 			add(humanOpposite);
+			add(easyDifficulty);
 			add(computerOpposite);
+			add(mediumDifficulty);
+			add(blankLabel);
+			add(hardDifficulty);
 
 			ButtonGroup group = new ButtonGroup();
 			group.add(humanOpposite);
 			group.add(computerOpposite);
+			
+			ButtonGroup difficultyGroup = new ButtonGroup();
+			difficultyGroup.add(easyDifficulty);
+			difficultyGroup.add(mediumDifficulty);
+			difficultyGroup.add(hardDifficulty);
 
 			// make selection
 			int white = ReversiProperties.inst().getIntProperty(SettingsConst.PROP_KEY_WHITE);
 			if (white == SettingsConst.PROP_VALUE_HUMAN) {
 				humanOpposite.setSelected(true);
+				easyDifficulty.setVisible(false);
+				mediumDifficulty.setVisible(false);
+				hardDifficulty.setVisible(false);
 			} else {
 				computerOpposite.setSelected(true);
+				easyDifficulty.setVisible(true);
+				mediumDifficulty.setVisible(true);
+				hardDifficulty.setVisible(true);
 			}
+			//Choose difficulty Level
+			int difficulty = ReversiProperties.inst().getIntProperty("difficulty");
+			if (difficulty == SettingsConst.PROP_VALUE_EASY){
+				easyDifficulty.setSelected(true);
+			}
+			else if(difficulty == SettingsConst.PROP_VALUE_MEDIUM){
+				mediumDifficulty.setSelected(true);
+			}
+			else if(difficulty == SettingsConst.PROP_VALUE_HARD){
+				hardDifficulty.setSelected(true);
+			}
+			
 		}
 	}
 
@@ -80,12 +138,27 @@ public class SettingsPanel extends JPanel {
 			save.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
+					//Save Player Information
 					int white = SettingsConst.PROP_VALUE_HUMAN;
 					if (computerOpposite.isSelected()) {
 						white = SettingsConst.PROP_VALUE_COMPUTER;
 					}
 					ReversiProperties.inst().setProperty(SettingsConst.PROP_KEY_WHITE, white);
 					ReversiProperties.inst().save();
+					
+					//Save difficulty Information
+					if(easyDifficulty.isSelected()){
+						ReversiProperties.inst().setProperty(SettingsConst.PROP_KEY_DIFFICULTY, SettingsConst.PROP_VALUE_EASY);
+						ReversiProperties.inst().save();
+					}
+					if(mediumDifficulty.isSelected()){
+						ReversiProperties.inst().setProperty(SettingsConst.PROP_KEY_DIFFICULTY, SettingsConst.PROP_VALUE_MEDIUM);
+						ReversiProperties.inst().save();
+					}
+					if(hardDifficulty.isSelected()){
+						ReversiProperties.inst().setProperty(SettingsConst.PROP_KEY_DIFFICULTY, SettingsConst.PROP_VALUE_HARD);
+						ReversiProperties.inst().save();
+					}
 				}
 			});
 			add(save);
