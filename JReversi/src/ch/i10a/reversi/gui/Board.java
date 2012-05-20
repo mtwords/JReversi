@@ -3,10 +3,14 @@ package ch.i10a.reversi.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import ch.i10a.reversi.gameplay.MoveHandler;
 import ch.i10a.reversi.gameplay.MoveList;
@@ -19,21 +23,32 @@ import ch.i10a.reversi.gui.StarterApplet.GeneralInfoPane;
  * A JPanel which represents the Reversi board.
  * It is initialized with 8 x 8 Fields.
  */
-public class Board extends JPanel {
+public class Board extends JPanel implements ActionListener {
 
 	private MouseListener mouseListener = new MouseListener();
 	private GeneralInfoPane infoPane;
 
 	private Field[][] fields;
 	private PlayerI activePlayer = null;
+	private Field activeField;
 	private MoveList<Move> moves = new MoveList<Move>();
+	private Timer fieldTimer;
+	private Timer animationCheckTimer;
 
 	public Board(GeneralInfoPane infoPane) {
 		this.infoPane = infoPane;
+		fieldTimer = new Timer(5, null);
+		fieldTimer.setRepeats(true);
+
 		initFields();
 		MoveHandler.registerFields(fields);
+		PlayerManager.registerBoard(this);
 		initComponents();
 		MoveHandler.collectingPossibleFieldHits();
+
+		fieldTimer.start();
+		animationCheckTimer = new Timer(5, this);
+		animationCheckTimer.setRepeats(true);
 	}
 	
 	/**
@@ -51,6 +66,8 @@ public class Board extends JPanel {
 				}
 				fields[j][i] = new Field(fieldValue, i, j);
 				fields[j][i].addMouseListener(mouseListener);
+				// add the field to the timer for animation purposes
+				fieldTimer.addActionListener(fields[j][i]);
 			}
 		}
 	}
@@ -97,13 +114,45 @@ public class Board extends JPanel {
 	public void setBoard(Field fields[][]){
 		for (int i = 0; i < fields.length; i++) {
 			for (int j = 0; j < fields[i].length; j++) {
-				
 				this.fields[i][j].setValue(fields[i][j].getValue());
 				this.fields[i][j].update(this.fields[i][j].getValue());
 			}
 		}
-		
-		
+	}
+
+	/**
+	 * Performs the move the player has choosen. This move is under
+	 * concurrency control.
+	 * @param field
+	 */
+	public void doMove(Field field) {
+		ArrayList<Field> hitFields = MoveHandler.doMove(field);
+		if (!hitFields.isEmpty()) {
+			animationCheckTimer.start();
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		if (MoveHandler.isAnimating()) {
+			return;
+		}
+		animationCheckTimer.stop();
+
+		activeField.repaint();
+		PlayerManager.setUnPass();
+		PlayerManager.nextPlayer();
+
+		MoveHandler.collectingPossibleFieldHits();
+		repaint();
+
+		// updates
+		infoPane.repaint();
+		// add this move to list
+		moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
+
+		MoveHandler.checkIfNextPlayerIsPossibleToMove();
+		PlayerManager.getActivePlayer().move();
 	}
 	
 	// ----------------- inner classes --------------------
@@ -111,28 +160,8 @@ public class Board extends JPanel {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			Field activeField = (Field) e.getComponent();
-			// synchronized call
-			MoveHandler.doMove(activeField);
-			MoveHandler.collectingPossibleFieldHits();
-
-			// updates
-			infoPane.repaint();
-			// add this move to list
-			moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
-
-//			try {
-//				Thread.sleep(1000);
-//			} catch (InterruptedException e1) {
-//				e1.printStackTrace();
-//			}
-			PlayerManager.getActivePlayer().move();
-
-			// updates
-			infoPane.repaint();
-			// add this move to list
-			moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
-
+			activeField = (Field) e.getComponent();
+			doMove(activeField);
 		}
 
 		@Override
@@ -158,6 +187,4 @@ public class Board extends JPanel {
 			activeField.repaint();
 		}
 	}
-	
-	
 }

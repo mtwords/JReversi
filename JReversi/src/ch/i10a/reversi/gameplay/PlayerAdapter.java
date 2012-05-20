@@ -1,5 +1,7 @@
 package ch.i10a.reversi.gameplay;
 
+import ch.i10a.reversi.gui.Board;
+
 /**
  * Abstract Player class.
  * 
@@ -8,6 +10,7 @@ package ch.i10a.reversi.gameplay;
  */
 public abstract class PlayerAdapter implements PlayerI {
 
+	private Board board;
 	/** the game starts with 2 stones for each player **/
 	private int stonesCount = 2;
 
@@ -31,4 +34,10 @@ public abstract class PlayerAdapter implements PlayerI {
 		stonesCount = count;
 	}
 
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+	public Board getBoard() {
+		return board;
+	}
 }

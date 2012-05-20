@@ -3,6 +3,8 @@ package ch.i10a.reversi.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +20,7 @@ import ch.i10a.reversi.gameplay.PlayerManager;
 /**
  * JPanel that represents a Field of the Reversi board.
  */
-public class Field extends JPanel {
+public class Field extends JPanel implements ActionListener {
 
 	public static final int WIDTH = 50;
 
@@ -35,6 +37,8 @@ public class Field extends JPanel {
 	int width = blackStone.getWidth();
 	int height = blackStone.getHeight();
 	BufferedImage imageToPaint = whiteStone;
+	boolean shrinkAnimation = true;
+	boolean animating = false;
 
 	static {
 		try {
@@ -103,6 +107,9 @@ public class Field extends JPanel {
 	 * Sets given value on this field
 	 */
 	public void setValue(int value) {
+		if (value != 0) {
+			animating = true;
+		}
 		this.value = value;
 	}
 	
@@ -133,6 +140,10 @@ public class Field extends JPanel {
 		return possibleHits;
 	}
 
+	public boolean isAnimating() {
+		return animating;
+	}
+
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer("Field:\n");
@@ -143,6 +154,53 @@ public class Field extends JPanel {
 		sb.append("row: " + rowNum);
 		sb.append("\n");
 		return sb.toString();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		if (value == 0 || !animating) {
+			return;
+		}
+
+		// use actual image
+		chooseImageToPaint(1);
+		// shrink
+		if (width != 0 && shrinkAnimation) {
+			shrinkStone();
+			return;
+		}
+		shrinkAnimation = false;
+		
+		// use other image
+		chooseImageToPaint(-1);
+		if (width != 40) {
+			growStone();
+			return;
+		}
+
+		// reset
+		shrinkAnimation = true;
+		value = PlayerManager.getActivePlayer().getValue();
+		animating = false;
+	}
+
+	private void shrinkStone() {
+		if (width % 2 == 0) {
+			x += 1;
+			y += 1;
+		}
+		width -= 1;
+		height -= 1;
+		repaint();
+	}
+	private void growStone() {
+		if (width % 2 == 0) {
+			x -= 1;
+			y -= 1;
+		}
+		width += 1;
+		height += 1;
+		repaint();
 	}
 
 	// ----------------- inner classes --------------------

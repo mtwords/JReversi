@@ -2,6 +2,7 @@ package ch.i10a.reversi.gameplay;
 
 import java.awt.Color;
 
+import ch.i10a.reversi.gui.Board;
 import ch.i10a.reversi.settings.ReversiProperties;
 import ch.i10a.reversi.settings.SettingsConst;
 
@@ -11,8 +12,6 @@ import ch.i10a.reversi.settings.SettingsConst;
  *
  */
 public class PlayerManager {
-
-	public static final Object playerLock = new Object();
 
 	private static PlayerAdapter[] players;
 	private static PlayerAdapter activePlayer;
@@ -36,6 +35,12 @@ public class PlayerManager {
 			return new HumanPlayer(Color.BLACK, 1);
 		} else {
 			return new ComputerPlayer(Color.BLACK, 1);
+		}
+	}
+
+	public static void registerBoard(Board board) {
+		for (int i = 0; i < players.length; i++) {
+			players[i].setBoard(board);
 		}
 	}
 

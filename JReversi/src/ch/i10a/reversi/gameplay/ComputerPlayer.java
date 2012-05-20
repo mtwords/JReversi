@@ -1,8 +1,6 @@
 package ch.i10a.reversi.gameplay;
 
 import java.awt.Color;
-import java.util.Iterator;
-import java.util.List;
 
 import ch.i10a.reversi.gui.Field;
 
@@ -25,13 +23,10 @@ public class ComputerPlayer extends PlayerAdapter {
 
 	@Override
 	public void move() {
-		// TODO implement!
-		// ...
 		Field bestMovableField = MoveHandler.getBestMove();
 		if (bestMovableField != null) {
-			MoveHandler.doMove(bestMovableField);
+			getBoard().doMove(bestMovableField);
 		}
-//		PlayerManager.nextPlayer();
 	}
 
 	@Override

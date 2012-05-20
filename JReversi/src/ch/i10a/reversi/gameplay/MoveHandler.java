@@ -29,10 +29,11 @@ public class MoveHandler {
 	 * 
 	 * @param activeField the field on which the move is being performed.
 	 */
-	public synchronized static void doMove(Field activeField) {
+	public synchronized static ArrayList<Field> doMove(Field activeField) {
 //	public static void doMove(Field activeField) {
 //		synchronized (PlayerManager.playerLock) {
 			PlayerI activePlayer = PlayerManager.getActivePlayer();
+			ArrayList<Field> hitFields = new ArrayList<Field>();
 
 			//check on empty Field
 			if(activeField.getValue() == 0){
@@ -41,32 +42,41 @@ public class MoveHandler {
 					if(MoveHandler.checkHit(activeField, activePlayer)){
 						// updates the value depending on the player
 						activeField.setValue(activePlayer.getColor() == Color.WHITE ? -1 : 1);
-						MoveHandler.hitEnemyStones(activeField,activePlayer);
-						
-						// updates
-						activeField.repaint();
-						PlayerManager.setUnPass();
-						PlayerManager.nextPlayer();
+						hitFields = MoveHandler.hitEnemyStones(activeField,activePlayer);
 					}
 				}
 			}
 
-			if(!MoveHandler.checkWholeFieldHit()){
-				PlayerManager.setPass();
-				PlayerManager.nextPlayer();
-				if(!MoveHandler.checkWholeFieldHit()){
-					PlayerManager.setDoublePass();
-				}
-				
-			}
+			return hitFields;
 //		}
+	}
+
+	public static void checkIfNextPlayerIsPossibleToMove() {
+		if(!MoveHandler.checkWholeFieldHit()){
+			PlayerManager.setPass();
+			PlayerManager.nextPlayer();
+			if(!MoveHandler.checkWholeFieldHit()){
+				PlayerManager.setDoublePass();
+			}
+		}
+	}
+
+	public static boolean isAnimating() {
+		for (int i = 0; i < fields.length; i++) {
+			for (int j = 0; j < fields[i].length; j++) {
+				if (fields[i][j].isAnimating()) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
 	 * Returns an ArrayList of Fields, which represents the beaten stones in all directions 
 	 * @return ArrayList of Fields which stones are beaten
 	 */
-	public static void hitEnemyStones(Field field, PlayerI player){
+	public static ArrayList<Field> hitEnemyStones(Field field, PlayerI player){
 		ArrayList<Field> hitFields = getHits(field, player);
 
 		// update the stones count of this player
@@ -75,11 +85,13 @@ public class MoveHandler {
 
 		int j = 0;
 		while (j < hitFields.size()) {
-			fields[hitFields.get(j).getColNum()][hitFields.get(j).getRowNum()].setValue(player.getValue()*2);
-			hitFields.get(j).update(PlayerManager.getActivePlayer().getValue());
+			hitFields.get(j).setValue(player.getValue() * 2);
+//			fields[hitFields.get(j).getColNum()][hitFields.get(j).getRowNum()].setValue(player.getValue()*2);
+//			hitFields.get(j).update(PlayerManager.getActivePlayer().getValue());
 			j++;
 		}
-		
+
+		return hitFields;
 	}
 
 	/**
@@ -258,9 +270,9 @@ public class MoveHandler {
 
 	public static List<Field> getPossibleFields() {
 		List<Field> possibleFields = new ArrayList<Field>();
-		for (int i = 0; i < fields.length; i++) {
-			for (int j = 0; j < fields[i].length; j++) {
-				if (!fields[i][j].getPossibleHits().isEmpty()) {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (!getHits(fields[i][j], PlayerManager.getActivePlayer()).isEmpty()) {
 					possibleFields.add(fields[i][j]);
 				}
 			}
