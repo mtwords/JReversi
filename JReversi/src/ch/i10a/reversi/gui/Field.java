@@ -88,7 +88,7 @@ public class Field extends JPanel implements ActionListener {
 	
 	private void chooseImageToPaint(int factor) {
 		int activePlayerValue = PlayerManager.getActivePlayer().getValue();
-		if (activePlayerValue * factor < 0) {
+		if (activePlayerValue * factor > 0) {
 			imageToPaint = whiteStone;
 		} else {
 			imageToPaint = blackStone;
