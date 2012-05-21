@@ -223,11 +223,11 @@ public class Field extends JPanel implements ActionListener {
 				width -= 1;
 				height -= 1;
 				repaint();
-				try {
+				/*try {
 					Thread.sleep(5);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
-				}
+				}*/
 			}
 			chooseImageToPaint(-1);
 			while (width != 40) {
@@ -238,11 +238,11 @@ public class Field extends JPanel implements ActionListener {
 				width += 1;
 				height += 1;
 				repaint();
-				try {
+				/*try {
 					Thread.sleep(5);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
-				}
+				}*/
 			}
 
 			setValue(activePlayerValue);

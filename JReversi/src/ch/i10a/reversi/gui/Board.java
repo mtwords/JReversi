@@ -47,7 +47,7 @@ public class Board extends JPanel implements ActionListener {
 		MoveHandler.collectingPossibleFieldHits();
 
 		fieldTimer.start();
-		animationCheckTimer = new Timer(5, this);
+		animationCheckTimer = new Timer(1, this);//0 is a possible value
 		animationCheckTimer.setRepeats(true);
 	}
 	
