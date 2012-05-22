@@ -235,7 +235,10 @@ public class MoveHandler {
 		List<Field> possibleFields = getPossibleFields();
 		Random randomGenerator = new Random();
 		
-		return possibleFields.get(randomGenerator.nextInt(possibleFields.size()));
+		if(possibleFields.size()>0){
+			return possibleFields.get(randomGenerator.nextInt(possibleFields.size()));
+		}
+		return null;
 	}
 	
 	public static Field getBestMove() {
@@ -283,7 +286,10 @@ public class MoveHandler {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				if (!getHits(fields[i][j], PlayerManager.getActivePlayer()).isEmpty()) {
-					possibleFields.add(fields[i][j]);
+					if(fields[i][j].getValue() == 0){
+						possibleFields.add(fields[i][j]);
+					}
+					
 				}
 			}
 		}
