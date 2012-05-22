@@ -37,7 +37,7 @@ public class Board extends JPanel implements ActionListener {
 
 	public Board(GeneralInfoPane infoPane) {
 		this.infoPane = infoPane;
-		fieldTimer = new Timer(5, null);
+		fieldTimer = new Timer(3, null);
 		fieldTimer.setRepeats(true);
 
 		initFields();
@@ -47,7 +47,7 @@ public class Board extends JPanel implements ActionListener {
 		MoveHandler.collectingPossibleFieldHits();
 
 		fieldTimer.start();
-		animationCheckTimer = new Timer(1, this);//0 is a possible value
+		animationCheckTimer = new Timer(5, this);//0 is a possible value
 		animationCheckTimer.setRepeats(true);
 	}
 	
