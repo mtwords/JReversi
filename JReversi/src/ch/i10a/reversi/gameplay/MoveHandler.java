@@ -58,7 +58,11 @@ public class MoveHandler {
 			PlayerManager.nextPlayer();
 			if(!MoveHandler.checkWholeFieldHit()){
 				PlayerManager.setDoublePass();
+			} else {
+				collectingPossibleFieldHits();
 			}
+		} else {
+			collectingPossibleFieldHits();
 		}
 	}
 
