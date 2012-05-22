@@ -2,6 +2,7 @@ package ch.i10a.reversi.gameplay;
 
 import java.awt.Color;
 
+import ch.i10a.reversi.gameplay.MoveList.Move;
 import ch.i10a.reversi.gui.Field;
 import ch.i10a.reversi.settings.ReversiProperties;
 import ch.i10a.reversi.settings.SettingsConst;
@@ -35,6 +36,7 @@ public class ComputerPlayer extends PlayerAdapter {
 
 		if (bestMovableField != null) {
 			getBoard().doMove(bestMovableField);
+			getBoard().getMoves().add(Move.getMove(bestMovableField.getRowNum(), bestMovableField.getColNum()));
 		}
 	}
 

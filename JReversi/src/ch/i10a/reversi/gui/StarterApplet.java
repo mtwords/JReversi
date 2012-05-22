@@ -283,11 +283,8 @@ public class StarterApplet extends JApplet {
 			
 			setStonesLabelText(PlayerManager.getWhitePlayer().getStonesCount());
 			if(board.getMoves().size() > 0){
-				if(PlayerManager.getActivePlayer().getColor() == Color.BLACK){
+				if(PlayerManager.getActivePlayer().getColor() == Color.WHITE){
 					moveLabel.setText("Last Move: " + board.getLastMove());
-				}
-				else{
-					moveLabel.setText("Last Move: ");
 				}
 			}
 			
@@ -348,11 +345,8 @@ public class StarterApplet extends JApplet {
 			
 			setStonesLabelText(PlayerManager.getBlackPlayer().getStonesCount());
 			if(board.getMoves().size() > 0){
-				if(PlayerManager.getActivePlayer().getColor() == Color.WHITE){
+				if(PlayerManager.getActivePlayer().getColor() == Color.BLACK){
 					moveLabel.setText("Last Move: " + board.getLastMove());
-				}
-				else{
-					moveLabel.setText("Last Move: ");
 				}
 			}
 			
