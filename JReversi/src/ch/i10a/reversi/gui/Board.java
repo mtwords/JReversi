@@ -139,6 +139,11 @@ public class Board extends JPanel implements ActionListener {
 		}
 		animationCheckTimer.stop();
 
+		// add this move to list
+		moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
+		// updates
+		infoPane.repaint();
+
 		activeField.repaint();
 		PlayerManager.setUnPass();
 		PlayerManager.nextPlayer();
@@ -146,10 +151,6 @@ public class Board extends JPanel implements ActionListener {
 		MoveHandler.collectingPossibleFieldHits();
 		repaint();
 
-		// updates
-		infoPane.repaint();
-		// add this move to list
-		moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
 
 		MoveHandler.checkIfNextPlayerIsPossibleToMove();
 		PlayerManager.getActivePlayer().move();

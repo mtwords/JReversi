@@ -267,7 +267,10 @@ public class MoveHandler {
 		}
 		if (player == PlayerManager.getActivePlayer()) {
 			for (Field childField : f.getPossibleHits()) {
+				// board = boardOrig.clone()
+				// doMove(childField)
 				alpha = Math.max(alpha, alphaBeta(childField, alpha, beta, depth - 1, PlayerManager.getNextPlayer()));
+				// board = null
 				if (beta <= alpha) {
 					break; // beta cut-off
 				}
@@ -275,7 +278,10 @@ public class MoveHandler {
 			}
 		} else {
 			for (Field childField : f.getPossibleHits()) {
+				// board = boardOrig.clone()
+				// board.doMove(childField)
 				beta = Math.min(beta, alphaBeta(childField, alpha, beta, depth - 1, PlayerManager.getNextPlayer()));
+				// board = null
 				if (beta <= alpha) {
 					break; // alpha cut-off
 				}
