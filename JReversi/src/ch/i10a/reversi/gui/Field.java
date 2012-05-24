@@ -107,7 +107,7 @@ public class Field extends JPanel implements ActionListener {
 	 * Sets given value on this field
 	 */
 	public void setValue(int value) {
-		if (value != 0) {
+		if (value < -1 || value > 1) {
 			animating = true;
 		}
 		this.value = value;

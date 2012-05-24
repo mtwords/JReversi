@@ -77,20 +77,29 @@ public class MoveHandler {
 		return false;
 	}
 
+	public static ArrayList<Field> hitEnemyStones(Field field, PlayerI player){
+		return hitEnemyStones(field, player, false);
+	}
 	/**
 	 * Returns an ArrayList of Fields, which represents the beaten stones in all directions 
 	 * @return ArrayList of Fields which stones are beaten
 	 */
-	public static ArrayList<Field> hitEnemyStones(Field field, PlayerI player){
+	public static ArrayList<Field> hitEnemyStones(Field field, PlayerI player, boolean simulate){
 		ArrayList<Field> hitFields = getHits(field, player);
 
 		// update the stones count of this player
 		// "+ 1" because one stone is set by the player!
-		PlayerManager.updateStones(hitFields.size() + 1);
+		if (!simulate) {
+			PlayerManager.updateStones(hitFields.size() + 1);
+		}
 
 		int j = 0;
 		while (j < hitFields.size()) {
-			hitFields.get(j).setValue(player.getValue() * 2);
+			if (simulate) {
+				hitFields.get(j).setValue(player.getValue());
+			} else {
+				hitFields.get(j).setValue(player.getValue() * 2);
+			}
 //			fields[hitFields.get(j).getColNum()][hitFields.get(j).getRowNum()].setValue(player.getValue()*2);
 //			hitFields.get(j).update(PlayerManager.getActivePlayer().getValue());
 			j++;
@@ -267,8 +276,12 @@ public class MoveHandler {
 		}
 		if (player == PlayerManager.getActivePlayer()) {
 			for (Field childField : f.getPossibleHits()) {
+				/*
+				 *  TODO:
+				 *  board muss entsprechend noch bei hitEnemyStones(...) berücksichtigt werden
+				 */
 				// board = boardOrig.clone()
-				// doMove(childField)
+				// hitEnemyStones(childField, player, true)
 				alpha = Math.max(alpha, alphaBeta(childField, alpha, beta, depth - 1, PlayerManager.getNextPlayer()));
 				// board = null
 				if (beta <= alpha) {
@@ -278,9 +291,14 @@ public class MoveHandler {
 			}
 		} else {
 			for (Field childField : f.getPossibleHits()) {
+				PlayerI oppositePlayer = PlayerManager.getNextPlayer();
+				/*
+				 *  TODO:
+				 *  board muss entsprechend noch bei hitEnemyStones(...) berücksichtigt werden
+				 */
 				// board = boardOrig.clone()
-				// board.doMove(childField)
-				beta = Math.min(beta, alphaBeta(childField, alpha, beta, depth - 1, PlayerManager.getNextPlayer()));
+				// hitEnemyStones(childField, oppositePlayer, true)
+				beta = Math.min(beta, alphaBeta(childField, alpha, beta, depth - 1, oppositePlayer));
 				// board = null
 				if (beta <= alpha) {
 					break; // alpha cut-off
