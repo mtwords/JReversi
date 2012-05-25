@@ -1,0 +1,54 @@
+package ch.i10a.reversi.gameplay;
+
+import java.awt.Color;
+
+import ch.i10a.reversi.gui.Field;
+import ch.i10a.reversi.settings.ReversiProperties;
+import ch.i10a.reversi.settings.SettingsConst;
+
+
+public class ComputerPlayer extends PlayerAdapter {
+
+	private Color color = null;
+	private int value = 1;
+
+	/**
+	 * Default color of a computer player is black
+	 */
+	public ComputerPlayer() {
+		this(Color.BLACK, 1);
+	}
+	public ComputerPlayer(Color color, int value) {
+		this.color = color;
+		this.value = value;
+	}
+
+	@Override
+	public void move() {
+<<<<<<< HEAD
+		Field bestMovableField = MoveHandler.getBestMove();
+=======
+		// TODO implement!
+		// ...
+		Field bestMovableField = null;
+		if (ReversiProperties.inst().getIntProperty("difficulty") == SettingsConst.PROP_VALUE_EASY){
+			bestMovableField = MoveHandler.getRandomMove();
+		}
+		if (ReversiProperties.inst().getIntProperty("difficulty") == SettingsConst.PROP_VALUE_MEDIUM){
+			bestMovableField = MoveHandler.getBestMove();
+		}
+			
+>>>>>>> 129772fa1527613df40d328e2c55dca2068bee8d
+		if (bestMovableField != null) {
+			getBoard().doMove(bestMovableField);
+		}
+	}
+
+	@Override
+	public Color getColor() {
+		return color;
+	}
+	public int getValue() {
+		return value;
+	}
+}
