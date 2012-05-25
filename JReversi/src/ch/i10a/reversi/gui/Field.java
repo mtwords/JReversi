@@ -56,6 +56,7 @@ public class Field extends JPanel implements ActionListener {
 		Field clone = new Field(value, rowNum, colNum);
 		if (!possibleHits.isEmpty()) {
 			ArrayList<Field> possibleHitsClone = new ArrayList<Field>();
+			System.out.println(possibleHits.size());
 			for (Field field : possibleHits) {
 				possibleHitsClone.add(field.clone());
 			}
