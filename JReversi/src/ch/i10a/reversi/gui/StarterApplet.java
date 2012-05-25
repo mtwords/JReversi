@@ -32,7 +32,7 @@ import ch.i10a.reversi.settings.SettingsPanel;
 public class StarterApplet extends JApplet {
 
 	GeneralInfoPane infoPane;
-	Board board;
+	ReversiBoard board;
 	PlayerOneInfoPane playerOne;
 	PlayerTwoInfoPane playerTwo;
 	
@@ -45,7 +45,7 @@ public class StarterApplet extends JApplet {
 
 		// GUI initialisations
 		infoPane = new GeneralInfoPane();
-		board = new Board(infoPane);
+		board = new ReversiBoard(infoPane);
 	}
 
 	public void start() {
@@ -96,7 +96,7 @@ public class StarterApplet extends JApplet {
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		setSize(new Dimension(325 + (8 * Field.WIDTH), 25 + 25 + (8 * Field.WIDTH)));
+		setSize(new Dimension(325 + (8 * ReversiField.WIDTH), 25 + 25 + (8 * ReversiField.WIDTH)));
 	}
 		
 
@@ -407,11 +407,11 @@ public class StarterApplet extends JApplet {
 		}
 		
 		public void surrender(){
-			Field [][] fields = new Field[8][8];
+			ReversiField [][] fields = new ReversiField[8][8];
 			for (int i = 0; i < fields.length; i++) {
 				for (int j = 0; j < fields[i].length; j++) {
 					int fieldValue = PlayerManager.getActivePlayer().getValue() * -1;
-					fields[j][i] = new Field(fieldValue, i, j);	
+					fields[j][i] = new ReversiField(fieldValue, i, j);	
 				}
 				
 			}
@@ -434,15 +434,15 @@ public class StarterApplet extends JApplet {
 		
 		/*If a draw is accepted, update every field and show the message about the draw */
 		public void setDraw(){
-			Field [][]fields = new Field[8][8];
+			ReversiField [][]fields = new ReversiField[8][8];
 			for (int i = 0; i < fields.length; i++) {
 				for (int j = 0; j < fields[i].length/2; j++) {
 					int fieldValue = 1;
-					fields[j][i] = new Field(fieldValue, i, j);	
+					fields[j][i] = new ReversiField(fieldValue, i, j);	
 				}
 				for (int j = fields[i].length/2; j < fields[i].length; j++) {
 					int fieldValue = -1;
-					fields[j][i] = new Field(fieldValue, i, j);	
+					fields[j][i] = new ReversiField(fieldValue, i, j);	
 				}
 			}
 			playerOne.setStonesLabelText(32);

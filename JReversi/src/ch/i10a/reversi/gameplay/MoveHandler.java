@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import ch.i10a.reversi.gui.Board;
 import ch.i10a.reversi.gui.Field;
 
 /**
@@ -20,6 +21,7 @@ public class MoveHandler {
 	 * Registers the fields of the board for later access.
 	 */
 	public static void registerFields(Field[][] fields) {
+		MoveHandler.fields = null;
 		MoveHandler.fields = fields;
 	}
 
@@ -255,25 +257,32 @@ public class MoveHandler {
 	}
 	
 	public static Field getBestMove() {
+		Field[][] activeGameFields = fields;
+
 		List<Field> possibleFields = getPossibleFields();
 		int alpha = -Integer.MAX_VALUE; // not MIN_VALUE to invert it as beta
 		int check = -1;
 		Field bestMovableField = null;
 		for (Iterator<Field> iterator = possibleFields.iterator(); iterator.hasNext();) {
 			Field field = iterator.next();
-			check = alphaBeta(field, alpha, -alpha, 3, PlayerManager.getActivePlayer());
+			check = alphaBeta(field, alpha, -alpha, 2, PlayerManager.getActivePlayer());
 			if (check > alpha) {
 				alpha = check;
 				bestMovableField = field;
 			}
 		}
+
+		registerFields(activeGameFields);
 		return bestMovableField;
 	}
-	public static int alphaBeta(Field f, int alpha, int beta, int depth, PlayerI player) {
+	public static int alphaBeta(Field f, int alpha, int beta, int depth, PlayerAdapter player) {
 		System.out.println("alpha-beta: depth " + depth);
 		if (depth == 0) {
 			return 0; // heuristic of f
 		}
+		Board actualPlayerBoard = player.getBoard().clone();
+		registerFields(actualPlayerBoard.getFields());
+
 		if (player == PlayerManager.getActivePlayer()) {
 			for (Field childField : f.getPossibleHits()) {
 				/*
@@ -281,9 +290,11 @@ public class MoveHandler {
 				 *  board muss entsprechend noch bei hitEnemyStones(...) berücksichtigt werden
 				 */
 				// board = boardOrig.clone()
-				// hitEnemyStones(childField, player, true)
+				hitEnemyStones(childField, player, true);
 				alpha = Math.max(alpha, alphaBeta(childField, alpha, beta, depth - 1, PlayerManager.getNextPlayer()));
-				// board = null
+
+				actualPlayerBoard.nullFields();
+				actualPlayerBoard = null;
 				if (beta <= alpha) {
 					break; // beta cut-off
 				}
@@ -291,15 +302,17 @@ public class MoveHandler {
 			}
 		} else {
 			for (Field childField : f.getPossibleHits()) {
-				PlayerI oppositePlayer = PlayerManager.getNextPlayer();
+				PlayerAdapter oppositePlayer = PlayerManager.getNextPlayer();
 				/*
 				 *  TODO:
 				 *  board muss entsprechend noch bei hitEnemyStones(...) berücksichtigt werden
 				 */
 				// board = boardOrig.clone()
-				// hitEnemyStones(childField, oppositePlayer, true)
+				hitEnemyStones(childField, oppositePlayer, true);
 				beta = Math.min(beta, alphaBeta(childField, alpha, beta, depth - 1, oppositePlayer));
-				// board = null
+
+				actualPlayerBoard.nullFields();
+				actualPlayerBoard = null;
 				if (beta <= alpha) {
 					break; // alpha cut-off
 				}

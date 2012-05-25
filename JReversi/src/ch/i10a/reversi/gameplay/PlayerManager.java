@@ -2,7 +2,7 @@ package ch.i10a.reversi.gameplay;
 
 import java.awt.Color;
 
-import ch.i10a.reversi.gui.Board;
+import ch.i10a.reversi.gui.ReversiBoard;
 import ch.i10a.reversi.settings.ReversiProperties;
 import ch.i10a.reversi.settings.SettingsConst;
 
@@ -38,7 +38,7 @@ public class PlayerManager {
 		}
 	}
 
-	public static void registerBoard(Board board) {
+	public static void registerBoard(ReversiBoard board) {
 		for (int i = 0; i < players.length; i++) {
 			players[i].setBoard(board);
 		}

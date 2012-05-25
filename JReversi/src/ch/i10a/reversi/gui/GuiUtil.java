@@ -15,21 +15,21 @@ public class GuiUtil {
 
 	/**
 	 * Constructs a Field label with the given x alignment text and
-	 * dynamic size dependent on the {@link Field.WITH}
+	 * dynamic size dependent on the {@link ReversiField.WITH}
 	 * @param label: the text to be displayed
 	 * @return a JLabel with the given Text with Field-dependent size
 	 */
 	public static JLabel getXOrientedFieldLabel(String label) {
-		return getLabel(label, Field.WIDTH, (int) Math.round(Field.WIDTH * 0.5));
+		return getLabel(label, ReversiField.WIDTH, (int) Math.round(ReversiField.WIDTH * 0.5));
 	}
 	/**
 	 * Constructs a Field label with the given y alignment text and
-	 * dynamic size dependent on the {@link Field.WITH}
+	 * dynamic size dependent on the {@link ReversiField.WITH}
 	 * @param label: the text to be displayed
 	 * @return a JLabel with the given Text with Field-dependent size
 	 */
 	public static JLabel getYOrientedFieldLabel(String label) {
-		return getLabel(label, (int) Math.round(Field.WIDTH * 0.5), Field.WIDTH);
+		return getLabel(label, (int) Math.round(ReversiField.WIDTH * 0.5), ReversiField.WIDTH);
 	}
 	/**
 	 * Constructs a Field label with the given text and sizes
