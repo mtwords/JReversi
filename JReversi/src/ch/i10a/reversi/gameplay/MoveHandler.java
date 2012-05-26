@@ -263,9 +263,11 @@ public class MoveHandler {
 		int alpha = -Integer.MAX_VALUE; // not MIN_VALUE to invert it as beta
 		int check = -1;
 		Field bestMovableField = null;
+		Board board = PlayerManager.getActivePlayer().getBoard().clone();
+		MoveHandler.printBoard(board);
 		for (Iterator<Field> iterator = possibleFields.iterator(); iterator.hasNext();) {
 			Field field = iterator.next();
-			check = alphaBeta(field, alpha, -alpha, 5, PlayerManager.getActivePlayer());
+			check = alphaBeta(field, alpha, -alpha, 5, PlayerManager.getActivePlayer(), board);
 			if (check > alpha) {
 				alpha = check;
 				bestMovableField = field;
@@ -275,27 +277,34 @@ public class MoveHandler {
 		registerFields(activeGameFields);
 		return bestMovableField;
 	}
-	public static int alphaBeta(Field f, int alpha, int beta, int depth, PlayerAdapter player) {
+	public static int alphaBeta(Field f, int alpha, int beta, int depth, PlayerAdapter player, Board actualPlayerBoard) {
 		System.out.println("alpha-beta: depth " + depth);
 		if (depth == 0) {
-			return 0; // heuristic of f
+			return 0; // heuristic of board
 		}
-		Board actualPlayerBoard = player.getBoard().clone();
-		MoveHandler.printBoard(actualPlayerBoard);
+		//Board actualPlayerBoard = player.getBoard().clone();
+		//MoveHandler.printBoard(actualPlayerBoard);
 		registerFields(actualPlayerBoard.getFields());
+		
+		Board boardToGiveDown = actualPlayerBoard.clone();
 
 		if (player == PlayerManager.getActivePlayer()) {
 			for (Field childField : f.getPossibleHits()) {
+				PlayerAdapter selfPlayer = PlayerManager.getNextPlayer();
 				/*
 				 *  TODO:
 				 *  board muss entsprechend noch bei hitEnemyStones(...) berücksichtigt werden
 				 */
 				// board = boardOrig.clone()
-				hitEnemyStones(childField, player, true);
-				alpha = Math.max(alpha, alphaBeta(childField, alpha, beta, depth - 1, PlayerManager.getNextPlayer()));
+				ArrayList<Field> hitFields = hitEnemyStones(childField, player, true);
+				actualPlayerBoard = updateSimBoard(actualPlayerBoard, hitFields);
+				System.out.println("after hitEnemyStones own");
+				MoveHandler.printBoard(actualPlayerBoard);
+				System.out.println("****");
+				alpha = Math.max(alpha, alphaBeta(childField, alpha, beta, depth - 1, selfPlayer, boardToGiveDown));
 
-				actualPlayerBoard.nullFields();
-				actualPlayerBoard = null;
+				boardToGiveDown.nullFields();
+				boardToGiveDown = null;
 				if (beta <= alpha) {
 					break; // beta cut-off
 				}
@@ -309,11 +318,14 @@ public class MoveHandler {
 				 *  board muss entsprechend noch bei hitEnemyStones(...) berücksichtigt werden
 				 */
 				// board = boardOrig.clone()
-				hitEnemyStones(childField, oppositePlayer, true);
-				beta = Math.min(beta, alphaBeta(childField, alpha, beta, depth - 1, oppositePlayer));
+				ArrayList<Field> hitFields = hitEnemyStones(childField, oppositePlayer, true);
+				System.out.println("after hitEnemyStones opposite");
+				MoveHandler.printBoard(actualPlayerBoard);
+				System.out.println("****");
+				beta = Math.min(beta, alphaBeta(childField, alpha, beta, depth - 1, oppositePlayer, boardToGiveDown));
 
-				actualPlayerBoard.nullFields();
-				actualPlayerBoard = null;
+				boardToGiveDown.nullFields();
+				boardToGiveDown = null;
 				if (beta <= alpha) {
 					break; // alpha cut-off
 				}
@@ -322,7 +334,17 @@ public class MoveHandler {
 		}
 		return 0;
 	}
+	
+	public static Board updateSimBoard(Board board, ArrayList<Field> fields){
+		Field origFields[][] = board.getFields();
+		for (int i = 0; i< fields.size(); i++){
+			origFields[fields.get(i).getColNum()][fields.get(i).getRowNum()] = fields.get(i);
+		}
+		
+		return board;
+	}
 
+	
 	public static List<Field> getPossibleFields() {
 		List<Field> possibleFields = new ArrayList<Field>();
 		for (int i = 0; i < 8; i++) {
@@ -353,8 +375,11 @@ public class MoveHandler {
 				else if(field[j][i].getValue() == -1){
 					System.out.print("o");
 				}
-				else{
+				else if(field[j][i].getValue() == 0){
 					System.out.print(" ");
+				}
+				else{
+					System.out.print("d");
 				}
 				
 			}
