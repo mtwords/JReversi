@@ -281,7 +281,7 @@ public class MoveHandler {
 			return 0; // heuristic of f
 		}
 		Board actualPlayerBoard = player.getBoard().clone();
-		
+		MoveHandler.printBoard(actualPlayerBoard);
 		registerFields(actualPlayerBoard.getFields());
 
 		if (player == PlayerManager.getActivePlayer()) {
@@ -347,10 +347,10 @@ public class MoveHandler {
 			System.out.println("");
 			for (int j = 0; j < 8; j++) {
 				System.out.print("|");
-				if(field[i][j].getValue() == 1){
+				if(field[j][i].getValue() == 1){
 					System.out.print("x");
 				}
-				else if(field[i][j].getValue() == -1){
+				else if(field[j][i].getValue() == -1){
 					System.out.print("o");
 				}
 				else{
