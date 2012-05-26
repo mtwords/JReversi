@@ -46,6 +46,7 @@ public class StarterApplet extends JApplet {
 		// GUI initialisations
 		infoPane = new GeneralInfoPane();
 		board = new ReversiBoard(infoPane);
+		
 	}
 
 	public void start() {
