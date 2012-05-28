@@ -288,7 +288,8 @@ public class MoveHandler {
 	public static int alphaBeta(int alpha, int beta, int depth, PlayerAdapter player, TreeNode<Board> node) {
 		System.out.println("alpha-beta: depth " + depth);
 		if (depth == 0) {
-			return 0; // heuristic of board
+			Random randomGenerator = new Random();
+			return randomGenerator.nextInt(100); // heuristic of board
 		}
 
 		Board actualBoard = node.getData();
@@ -311,9 +312,9 @@ public class MoveHandler {
 				alpha = Math.max(alpha, alphaBeta(alpha, beta, depth - 1, otherPlayer, child));
 
 				if (beta <= alpha) {
-					break; // beta cut-off
+					return alpha; // beta cut-off
 				}
-				return alpha;
+				
 			}
 		} else {
 			for (Field field : child.getPossibleMoves()) {
@@ -325,9 +326,9 @@ public class MoveHandler {
 				beta = Math.min(beta, alphaBeta(alpha, beta, depth - 1, otherPlayer, child));
 
 				if (beta <= alpha) {
-					break; // alpha cut-off
+					return beta; // alpha cut-off
 				}
-				return beta;
+				
 			}
 		}
 		return 0;
