@@ -334,7 +334,10 @@ public class MoveHandler {
 		if (player == PlayerManager.getActivePlayer()){
 			return alpha;
 		}
-		return 0;
+		else{
+			return beta;
+		}
+		
 	}
 
 	// BACKUP !!!!
