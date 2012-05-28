@@ -299,36 +299,32 @@ public class MoveHandler {
 		ArrayList<Field> hitFields = hitEnemyStones(f, player, true);
 		hitFields.add(f);
 		actualBoard = updateSimBoard(actualBoard.clone(), hitFields);
+		System.out.println("TestAfterUpdate");
+		printBoard(actualBoard, player);
+		System.out.println("----------------");
 		PlayerAdapter otherPlayer = PlayerManager.getOtherPlayer(player);
 		TreeNode<Board> child = new TreeNode<Board>(actualBoard.clone(), getPossibleFields(otherPlayer));
 		node.addChild(child);
-		if (player == PlayerManager.getActivePlayer()) {
-			for (Field field : child.getPossibleMoves()) {
-
+		for (Field field : child.getPossibleMoves()) {
+			if (player == PlayerManager.getActivePlayer()) {
 				// sysouts
 				printBoard(actualBoard, player);
-
+				
 				child.setField(field.clone());
 				alpha = Math.max(alpha, alphaBeta(alpha, beta, depth - 1, otherPlayer, child));
-
-				if (beta <= alpha) {
+				if (alpha >= beta) {
 					return alpha; // beta cut-off
 				}
-				
 			}
-		} else {
-			for (Field field : child.getPossibleMoves()) {
-
+			else {
 				// sysouts
 				printBoard(actualBoard, player);
 
 				child.setField(field);
 				beta = Math.min(beta, alphaBeta(alpha, beta, depth - 1, otherPlayer, child));
-
-				if (beta <= alpha) {
-					return beta; // alpha cut-off
+				if (alpha >= beta) {
+					return alpha; // beta cut-off
 				}
-				
 			}
 		}
 		if (player == PlayerManager.getActivePlayer()){
@@ -337,6 +333,42 @@ public class MoveHandler {
 		else{
 			return beta;
 		}
+		
+//		if (player == PlayerManager.getActivePlayer()) {
+//			for (Field field : child.getPossibleMoves()) {
+//
+//				// sysouts
+//				printBoard(actualBoard, player);
+//
+//				child.setField(field.clone());
+//				alpha = Math.max(alpha, alphaBeta(alpha, beta, depth - 1, otherPlayer, child));
+//
+//				if (beta <= alpha) {
+//					return alpha; // beta cut-off
+//				}
+//				
+//			}
+//		} else {
+//			for (Field field : child.getPossibleMoves()) {
+//
+//				// sysouts
+//				printBoard(actualBoard, player);
+//
+//				child.setField(field);
+//				beta = Math.min(beta, alphaBeta(alpha, beta, depth - 1, otherPlayer, child));
+//
+//				if (beta <= alpha) {
+//					return beta; // alpha cut-off
+//				}
+//				
+//			}
+//		}
+//		if (player == PlayerManager.getActivePlayer()){
+//			return alpha;
+//		}
+//		else{
+//			return beta;
+//		}
 		
 	}
 
@@ -513,7 +545,7 @@ public class MoveHandler {
 			System.out.print("|");
 			
 		}
-		System.out.println("******");
+		
 	}
 	
 	
