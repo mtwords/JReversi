@@ -292,16 +292,16 @@ public class MoveHandler {
 			return randomGenerator.nextInt(100); // heuristic of board
 		}
 
-		Board actualBoard = node.getData();
+		Board actualBoard = node.getData().clone();
 		registerFields(actualBoard.getFields());
 		Field f = node.getField();
 		f.setValue(player.getValue());
 		ArrayList<Field> hitFields = hitEnemyStones(f, player, true);
 		hitFields.add(f);
-		actualBoard = updateSimBoard(actualBoard.clone(), hitFields);
-		System.out.println("TestAfterUpdate");
-		printBoard(actualBoard, player);
-		System.out.println("----------------");
+		actualBoard = updateSimBoard(actualBoard, hitFields);
+//		System.out.println("TestAfterUpdate");
+//		printBoard(actualBoard, player);
+//		System.out.println("----------------");
 		PlayerAdapter otherPlayer = PlayerManager.getOtherPlayer(player);
 		TreeNode<Board> child = new TreeNode<Board>(actualBoard.clone(), getPossibleFields(otherPlayer));
 		node.addChild(child);
@@ -311,7 +311,7 @@ public class MoveHandler {
 				printBoard(actualBoard, player);
 				
 				child.setField(field.clone());
-				alpha = Math.max(alpha, alphaBeta(alpha, beta, depth - 1, otherPlayer, child));
+				alpha = Math.max(alpha, alphaBeta(alpha, beta, depth - 1, PlayerManager.getOtherPlayer(player), child));
 				if (alpha >= beta) {
 					return alpha; // beta cut-off
 				}
@@ -320,8 +320,8 @@ public class MoveHandler {
 				// sysouts
 				printBoard(actualBoard, player);
 
-				child.setField(field);
-				beta = Math.min(beta, alphaBeta(alpha, beta, depth - 1, otherPlayer, child));
+				child.setField(field.clone());
+				beta = Math.min(beta, alphaBeta(alpha, beta, depth - 1, PlayerManager.getOtherPlayer(player), child));
 				if (alpha >= beta) {
 					return alpha; // beta cut-off
 				}
