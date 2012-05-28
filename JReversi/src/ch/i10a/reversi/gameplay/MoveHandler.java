@@ -274,7 +274,7 @@ public class MoveHandler {
 		for (Iterator<Field> iterator = possibleFields.iterator(); iterator.hasNext();) {
 			Field field = iterator.next();
 			root.setField(field.clone());
-			check = alphaBeta(alpha, -alpha, 5, PlayerManager.getActivePlayer(), root);
+			check = alphaBeta(alpha, -alpha, 3, PlayerManager.getActivePlayer(), root);
 			if (check > alpha) {
 				alpha = check;
 				bestMovableField = field;
@@ -545,6 +545,7 @@ public class MoveHandler {
 			System.out.print("|");
 			
 		}
+		System.out.println("");
 		
 	}
 	
