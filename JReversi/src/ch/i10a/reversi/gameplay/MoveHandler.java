@@ -331,6 +331,9 @@ public class MoveHandler {
 				
 			}
 		}
+		if (player == PlayerManager.getActivePlayer()){
+			return alpha;
+		}
 		return 0;
 	}
 
