@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.border.BevelBorder;
 
+import ch.i10a.reversi.gameplay.MoveList.Move;
 import ch.i10a.reversi.gameplay.PlayerManager;
 
 /**
@@ -144,6 +145,8 @@ public class ReversiField extends Field implements ActionListener {
 		sb.append("col: " + colNum);
 		sb.append("\n");
 		sb.append("row: " + rowNum);
+		sb.append("\n");
+		sb.append("coord: " + Move.getMove(rowNum, colNum));
 		sb.append("\n");
 		return sb.toString();
 	}

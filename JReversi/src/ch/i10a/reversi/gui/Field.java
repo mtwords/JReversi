@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import ch.i10a.reversi.gameplay.MoveList.Move;
+
 public class Field extends JPanel implements ActionListener {
 
 	protected int value;
@@ -52,7 +54,7 @@ public class Field extends JPanel implements ActionListener {
 	}
 
 	@Override
-	protected Field clone() {
+	public Field clone() {
 		Field clone = new Field(value, rowNum, colNum);
 //		if (!possibleHits.isEmpty()) {
 //			ArrayList<Field> possibleHitsClone = new ArrayList<Field>();
@@ -63,6 +65,20 @@ public class Field extends JPanel implements ActionListener {
 //			clone.setPossibleHits(possibleHitsClone);
 //		}
 		return clone;
+	}
+
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer("Field:\n");
+		sb.append("value: " + value);
+		sb.append("\n");
+		sb.append("col: " + colNum);
+		sb.append("\n");
+		sb.append("row: " + rowNum);
+		sb.append("\n");
+		sb.append("coord: " + Move.getMove(rowNum, colNum));
+		sb.append("\n");
+		return sb.toString();
 	}
 
 	@Override

@@ -59,6 +59,10 @@ public class PlayerManager {
 		}
 	}
 
+	public static PlayerAdapter getOtherPlayer(PlayerAdapter player) {
+		return (player == players[0]) ? players[1] : players[0];
+	}
+
 	public static PlayerAdapter getWhitePlayer() {
 		if (players[0].getColor() == Color.WHITE) {
 			return players[0];
