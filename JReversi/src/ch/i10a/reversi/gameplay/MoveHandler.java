@@ -379,6 +379,10 @@ public class MoveHandler {
 		return situationValue;
 	}
 	
+	/**
+	 * Calculates, how many moves can be made till the end of the game
+	 * @return integer of moves left
+	 */
 	private static int calculateRestMoves(Board board){
 		int movesLeft = 0;
 		Field field[][] = board.getFields();
@@ -392,6 +396,62 @@ public class MoveHandler {
 		}
 		
 		return movesLeft;
+	}
+	
+	/**
+	 * Checks if one of the four (16) corner Fields are hit
+	 * @return boolean true if a CornerField ist hit
+	 */
+	private boolean checkForFourCornerFieldHits(Board board){
+		boolean cornerHit = false;
+		Field field[][] = board.getFields();
+		
+		//upper left corner
+		if(field[0][0].getValue() != 0 || field[0][1].getValue() != 0 ||field[1][0].getValue() != 0 ||field[1][1].getValue() != 0){
+			return true;
+		}
+		//upper right corner
+		if(field[7][0].getValue() != 0 || field[7][1].getValue() != 0 ||field[1][7].getValue() != 0 ||field[6][1].getValue() != 0){
+			return true;
+		}
+		//lower left corner
+		if(field[0][7].getValue() != 0 || field[1][7].getValue() != 0 ||field[7][1].getValue() != 0 ||field[1][6].getValue() != 0){
+			return true;
+		}
+		//lower right corner
+		if(field[7][7].getValue() != 0 || field[7][6].getValue() != 0 ||field[6][7].getValue() != 0 ||field[6][6].getValue() != 0){
+			return true;
+		}
+		
+		return cornerHit;
+	}
+	
+	/**
+	 * Checks if one of the four Edges are hit
+	 * @return boolean true if an edge is hit
+	 */
+	private boolean checkForFourEdgesFieldHits(Board board){
+		boolean edgeHit = false;
+		Field field[][] = board.getFields();
+		
+		//left edge
+		if(field[0][2].getValue() != 0 || field[0][3].getValue() != 0 ||field[0][4].getValue() != 0 ||field[0][5].getValue() != 0){
+			return true;
+		}
+		//top edge
+		if(field[2][0].getValue() != 0 || field[3][0].getValue() != 0 ||field[4][0].getValue() != 0 ||field[5][0].getValue() != 0){
+			return true;
+		}
+		//right edge
+		if(field[2][7].getValue() != 0 || field[3][7].getValue() != 0 ||field[4][7].getValue() != 0 ||field[5][7].getValue() != 0){
+			return true;
+		}
+		//bottom edge
+		if(field[7][2].getValue() != 0 || field[7][3].getValue() != 0 ||field[7][4].getValue() != 0 ||field[7][5].getValue() != 0){
+			return true;
+		}
+		
+		return edgeHit;
 	}
 	
 	public static Board updateSimBoard(Board board, ArrayList<Field> fields){
