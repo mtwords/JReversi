@@ -259,9 +259,9 @@ public class MoveHandler {
 		return null;
 	}
 	
-	public static Field getBestMove() {
+	public static Field getBestMove(boolean strengthHard) {
 		Field[][] activeGameFields = fields;
-
+	
 		List<Field> possibleFields = getPossibleFields(PlayerManager.getActivePlayer());
 		int alpha = -Integer.MAX_VALUE; // not MIN_VALUE to invert it as beta
 		int check = -1;
@@ -274,7 +274,7 @@ public class MoveHandler {
 		for (Iterator<Field> iterator = possibleFields.iterator(); iterator.hasNext();) {
 			Field field = iterator.next();
 			root.setField(field.clone());
-			check = alphaBeta(alpha, -alpha, 4, PlayerManager.getActivePlayer(), root);
+			check = alphaBeta(alpha, -alpha, 5, PlayerManager.getActivePlayer(), root, strengthHard);
 			if (check > alpha) {
 				alpha = check;
 				bestMovableField = field;
@@ -285,7 +285,7 @@ public class MoveHandler {
 		root = null;
 		return bestMovableField;
 	}
-	public static int alphaBeta(int alpha, int beta, int depth, PlayerAdapter player, TreeNode<Board> node) {
+	public static int alphaBeta(int alpha, int beta, int depth, PlayerAdapter player, TreeNode<Board> node, boolean strengthHard) {
 		System.out.println("alpha-beta: depth " + depth);
 		
 		Board actualBoard = node.getData().clone();
@@ -304,8 +304,15 @@ public class MoveHandler {
 		node.addChild(child);
 		
 		if (depth == 0) {
-			System.out.println("Value " + calculateSituationMediumStrength(actualBoard));
-			return calculateSituationMediumStrength(actualBoard); // heuristic of board
+			if(strengthHard){
+				System.out.println("Strong Value " + calculateSituationHardStrength(actualBoard));
+				return calculateSituationHardStrength(actualBoard); // heuristic of board
+			}
+			else{
+				System.out.println("Medium Value " + calculateSituationMediumStrength(actualBoard));
+				return calculateSituationMediumStrength(actualBoard); // heuristic of board
+			}
+			
 		}
 
 		
@@ -316,7 +323,7 @@ public class MoveHandler {
 				printBoard(actualBoard, player);
 				
 				child.setField(field.clone());
-				alpha = Math.max(alpha, alphaBeta(alpha, beta, depth - 1, PlayerManager.getOtherPlayer(player), child));
+				alpha = Math.max(alpha, alphaBeta(alpha, beta, depth - 1, PlayerManager.getOtherPlayer(player), child, strengthHard));
 				if (alpha >= beta) {
 					System.out.println("Beta Cut Off");
 					return alpha; // beta cut-off
@@ -327,7 +334,7 @@ public class MoveHandler {
 				printBoard(actualBoard, player);
 
 				child.setField(field.clone());
-				beta = Math.min(beta, alphaBeta(alpha, beta, depth - 1, PlayerManager.getOtherPlayer(player), child));
+				beta = Math.min(beta, alphaBeta(alpha, beta, depth - 1, PlayerManager.getOtherPlayer(player), child, strengthHard));
 				if (alpha >= beta) {
 					System.out.println("Alpha Cut Off");
 					return alpha; // beta cut-off
@@ -347,8 +354,7 @@ public class MoveHandler {
 		int situationValue = 0;
 		Field field[][] = board.getFields();
 		
-		for (int i = 0; i < 8; i++) {
-			
+		for (int i = 0; i < 8; i++) {			
 			for (int j = 0; j < 8; j++) {
 				if(field[j][i].getValue() == 1){
 					situationValue++;
@@ -357,12 +363,36 @@ public class MoveHandler {
 					situationValue--;
 				}				
 			}
-			
 		}
-		
 		return situationValue;
 	}
 
+	private static int calculateSituationHardStrength(Board board){
+		int situationValue = 0;
+		Field field[][] = board.getFields();
+		int movesLeft = calculateRestMoves(board);
+		
+		//Test-Output
+		//System.out.println("Moves Left: " +movesLeft);
+		
+		
+		return situationValue;
+	}
+	
+	private static int calculateRestMoves(Board board){
+		int movesLeft = 0;
+		Field field[][] = board.getFields();
+		
+		for (int i = 0; i < 8; i++) {			
+			for (int j = 0; j < 8; j++) {
+				if(field[j][i].getValue() == 0){
+					movesLeft++;
+				}
+			}
+		}
+		
+		return movesLeft;
+	}
 	
 	public static Board updateSimBoard(Board board, ArrayList<Field> fields){
 		Field origFields[][] = board.getFields();

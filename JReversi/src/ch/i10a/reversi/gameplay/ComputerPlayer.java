@@ -31,7 +31,10 @@ public class ComputerPlayer extends PlayerAdapter {
 			bestMovableField = MoveHandler.getRandomMove();
 		}
 		if (ReversiProperties.inst().getIntProperty("difficulty") == SettingsConst.PROP_VALUE_MEDIUM){
-			bestMovableField = MoveHandler.getBestMove();
+			bestMovableField = MoveHandler.getBestMove(false);
+		}
+		if (ReversiProperties.inst().getIntProperty("difficulty") == SettingsConst.PROP_VALUE_HARD){
+			bestMovableField = MoveHandler.getBestMove(true);
 		}
 
 		if (bestMovableField != null) {
