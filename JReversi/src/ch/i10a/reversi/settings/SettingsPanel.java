@@ -31,6 +31,7 @@ public class SettingsPanel extends JPanel {
 		setLayout(new BorderLayout());
 
 		add(new OppositePanel(), BorderLayout.NORTH);
+		add(new JLabel("<html>Hint:<br/> You'll need to start a new game <br/>to activate the changes!</html>"), BorderLayout.CENTER);
 		add(new ButtonPanel(), BorderLayout.SOUTH);
 	}
 

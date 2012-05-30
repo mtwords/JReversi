@@ -337,7 +337,7 @@ public class MoveHandler {
 				beta = Math.min(beta, alphaBeta(alpha, beta, depth - 1, PlayerManager.getOtherPlayer(player), child, strengthHard));
 				if (alpha >= beta) {
 					System.out.println("Alpha Cut Off");
-					return alpha; // beta cut-off
+					return beta; // beta cut-off
 				}
 			}
 		}
