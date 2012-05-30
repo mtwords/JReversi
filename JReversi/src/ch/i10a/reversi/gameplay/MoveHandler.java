@@ -442,11 +442,11 @@ public class MoveHandler {
 		if(field[2][0].getValue() != 0 || field[3][0].getValue() != 0 ||field[4][0].getValue() != 0 ||field[5][0].getValue() != 0){
 			return true;
 		}
-		//right edge
+		//bottom edge
 		if(field[2][7].getValue() != 0 || field[3][7].getValue() != 0 ||field[4][7].getValue() != 0 ||field[5][7].getValue() != 0){
 			return true;
 		}
-		//bottom edge
+		//right edge
 		if(field[7][2].getValue() != 0 || field[7][3].getValue() != 0 ||field[7][4].getValue() != 0 ||field[7][5].getValue() != 0){
 			return true;
 		}
