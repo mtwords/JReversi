@@ -411,11 +411,11 @@ public class MoveHandler {
 			return true;
 		}
 		//upper right corner
-		if(field[7][0].getValue() != 0 || field[7][1].getValue() != 0 ||field[1][7].getValue() != 0 ||field[6][1].getValue() != 0){
+		if(field[7][0].getValue() != 0 || field[7][1].getValue() != 0 ||field[6][0].getValue() != 0 ||field[6][1].getValue() != 0){
 			return true;
 		}
 		//lower left corner
-		if(field[0][7].getValue() != 0 || field[1][7].getValue() != 0 ||field[7][1].getValue() != 0 ||field[1][6].getValue() != 0){
+		if(field[0][7].getValue() != 0 || field[1][7].getValue() != 0 ||field[1][6].getValue() != 0 ||field[0][6].getValue() != 0){
 			return true;
 		}
 		//lower right corner
@@ -452,6 +452,34 @@ public class MoveHandler {
 		}
 		
 		return edgeHit;
+	}
+	
+	/**
+	 * Checks if the fields before the Edges are hit
+	 * @return boolean true if an pre-edge is hit
+	 */
+	private boolean checkForFourPreEdgesFieldHits(Board board){
+		boolean preEdgeHit = false;
+		Field field[][] = board.getFields();
+		
+		//left pre-edge
+		if(field[1][2].getValue() != 0 || field[1][3].getValue() != 0 ||field[1][4].getValue() != 0 ||field[1][5].getValue() != 0){
+			return true;
+		}
+		//top pre-edge
+		if(field[2][1].getValue() != 0 || field[3][1].getValue() != 0 ||field[4][1].getValue() != 0 ||field[5][1].getValue() != 0){
+			return true;
+		}
+		//right pre-edge
+		if(field[6][2].getValue() != 0 || field[6][3].getValue() != 0 ||field[6][4].getValue() != 0 ||field[6][5].getValue() != 0){
+			return true;
+		}
+		//bottom pre-edge
+		if(field[2][6].getValue() != 0 || field[3][6].getValue() != 0 ||field[4][6].getValue() != 0 ||field[5][6].getValue() != 0){
+			return true;
+		}
+		
+		return preEdgeHit;
 	}
 	
 	public static Board updateSimBoard(Board board, ArrayList<Field> fields){
