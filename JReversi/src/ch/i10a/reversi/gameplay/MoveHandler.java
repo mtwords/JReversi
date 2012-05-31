@@ -274,7 +274,7 @@ public class MoveHandler {
 		for (Iterator<Field> iterator = possibleFields.iterator(); iterator.hasNext();) {
 			Field field = iterator.next();
 			root.setField(field.clone());
-			check = alphaBeta(alpha, -alpha, 1, PlayerManager.getActivePlayer(), root, strengthHard);
+			check = alphaBeta(alpha, -alpha, 5, PlayerManager.getActivePlayer(), root, strengthHard);
 			if (check > alpha) {
 				alpha = check;
 				bestMovableField = field;
@@ -305,8 +305,8 @@ public class MoveHandler {
 		
 		if (depth == 0) {
 			if(strengthHard){
-				System.out.println("Strong Value " + calculateSituationHardStrength(actualBoard));
-				return calculateSituationHardStrength(actualBoard); // heuristic of board
+				System.out.println("Strong Value " + calculateSituationHardStrength(actualBoard, hitFields.size()));
+				return calculateSituationHardStrength(actualBoard, hitFields.size()); // heuristic of board
 			}
 			else{
 				System.out.println("Medium Value " + calculateSituationMediumStrength(actualBoard));
@@ -367,14 +367,10 @@ public class MoveHandler {
 		return situationValue;
 	}
 
-	private static int calculateSituationHardStrength(Board board){
+	private static int calculateSituationHardStrength(Board board, int hitFields){
 		int situationValue = 0;
 		Field field[][] = board.getFields();
 		int movesLeft = calculateRestMoves(board);
-		
-		//Test-Output
-		//System.out.println("Moves Left: " +movesLeft);
-		
 
 		//As long as we are only in the sweet sixteen (4x4 center of the board)
 		//Meaning we stand on no corners, edges or pre-edges
@@ -387,7 +383,7 @@ public class MoveHandler {
 		//we enter the midgame
 		else if(movesLeft > 10){	
 			System.out.println("MidgameValueCalculated");
-			return getMidgameValue(board);
+			return getMidgameValue(board, hitFields);
 		}
 			//here the heuristic for the endgame kicks in
 		else{
@@ -417,17 +413,19 @@ public class MoveHandler {
 		// --> agility / mobility
 		//again, we use the calculateSituationMediumStrength method, but in the negative
 		else{
-			return -calculateSituationMediumStrength(board);
+			int factor = 10;
+			return -calculateSituationMediumStrength(board)*factor;
 		}
 		
 		
 	}
 	
-	private static int getMidgameValue(Board board){
+	private static int getMidgameValue(Board board, int hitFields){
 		Field field[][] = board.getFields();
 		int situationValue = 0;
+		int factor = -hitFields;
 		
-		return -2;
+		return situationValue;
 	}
 	
 	/**
