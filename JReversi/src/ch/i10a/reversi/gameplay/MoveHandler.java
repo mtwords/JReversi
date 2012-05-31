@@ -274,7 +274,7 @@ public class MoveHandler {
 		for (Iterator<Field> iterator = possibleFields.iterator(); iterator.hasNext();) {
 			Field field = iterator.next();
 			root.setField(field.clone());
-			check = alphaBeta(alpha, -alpha, 5, PlayerManager.getActivePlayer(), root, strengthHard);
+			check = alphaBeta(alpha, -alpha, 1, PlayerManager.getActivePlayer(), root, strengthHard);
 			if (check > alpha) {
 				alpha = check;
 				bestMovableField = field;
@@ -375,10 +375,80 @@ public class MoveHandler {
 		//Test-Output
 		//System.out.println("Moves Left: " +movesLeft);
 		
+
+		//As long as we are only in the sweet sixteen (4x4 center of the board)
+		//Meaning we stand on no corners, edges or pre-edges
+		if(!checkForFourCornerFieldHits(board)&&!checkForFourEdgesFieldHits(board)&&!checkForFourPreEdgesFieldHits(board)){
+			System.out.println("BeginningValueCalculated");
+			return getBeginningValue(board);
+		}
 		
-		return situationValue;
+		//when the sweet sixteen are left (first stone out of the sweet sixteen)
+		//we enter the midgame
+		else if(movesLeft > 10){	
+			System.out.println("MidgameValueCalculated");
+			return getMidgameValue(board);
+		}
+			//here the heuristic for the endgame kicks in
+		else{
+			//Endgame
+			//we kick again the Medium Strenght calculation. Why?
+			//because at the end, it's best to have the most pieces on the
+			//board. ant that's exactly that the Medium Calculation does.
+			System.out.println("EndgameValueCalculated");
+			return calculateSituationMediumStrength(board);
+		}
+		
 	}
 	
+	/**
+	 * gets the value for the time as everything is in the sweet sixteen
+	 * @return integer situation strength
+	 */
+	private static int getBeginningValue(Board board){
+		Field field[][] = board.getFields();
+		int situationValue = 0;
+		//if no black stones are left, the situation has to be drastically
+		//calculated, as Black will win for shure. ->poison
+		if(getNumberOfBlackStones(board) == 0){
+			return -2000000;
+		}
+		//When we are playing in the beginning, we do not want a lot of stones
+		// --> agility / mobility
+		//again, we use the calculateSituationMediumStrength method, but in the negative
+		else{
+			return -calculateSituationMediumStrength(board);
+		}
+		
+		
+	}
+	
+	private static int getMidgameValue(Board board){
+		Field field[][] = board.getFields();
+		int situationValue = 0;
+		
+		return -2;
+	}
+	
+	/**
+	 * Calculates, how many BlackStones are on the field
+	 * @return integer of black Stones on the field 
+	 */
+	private static int getNumberOfBlackStones(Board board){
+		int numberOfBlackStones = 0;
+		Field field[][] = board.getFields();
+		
+		for (int i = 0; i < 8; i++) {			
+			for (int j = 0; j < 8; j++) {
+				if(field[j][i].getValue() == 1){
+					numberOfBlackStones++;
+				}
+			}
+		}
+		
+		return numberOfBlackStones;
+	}
+
 	/**
 	 * Calculates, how many moves can be made till the end of the game
 	 * @return integer of moves left
@@ -402,7 +472,7 @@ public class MoveHandler {
 	 * Checks if one of the four (16) corner Fields are hit
 	 * @return boolean true if a CornerField ist hit
 	 */
-	private boolean checkForFourCornerFieldHits(Board board){
+	private static boolean checkForFourCornerFieldHits(Board board){
 		boolean cornerHit = false;
 		Field field[][] = board.getFields();
 		
@@ -430,7 +500,7 @@ public class MoveHandler {
 	 * Checks if one of the four Edges are hit
 	 * @return boolean true if an edge is hit
 	 */
-	private boolean checkForFourEdgesFieldHits(Board board){
+	private static boolean checkForFourEdgesFieldHits(Board board){
 		boolean edgeHit = false;
 		Field field[][] = board.getFields();
 		
@@ -458,7 +528,7 @@ public class MoveHandler {
 	 * Checks if the fields before the Edges are hit
 	 * @return boolean true if an pre-edge is hit
 	 */
-	private boolean checkForFourPreEdgesFieldHits(Board board){
+	private static boolean checkForFourPreEdgesFieldHits(Board board){
 		boolean preEdgeHit = false;
 		Field field[][] = board.getFields();
 		
