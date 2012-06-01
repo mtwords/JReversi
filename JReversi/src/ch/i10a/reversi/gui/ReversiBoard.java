@@ -107,6 +107,8 @@ public class ReversiBoard extends Board implements ActionListener {
 	public void doMove(Field field) {
 		ArrayList<Field> hitFields = MoveHandler.doMove(field);
 		if (!hitFields.isEmpty()) {
+			moves.add(Move.getMove(field.getRowNum(), field.getColNum()));
+			infoPane.updateInfo();
 			animationCheckTimer.start();
 		}
 	}
@@ -118,9 +120,9 @@ public class ReversiBoard extends Board implements ActionListener {
 		}
 		animationCheckTimer.stop();
 
-		// add this move to list
-		moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
-		// updates
+//		// add this move to list
+//		moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
+//		// updates
 		infoPane.repaint();
 
 		activeField.repaint();

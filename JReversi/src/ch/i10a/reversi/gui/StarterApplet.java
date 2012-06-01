@@ -3,11 +3,13 @@ package ch.i10a.reversi.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JApplet;
 import javax.swing.JButton;
@@ -22,6 +24,7 @@ import javax.swing.JPanel;
 import ch.i10a.reversi.gameplay.MoveHandler;
 import ch.i10a.reversi.gameplay.MoveList;
 import ch.i10a.reversi.gameplay.Openings;
+import ch.i10a.reversi.gameplay.PlayerAdapter;
 import ch.i10a.reversi.gameplay.PlayerManager;
 import ch.i10a.reversi.settings.SettingsPanel;
 
@@ -35,7 +38,12 @@ public class StarterApplet extends JApplet {
 	ReversiBoard board;
 	PlayerOneInfoPane playerOne;
 	PlayerTwoInfoPane playerTwo;
-	
+	GameInfoPane gameInfoPane;
+
+	JButton offerDrawButton;
+	JButton newGameButton;
+	JButton surrenderButton;
+
 	@Override
 	public void init() {
 		super.init();
@@ -46,7 +54,6 @@ public class StarterApplet extends JApplet {
 		// GUI initialisations
 		infoPane = new GeneralInfoPane();
 		board = new ReversiBoard(infoPane);
-		
 	}
 
 	public void start() {
@@ -57,7 +64,7 @@ public class StarterApplet extends JApplet {
 		add(new CipherPane(), BorderLayout.WEST);
 		add(board, BorderLayout.CENTER);
 		add(infoPane, BorderLayout.EAST);
-
+		add(createButtonPanel(), BorderLayout.SOUTH);
 	}
 	@Override
 	public void stop() {
@@ -90,6 +97,23 @@ public class StarterApplet extends JApplet {
 		return menuBar;
 	}
 
+	private JPanel createButtonPanel() {
+		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
+		offerDrawButton = new JButton("Offer Draw");
+		offerDrawButton.addActionListener(new ActDraw());
+		newGameButton = new JButton("New Game");
+		newGameButton.addActionListener(new StartNewGame());
+		surrenderButton = new JButton("Surrender");
+		surrenderButton.addActionListener(new SurrenderGame());
+
+		buttonPanel.add(newGameButton);
+		buttonPanel.add(offerDrawButton);
+		buttonPanel.add(surrenderButton);
+
+		return buttonPanel;
+	}
+
 	/**
 	 * Overridden to set a fix size. Could be removed if dynamic size
 	 * is supported.
@@ -97,11 +121,43 @@ public class StarterApplet extends JApplet {
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		setSize(new Dimension(325 + (8 * ReversiField.WIDTH), 25 + 25 + (8 * ReversiField.WIDTH)));
+		setSize(new Dimension(330 + (8 * ReversiField.WIDTH), 25 + 25 + 35 + (8 * ReversiField.WIDTH)));
 	}
 		
 
 	// --------------- inner classes ------------------
+	private class StartNewGame implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			restart();
+		}
+	}
+
+	private class ActDraw implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			String drawLabel = null;
+			if(PlayerManager.getActivePlayer().getColor() == Color.WHITE){
+				drawLabel = "The WHITE Player offers you a draw. Accept?";
+			}
+			else{
+				drawLabel = "The BLACK Player offers you a draw. Accept?";
+			}
+
+			int choice = JOptionPane.showConfirmDialog(board, drawLabel, "Offered draw", JOptionPane.YES_NO_OPTION);
+			if (choice == JOptionPane.YES_OPTION) {
+				gameInfoPane.setDraw();
+			}
+		}
+	}
+
+	private class SurrenderGame implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			gameInfoPane.surrender();
+		}
+	}
+
 	/**
 	 * A JPanel, which can be used to name the a - h Fields.
 	 * By now it is set fixed as horizontal.
@@ -155,13 +211,7 @@ public class StarterApplet extends JApplet {
 	 * the Players. The Player that's on has a Frame
 	 * Around his Info Pane
 	 */
-	protected class GeneralInfoPane extends JPanel {
-
-		JButton offerDrawButton;
-		JButton newGameButton;
-		JButton surrenderButton;
-
-		GameInfoPane gameInfoPane;
+	protected class GeneralInfoPane extends JPanel implements ActionListener {
 
 		public GeneralInfoPane() {
 			initComponents();
@@ -176,61 +226,62 @@ public class StarterApplet extends JApplet {
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
 			
-			offerDrawButton = new JButton("Offer Draw");
-			offerDrawButton.addActionListener(new ActDraw());
-			newGameButton = new JButton("New Game");
-			newGameButton.addActionListener(new StartNewGame());
-			surrenderButton = new JButton("Surrender");
-			surrenderButton.addActionListener(new SurrenderGame());
-
 			add(playerOne); //Info Pane Player One
 			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
 			add(playerTwo); //Info Pane Player Two
 			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
 			add(gameInfoPane); //Info Pane Player Two
 			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
-			
-			add(offerDrawButton);
-			add(newGameButton);
-			add (surrenderButton);
-			
-
 		}
 
-		private class ActDraw implements ActionListener {
+		public void updateInfo() {
+			PlayerAdapter player = PlayerManager.getActivePlayer();
+			PlayerAdapter opposite = PlayerManager.getOtherPlayer(player);
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				String drawLabel = null;
-				if(PlayerManager.getActivePlayer().getColor() == Color.WHITE){
-					drawLabel = "The WHITE Player offers you a draw. Accept?";
+			if (player == PlayerManager.getWhitePlayer()) {
+				playerTwo.setPlayerLabelText("> ");
+				playerOne.setPlayerLabelText("");
+				playerOne.setStonesLabelText(player.getStonesCount());
+				playerTwo.setStonesLabelText(opposite.getStonesCount());
+				if (PlayerManager.getPass() == player.getValue()) {
+					playerOne.setPassLabelText("pass");
+				} else {
+					playerOne.setPassLabelText("");
 				}
-				else{
-					drawLabel = "The BLACK Player offers you a draw. Accept?";
+				playerOne.setLastMoveLabelText();
+			} else {
+				playerTwo.setPlayerLabelText("");
+				playerOne.setPlayerLabelText("> ");
+				playerTwo.setStonesLabelText(player.getStonesCount());
+				playerOne.setStonesLabelText(opposite.getStonesCount());
+				if (PlayerManager.getPass() == player.getValue()) {
+					playerTwo.setPassLabelText("pass");
+				} else {
+					playerTwo.setPassLabelText("");
 				}
-
-				int choice = JOptionPane.showConfirmDialog(board, drawLabel, "Offered draw", JOptionPane.YES_NO_OPTION);
-				if (choice == JOptionPane.YES_OPTION) {
-					gameInfoPane.setDraw();
-				}
-			}
-
-		}
-		private class StartNewGame implements ActionListener {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				restart();
-			}
-
-		}
-		private class SurrenderGame implements ActionListener{
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				gameInfoPane.surrender();
+				playerTwo.setLastMoveLabelText();
 			}
 		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+//			updateImage(PlayerManager.getActivePlayer());
+		}
+//		public void updateImage(PlayerAdapter player) {
+//			Graphics g = null;
+//			playerOne.getGraphics().setColor(playerOne.getBackground());
+//			playerOne.getGraphics().fillRect(20, 20, 20, 20);
+//			playerTwo.getGraphics().setColor(playerTwo.getBackground());
+//			playerTwo.getGraphics().fillRect(20, 20, 40, 40);
+//			if (player instanceof HumanPlayer) {
+//				image = ReversiField.whiteStone;
+//				g = playerOne.getGraphics();
+//			} else {
+//				image = ReversiField.blackStone;
+//				g = playerTwo.getGraphics();
+//			}
+//			g.drawImage(image, 20, 20, null);
+//		}
 	}
 	
 	
@@ -239,62 +290,45 @@ public class StarterApplet extends JApplet {
 	 * Player One (Black Player)
 	 */
 	private class PlayerOneInfoPane extends JPanel {
-		
+		JLabel playerLabel = GuiUtil.getLabel("Player 1",300, 1 * 25);
 		JLabel passLabel = GuiUtil.getLabel("", 300, 1*25);
 		JLabel stonesLabel = GuiUtil.getLabel("Stones: " + PlayerManager.getWhitePlayer().getStonesCount(), 300, 1*25);
 		JLabel moveLabel = GuiUtil.getLabel("Last Move: ", 300, 1*25);
 		
 		public PlayerOneInfoPane() {
 			initComponents();
+			setStonesLabelText(PlayerManager.getWhitePlayer().getStonesCount());
+			setPlayerLabelText("> ");
 		}
 
 		private void initComponents() {
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			setSize(new Dimension(300, 2 * 50));
-			setBackground(Color.lightGray);
+			setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
-			add(GuiUtil.getLabel("Player 1",300, 1 * 25));
+
+			add(playerLabel);
 			add(stonesLabel);
 			add(moveLabel);
 			add(passLabel);
-			
 		}
 
-		public void paint(Graphics g) {
-			super.paint(g);
-			
-			if (PlayerManager.getActivePlayer().getColor() == Color.WHITE) {
-				g.setColor(Color.RED);
-				g.fillRect(0, 0, 50, 50);
-			}
-			
-			g.setColor(Color.BLACK);
-			g.drawOval(4, 4, 40, 40);
-			g.setColor(Color.WHITE);
-			g.fillOval(4, 4, 40, 40);
-			
-			if(PlayerManager.getPass() == -1){
-				passLabel.setText("pass");
-			}
-			else{
-				passLabel.setText("");
-			}
-
-			
-			setStonesLabelText(PlayerManager.getWhitePlayer().getStonesCount());
-			if(board.getMoves().size() > 0){
-				if(PlayerManager.getActivePlayer().getColor() == Color.WHITE){
-					moveLabel.setText("Last Move: " + board.getLastMove());
-				}
-			}
-			
+		public void setPlayerLabelText(String prefix) {
+			playerLabel.setText(prefix + "Player 1");
 		}
+
 		public void setStonesLabelText(int count){
 			stonesLabel.setText("Stones: " + count);
 		}
-		
-		
+
+		public void setPassLabelText(String pass) {
+			passLabel.setText(pass);
+		}
+
+		public void setLastMoveLabelText() {
+			moveLabel.setText("Last Move: " + board.getLastMove());
+		}
 	}
 	
 	
@@ -304,58 +338,43 @@ public class StarterApplet extends JApplet {
 	 */
 	private class PlayerTwoInfoPane extends JPanel {
 		
+		JLabel playerLabel = GuiUtil.getLabel("Player 2",300, 1 * 25);
 		JLabel passLabel = GuiUtil.getLabel("", 300, 1*25);
 		JLabel stonesLabel = GuiUtil.getLabel("Stones: " + PlayerManager.getBlackPlayer().getStonesCount(), 300, 1*25);
 		JLabel moveLabel = GuiUtil.getLabel("Last Move: ", 300, 1*25);
 
 		public PlayerTwoInfoPane() {
 			initComponents();
+			setStonesLabelText(PlayerManager.getBlackPlayer().getStonesCount());
 		}
 
 		private void initComponents() {
-			
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			setSize(new Dimension(300, 2 * 50));
-			setBackground(Color.lightGray);
+			setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
-			add(GuiUtil.getLabel("Player 2",300, 1 * 25));
+			add(playerLabel);
 			add(stonesLabel);
 			add(moveLabel);
 			add(passLabel);
 		}
-		
-		public void paint(Graphics g) {
-			super.paint(g);
-			
-			if (PlayerManager.getActivePlayer().getColor() == Color.BLACK) {
-				g.setColor(Color.RED);
-				g.fillRect(0, 0, 50, 50);
-			}
-			
-			g.setColor(Color.BLACK);
-			g.fillOval(4, 4, 40, 40);
-			
-			if(PlayerManager.getPass() == 1){
-				passLabel.setText("pass");
-			}
-			else{
-				passLabel.setText("");
-			}
 
-			
-			setStonesLabelText(PlayerManager.getBlackPlayer().getStonesCount());
-			if(board.getMoves().size() > 0){
-				if(PlayerManager.getActivePlayer().getColor() == Color.BLACK){
-					moveLabel.setText("Last Move: " + board.getLastMove());
-				}
-			}
-			
+		public void setPlayerLabelText(String prefix) {
+			playerLabel.setText(prefix + "Player 2");
 		}
+
 		public void setStonesLabelText(int count){
 			stonesLabel.setText("Stones: " + count);
 		}
-		
+
+		public void setPassLabelText(String pass) {
+			passLabel.setText("");
+		}
+
+		public void setLastMoveLabelText() {
+			moveLabel.setText("Last Move: " + board.getLastMove());
+		}
 	}
 	
 	/**
@@ -374,7 +393,7 @@ public class StarterApplet extends JApplet {
 		private void initComponents() {
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); 
 			setSize(new Dimension(300, 3 * 50));
-			setBackground(Color.lightGray);
+			setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 			setMaximumSize(getSize());
 			setMinimumSize(getSize());
 			add(GuiUtil.getLabel("Game Informations",300, 1 * 25));
@@ -388,7 +407,6 @@ public class StarterApplet extends JApplet {
 			if(!Openings.checkOpening(board.getMoves()).isEmpty()){
 				opening.setText("Opening: " + Openings.checkOpening(board.getMoves()));
 			}
-			
 
 			if(!MoveHandler.checkForFreeFields() || PlayerManager.checkDoublePass()){
 				
@@ -430,29 +448,26 @@ public class StarterApplet extends JApplet {
 			}
 			
 			board.setBoard(fields);
+			board.repaint();
 			repaint();
 		}
 		
 		/*If a draw is accepted, update every field and show the message about the draw */
 		public void setDraw(){
-			ReversiField [][]fields = new ReversiField[8][8];
-			for (int i = 0; i < fields.length; i++) {
-				for (int j = 0; j < fields[i].length/2; j++) {
-					int fieldValue = 1;
-					fields[j][i] = new ReversiField(fieldValue, i, j);	
+			for (int i = 0; i < board.fields.length; i++) {
+				for (int j = 0; j < board.fields[i].length/2; j++) {
+					board.fields[j][i].setValue(1);
 				}
-				for (int j = fields[i].length/2; j < fields[i].length; j++) {
-					int fieldValue = -1;
-					fields[j][i] = new ReversiField(fieldValue, i, j);	
+				for (int j = board.fields[i].length/2; j < board.fields[i].length; j++) {
+					board.fields[j][i].setValue(-1);
 				}
 			}
 			playerOne.setStonesLabelText(32);
 			playerTwo.setStonesLabelText(32);
 			PlayerManager.getBlackPlayer().setStonesCount(32);
 			PlayerManager.getWhitePlayer().setStonesCount(32);
-			board.setBoard(fields);
 			winnerInfo.setText("This game was a draw!");
-			
+			board.repaint();
 			repaint();
 		}
 		
