@@ -423,9 +423,350 @@ public class MoveHandler {
 	private static int getMidgameValue(Board board, int hitFields){
 		Field field[][] = board.getFields();
 		int situationValue = 0;
-		int factor = -hitFields;
 		
-		return situationValue;
+		int addFactorCorner = 20;//Corners are vital, so it is multiplicated with a high value
+		int addFactorDiagonalCorner = -15;//diagonal Corner fields are ugly to play, a little poisoning here
+		int addFactorPreCorner = -5;//playing just before the corner gives the opponent the possibility to get
+												//the corner, so a little poisoning as well.
+		int addFactorEdge = 10;//An edgeField gives a little advantage in the game
+		int addFactorPreEdge = -2;//placing before the edge gives the opponent a good possibility -> small poisoning value
+		
+		for (int i = 0; i < 8; i++) {			
+			for (int j = 0; j < 8; j++) {
+				//heuristic of midgame
+				//-----------------begin of Loop-----------------------------------------------------
+				
+				//if a stone lies on a corner
+				if((i == 0 && j == 0)||(i == 7 && j == 7)||(i == 0 && j == 7)||(i == 7 && j == 0)){
+					if(field[i][j].getValue() == 1){
+						situationValue = situationValue + addFactorCorner;
+					}
+					else if(field[i][j].getValue() == -1){
+						situationValue = situationValue - addFactorCorner;
+					}
+				}
+				
+				//if a stone lies on the left edge
+				if(i == 0 && (j == 2 || j == 3 || j == 4 || j == 5)){
+					if(field[i][j].getValue() == 1){
+						situationValue = situationValue + addFactorEdge;
+					}
+					else if(field[i][j].getValue() == -1){
+						situationValue = situationValue - addFactorEdge;
+					}
+				}
+				
+				//if a stone lies on the right edge
+				if(i == 7 && (j == 2 || j == 3 || j == 4 || j == 5)){
+					if(field[i][j].getValue() == 1){
+						situationValue = situationValue + addFactorEdge;
+					}
+					else if(field[i][j].getValue() == -1){
+						situationValue = situationValue - addFactorEdge;
+					}
+				}
+				
+				//if a stone lies on the upper edge
+				if(j == 0 && (i == 2 || i == 3 || i == 4 || i == 5)){
+					if(field[i][j].getValue() == 1){
+						situationValue = situationValue + addFactorEdge;
+					}
+					else if(field[i][j].getValue() == -1){
+						situationValue = situationValue - addFactorEdge;
+					}
+				}
+				
+				//if a stone lies on the lower edge
+				if(j == 7 && (i == 2 || i == 3 || i == 4 || i == 5)){
+					if(field[i][j].getValue() == 1){
+						situationValue = situationValue + addFactorEdge;
+					}
+					else if(field[i][j].getValue() == -1){
+						situationValue = situationValue - addFactorEdge;
+					}
+				}
+				
+				//if a stone lies on a pre-diag-corner field (upper left)
+				if(i == 1 && j == 1){
+					if(field[i][j].getValue() == 1){
+						//if the corner field is occupied by a black stone, just count
+						if(field[0][0].getValue() == 1){
+							situationValue++;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue + addFactorDiagonalCorner;
+						}
+					}
+					else if(field[i][j].getValue() == -1){
+						if(field[0][0].getValue() == -1){
+							situationValue--;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue - addFactorDiagonalCorner;
+						}
+					}
+				}
+				
+				//if a stone lies on a pre-diag-corner field (lower right)
+				if(i == 6 && j == 6){
+					if(field[i][j].getValue() == 1){
+						//if the corner field is occupied by a black stone, just count
+						if(field[7][7].getValue() == 1){
+							situationValue++;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue + addFactorDiagonalCorner;
+						}
+					}
+					else if(field[i][j].getValue() == -1){
+						if(field[7][7].getValue() == -1){
+							situationValue--;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue - addFactorDiagonalCorner;
+						}
+					}
+				}
+				
+				//if a stone lies on a pre-diag-corner field (lower left)
+				if(i == 1 && j == 6){
+					if(field[i][j].getValue() == 1){
+						//if the corner field is occupied by a black stone, just count
+						if(field[0][7].getValue() == 1){
+							situationValue++;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue + addFactorDiagonalCorner;
+						}
+					}
+					else if(field[i][j].getValue() == -1){
+						if(field[0][7].getValue() == -1){
+							situationValue--;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue - addFactorDiagonalCorner;
+						}
+					}
+				}
+				
+				//if a stone lies on a pre-diag-corner field (upper right)
+				if(i == 6 && j == 1){
+					if(field[i][j].getValue() == 1){
+						//if the corner field is occupied by a black stone, just count
+						if(field[7][0].getValue() == 1){
+							situationValue++;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue + addFactorDiagonalCorner;
+						}
+					}
+					else if(field[i][j].getValue() == -1){
+						if(field[7][0].getValue() == -1){
+							situationValue--;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue - addFactorDiagonalCorner;
+						}
+					}
+				}
+				
+				//if a stone lies on a pre-corner field (upper left)
+				if((i == 1 && j == 0)||(i == 0 && j == 1)){
+					if(field[i][j].getValue() == 1){
+						//if the corner field is occupied by a black stone, just count
+						if(field[0][0].getValue() == 1){
+							situationValue++;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue + addFactorPreCorner;
+						}
+					}
+					else if(field[i][j].getValue() == -1){
+						if(field[0][0].getValue() == -1){
+							situationValue--;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue - addFactorPreCorner;
+						}
+					}
+				}
+				
+				//if a stone lies on a pre-corner field (upper right)
+				if((i == 7 && j == 1)||(i == 6 && j == 0)){
+					if(field[i][j].getValue() == 1){
+						//if the corner field is occupied by a black stone, just count
+						if(field[7][0].getValue() == 1){
+							situationValue++;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue + addFactorPreCorner;
+						}
+					}
+					else if(field[i][j].getValue() == -1){
+						if(field[7][0].getValue() == -1){
+							situationValue--;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue - addFactorPreCorner;
+						}
+					}
+				}
+				
+				//if a stone lies on a pre-corner field (lower right)
+				if((i == 7 && j == 6)||(i == 6 && j == 7)){
+					if(field[i][j].getValue() == 1){
+						//if the corner field is occupied by a black stone, just count
+						if(field[7][7].getValue() == 1){
+							situationValue++;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue + addFactorPreCorner;
+						}
+					}
+					else if(field[i][j].getValue() == -1){
+						if(field[7][7].getValue() == -1){
+							situationValue--;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue - addFactorPreCorner;
+						}
+					}
+				}
+				
+				//if a stone lies on a pre-corner field (lower left)
+				if((i == 1 && j == 7)||(i == 0 && j == 6)){
+					if(field[i][j].getValue() == 1){
+						//if the corner field is occupied by a black stone, just count
+						if(field[0][7].getValue() == 1){
+							situationValue++;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue + addFactorPreCorner;
+						}
+					}
+					else if(field[i][j].getValue() == -1){
+						if(field[0][7].getValue() == -1){
+							situationValue--;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue - addFactorPreCorner;
+						}
+					}
+				}
+				
+				//if a stone lies on a pre-edge field (left)
+				if((i == 1 && (j == 2 || j == 3 || j == 4 || j == 5))){
+					if(field[i][j].getValue() == 1){
+						//if the edge field is occupied by a black stone, just count
+						if(field[0][j-1].getValue() == 1 || field[0][j].getValue() == 1 || field[0][j+1].getValue() == 1){
+							situationValue++;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue + addFactorPreEdge;
+						}
+					}
+					else if(field[i][j].getValue() == -1){
+						if(field[0][j-1].getValue() == -1 || field[0][j].getValue() == -1 || field[0][j+1].getValue() == -1){
+							situationValue--;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue - addFactorPreEdge;
+						}
+					}
+				}
+				
+				//if a stone lies on a pre-edge field (right)
+				if((i == 6 && (j == 2 || j == 3 || j == 4 || j == 5))){
+					if(field[i][j].getValue() == 1){
+						//if the edge field is occupied by a black stone, just count
+						if(field[7][j-1].getValue() == 1 || field[7][j].getValue() == 1 || field[7][j+1].getValue() == 1){
+							situationValue++;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue + addFactorPreEdge;
+						}
+					}
+					else if(field[i][j].getValue() == -1){
+						if(field[7][j-1].getValue() == -1 || field[7][j].getValue() == -1 || field[7][j+1].getValue() == -1){
+							situationValue--;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue - addFactorPreEdge;
+						}
+					}
+				}
+				
+				//if a stone lies on a pre-edge field (top)
+				if((j == 1 && (i == 2 || i == 3 || i == 4 || i == 5))){
+					if(field[i][j].getValue() == 1){
+						//if the edge field is occupied by a black stone, just count
+						if(field[i-1][0].getValue() == 1 || field[i][0].getValue() == 1 || field[i+1][0].getValue() == 1){
+							situationValue++;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue + addFactorPreEdge;
+						}
+					}
+					else if(field[i][j].getValue() == -1){
+						if(field[i-1][0].getValue() == -1 || field[i][0].getValue() == -1 || field[i+1][0].getValue() == -1){
+							situationValue--;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue - addFactorPreEdge;
+						}
+					}
+				}
+				
+				//if a stone lies on a pre-edge field (bottom)
+				if((j == 6 && (i == 2 || i == 3 || i == 4 || i == 5))){
+					if(field[i][j].getValue() == 1){
+						//if the edge field is occupied by a black stone, just count
+						if(field[i-1][7].getValue() == 1 || field[i][7].getValue() == 1 || field[i+1][7].getValue() == 1){
+							situationValue++;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue + addFactorPreEdge;
+						}
+					}
+					else if(field[i][j].getValue() == -1){
+						if(field[i-1][7].getValue() == -1 || field[i][7].getValue() == -1 || field[i+1][7].getValue() == -1){
+							situationValue--;
+						}
+						//if the corner field or nearby is anything else
+						else{
+							situationValue = situationValue - addFactorPreEdge;
+						}
+					}
+				}
+				
+			//-----------------end of loop------------------------------------	
+			}
+		}
+		
+		return situationValue/hitFields;
 	}
 	
 	/**
