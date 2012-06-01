@@ -93,7 +93,6 @@ public class ReversiBoard extends Board implements ActionListener {
 		for (int i = 0; i < fields.length; i++) {
 			for (int j = 0; j < fields[i].length; j++) {
 				this.fields[i][j].setValue(fields[i][j].getValue());
-//				this.fields[i][j].update(this.fields[i][j].getValue());
 			}
 		}
 	}
@@ -120,9 +119,7 @@ public class ReversiBoard extends Board implements ActionListener {
 		}
 		animationCheckTimer.stop();
 
-//		// add this move to list
-//		moves.add(Move.getMove(activeField.getRowNum(), activeField.getColNum()));
-//		// updates
+		// updates
 		infoPane.repaint();
 
 		activeField.repaint();
