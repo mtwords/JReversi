@@ -39,6 +39,7 @@ public class StarterApplet extends JApplet {
 	PlayerOneInfoPane playerOne;
 	PlayerTwoInfoPane playerTwo;
 	GameInfoPane gameInfoPane;
+	JPanel buttonPanel;
 
 	JButton offerDrawButton;
 	JButton newGameButton;
@@ -64,7 +65,7 @@ public class StarterApplet extends JApplet {
 		add(new CipherPane(), BorderLayout.WEST);
 		add(board, BorderLayout.CENTER);
 		add(infoPane, BorderLayout.EAST);
-		add(createButtonPanel(), BorderLayout.SOUTH);
+		add(buttonPanel = createButtonPanel(), BorderLayout.SOUTH);
 	}
 	@Override
 	public void stop() {
@@ -72,8 +73,10 @@ public class StarterApplet extends JApplet {
 
 		board.setVisible(false);
 		infoPane.setVisible(false);
+		buttonPanel.setVisible(false);
 		board = null;
 		infoPane = null;
+		buttonPanel = null;
 	}
 
 	/**
@@ -110,7 +113,6 @@ public class StarterApplet extends JApplet {
 		buttonPanel.add(newGameButton);
 		buttonPanel.add(offerDrawButton);
 		buttonPanel.add(surrenderButton);
-
 		return buttonPanel;
 	}
 
@@ -147,6 +149,9 @@ public class StarterApplet extends JApplet {
 			int choice = JOptionPane.showConfirmDialog(board, drawLabel, "Offered draw", JOptionPane.YES_NO_OPTION);
 			if (choice == JOptionPane.YES_OPTION) {
 				gameInfoPane.setDraw();
+
+				offerDrawButton.setEnabled(false);
+				surrenderButton.setEnabled(false);
 			}
 		}
 	}
@@ -154,6 +159,9 @@ public class StarterApplet extends JApplet {
 	private class SurrenderGame implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			offerDrawButton.setEnabled(false);
+			surrenderButton.setEnabled(false);
+
 			gameInfoPane.surrender();
 		}
 	}
@@ -409,7 +417,9 @@ public class StarterApplet extends JApplet {
 			}
 
 			if(!MoveHandler.checkForFreeFields() || PlayerManager.checkDoublePass()){
-				
+				offerDrawButton.setEnabled(false);
+				surrenderButton.setEnabled(false);
+
 				gameInfo.setText("The game is over");
 
 				if(PlayerManager.getBlackPlayer().getStonesCount() > PlayerManager.getWhitePlayer().getStonesCount()){
