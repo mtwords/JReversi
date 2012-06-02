@@ -430,11 +430,11 @@ public class MoveHandler {
 		Field field[][] = board.getFields();
 		int situationValue = 0;
 		
-		int addFactorCorner = 40;//Corners are vital, so it is multiplicated with a high value
+		int addFactorCorner = 400;//Corners are vital, so it is multiplicated with a high value
 		int addFactorDiagonalCorner = -20;//diagonal Corner fields are ugly to play, a little poisoning here
 		int addFactorPreCorner = -5;//playing just before the corner gives the opponent the possibility to get
 												//the corner, so a little poisoning as well.
-		int addFactorEdge = 15;//An edgeField gives a little advantage in the game
+		int addFactorEdge = 40;//An edgeField gives a little advantage in the game
 		int addFactorPreEdge = -2;//placing before the edge gives the opponent a good possibility -> small poisoning value
 		
 		for (int i = 0; i < 8; i++) {			
