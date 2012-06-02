@@ -281,7 +281,7 @@ public class MoveHandler {
 				check = alphaBeta(alpha, -alpha, 4, PlayerManager.getOtherPlayer(PlayerManager.getActivePlayer()), root, strengthHard);
 			}
 			
-			if (check > alpha) {
+			if (check >= alpha) {
 				alpha = check;
 				bestMovableField = field;
 			}
@@ -421,7 +421,7 @@ public class MoveHandler {
 		// --> agility / mobility
 		//again, we use the calculateSituationMediumStrength method, but in the negative
 		else{
-			int factor = 10;
+			int factor = 100;
 			return -calculateSituationMediumStrength(board)*factor;
 		}
 		
