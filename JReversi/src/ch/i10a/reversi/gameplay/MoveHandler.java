@@ -274,7 +274,13 @@ public class MoveHandler {
 		for (Iterator<Field> iterator = possibleFields.iterator(); iterator.hasNext();) {
 			Field field = iterator.next();
 			root.setField(field.clone());
-			check = alphaBeta(alpha, -alpha, 5, PlayerManager.getActivePlayer(), root, strengthHard);
+			if(calculateRestMoves(board) < 10){
+				check = alphaBeta(alpha, -alpha, 8, PlayerManager.getActivePlayer(), root, strengthHard);
+			}
+			else{
+				check = alphaBeta(alpha, -alpha, 4, PlayerManager.getActivePlayer(), root, strengthHard);
+			}
+			
 			if (check > alpha) {
 				alpha = check;
 				bestMovableField = field;
@@ -303,7 +309,7 @@ public class MoveHandler {
 		TreeNode<Board> child = new TreeNode<Board>(actualBoard.clone(), getPossibleFields(otherPlayer));
 		node.addChild(child);
 		
-		if (depth == 0) {
+		if (depth == 0 || calculateRestMoves(actualBoard) == 0 || getPossibleFields(otherPlayer).size() == 0) {
 			if(strengthHard){
 				System.out.println("Strong Value " + calculateSituationHardStrength(actualBoard, hitFields.size()));
 				return calculateSituationHardStrength(actualBoard, hitFields.size()); // heuristic of board
@@ -424,11 +430,11 @@ public class MoveHandler {
 		Field field[][] = board.getFields();
 		int situationValue = 0;
 		
-		int addFactorCorner = 20;//Corners are vital, so it is multiplicated with a high value
-		int addFactorDiagonalCorner = -15;//diagonal Corner fields are ugly to play, a little poisoning here
+		int addFactorCorner = 40;//Corners are vital, so it is multiplicated with a high value
+		int addFactorDiagonalCorner = -20;//diagonal Corner fields are ugly to play, a little poisoning here
 		int addFactorPreCorner = -5;//playing just before the corner gives the opponent the possibility to get
 												//the corner, so a little poisoning as well.
-		int addFactorEdge = 10;//An edgeField gives a little advantage in the game
+		int addFactorEdge = 15;//An edgeField gives a little advantage in the game
 		int addFactorPreEdge = -2;//placing before the edge gives the opponent a good possibility -> small poisoning value
 		
 		for (int i = 0; i < 8; i++) {			
@@ -762,6 +768,39 @@ public class MoveHandler {
 					}
 				}
 				
+				//At last, count the pieces in the sweet sixteen
+				if(i == 2 && (j == 2 || j == 3 || j == 4 || j == 5)){
+					if(field[i][j].getValue() == 1){
+						situationValue++;
+					}
+					else if(field[i][j].getValue() == -1){
+						situationValue--;
+					}
+				}
+				if(i == 3 && (j == 2 || j == 3 || j == 4 || j == 5)){
+					if(field[i][j].getValue() == 1){
+						situationValue++;
+					}
+					else if(field[i][j].getValue() == -1){
+						situationValue--;
+					}
+				}
+				if(i == 4 && (j == 2 || j == 3 || j == 4 || j == 5)){
+					if(field[i][j].getValue() == 1){
+						situationValue++;
+					}
+					else if(field[i][j].getValue() == -1){
+						situationValue--;
+					}
+				}
+				if(i == 5 && (j == 2 || j == 3 || j == 4 || j == 5)){
+					if(field[i][j].getValue() == 1){
+						situationValue++;
+					}
+					else if(field[i][j].getValue() == -1){
+						situationValue--;
+					}
+				}
 			//-----------------end of loop------------------------------------	
 			}
 		}
