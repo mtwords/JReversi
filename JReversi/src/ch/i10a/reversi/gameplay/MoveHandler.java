@@ -275,10 +275,10 @@ public class MoveHandler {
 			Field field = iterator.next();
 			root.setField(field.clone());
 			if(calculateRestMoves(board) < 10){
-				check = alphaBeta(alpha, -alpha, 8, PlayerManager.getActivePlayer(), root, strengthHard);
+				check = alphaBeta(alpha, -alpha, 8, PlayerManager.getOtherPlayer(PlayerManager.getActivePlayer()), root, strengthHard);
 			}
 			else{
-				check = alphaBeta(alpha, -alpha, 4, PlayerManager.getActivePlayer(), root, strengthHard);
+				check = alphaBeta(alpha, -alpha, 4, PlayerManager.getOtherPlayer(PlayerManager.getActivePlayer()), root, strengthHard);
 			}
 			
 			if (check > alpha) {
@@ -311,12 +311,14 @@ public class MoveHandler {
 		
 		if (depth == 0 || calculateRestMoves(actualBoard) == 0 || getPossibleFields(otherPlayer).size() == 0) {
 			if(strengthHard){
-				System.out.println("Strong Value " + calculateSituationHardStrength(actualBoard, hitFields.size()));
-				return calculateSituationHardStrength(actualBoard, hitFields.size()); // heuristic of board
+				int value = calculateSituationHardStrength(actualBoard, hitFields.size());
+				System.out.println("Strong Value " + value);
+				return value; // heuristic of board
 			}
 			else{
-				System.out.println("Medium Value " + calculateSituationMediumStrength(actualBoard));
-				return calculateSituationMediumStrength(actualBoard); // heuristic of board
+				int value = calculateSituationMediumStrength(actualBoard);
+				System.out.println("Medium Value " + value);
+				return value; // heuristic of board
 			}
 			
 		}
@@ -430,12 +432,12 @@ public class MoveHandler {
 		Field field[][] = board.getFields();
 		int situationValue = 0;
 		
-		int addFactorCorner = 400;//Corners are vital, so it is multiplicated with a high value
+		int addFactorCorner = 40;//Corners are vital, so it is multiplicated with a high value
 		int addFactorDiagonalCorner = -20;//diagonal Corner fields are ugly to play, a little poisoning here
 		int addFactorPreCorner = -5;//playing just before the corner gives the opponent the possibility to get
 												//the corner, so a little poisoning as well.
-		int addFactorEdge = 40;//An edgeField gives a little advantage in the game
-		int addFactorPreEdge = -2;//placing before the edge gives the opponent a good possibility -> small poisoning value
+		int addFactorEdge = 20;//An edgeField gives a little advantage in the game
+		int addFactorPreEdge = -5;//placing before the edge gives the opponent a good possibility -> small poisoning value
 		
 		for (int i = 0; i < 8; i++) {			
 			for (int j = 0; j < 8; j++) {
