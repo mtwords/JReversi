@@ -275,13 +275,13 @@ public class MoveHandler {
 			Field field = iterator.next();
 			root.setField(field.clone());
 			if(calculateRestMoves(board) < 10){
-				check = alphaBeta(alpha, -alpha, 8, PlayerManager.getOtherPlayer(PlayerManager.getActivePlayer()), root, strengthHard);
+				check = alphaBeta(-Integer.MAX_VALUE, Integer.MAX_VALUE, 8, PlayerManager.getActivePlayer(), root, strengthHard);
 			}
 			else{
-				check = alphaBeta(alpha, -alpha, 4, PlayerManager.getOtherPlayer(PlayerManager.getActivePlayer()), root, strengthHard);
+				check = alphaBeta(-Integer.MAX_VALUE, Integer.MAX_VALUE, 3, PlayerManager.getActivePlayer(), root, strengthHard);
 			}
 			
-			if (check >= alpha) {
+			if (check > alpha) {
 				alpha = check;
 				bestMovableField = field;
 			}
@@ -311,7 +311,7 @@ public class MoveHandler {
 		
 		if (depth == 0 || calculateRestMoves(actualBoard) == 0 || getPossibleFields(otherPlayer).size() == 0) {
 			if(strengthHard){
-				int value = calculateSituationHardStrength(actualBoard, hitFields.size());
+				int value = calculateSituationHardStrength(actualBoard);
 				System.out.println("Strong Value " + value);
 				return value; // heuristic of board
 			}
@@ -375,7 +375,7 @@ public class MoveHandler {
 		return situationValue;
 	}
 
-	private static int calculateSituationHardStrength(Board board, int hitFields){
+	private static int calculateSituationHardStrength(Board board){
 		int situationValue = 0;
 		Field field[][] = board.getFields();
 		int movesLeft = calculateRestMoves(board);
@@ -391,7 +391,7 @@ public class MoveHandler {
 		//we enter the midgame
 		else if(movesLeft > 10){	
 			System.out.println("MidgameValueCalculated");
-			return getMidgameValue(board, hitFields);
+			return getMidgameValue(board);
 		}
 			//here the heuristic for the endgame kicks in
 		else{
@@ -428,16 +428,16 @@ public class MoveHandler {
 		
 	}
 	
-	private static int getMidgameValue(Board board, int hitFields){
+	private static int getMidgameValue(Board board){
 		Field field[][] = board.getFields();
 		int situationValue = 0;
 		
 		int addFactorCorner = 40;//Corners are vital, so it is multiplicated with a high value
 		int addFactorDiagonalCorner = -20;//diagonal Corner fields are ugly to play, a little poisoning here
-		int addFactorPreCorner = -5;//playing just before the corner gives the opponent the possibility to get
+		int addFactorPreCorner = -10;//playing just before the corner gives the opponent the possibility to get
 												//the corner, so a little poisoning as well.
 		int addFactorEdge = 20;//An edgeField gives a little advantage in the game
-		int addFactorPreEdge = -5;//placing before the edge gives the opponent a good possibility -> small poisoning value
+		int addFactorPreEdge = -10;//placing before the edge gives the opponent a good possibility -> small poisoning value
 		
 		for (int i = 0; i < 8; i++) {			
 			for (int j = 0; j < 8; j++) {
@@ -807,7 +807,7 @@ public class MoveHandler {
 			}
 		}
 		
-		return situationValue/hitFields;
+		return situationValue;
 	}
 	
 	/**
