@@ -291,6 +291,7 @@ public class MoveHandler {
 
 		registerFields(activeGameFields);
 		root = null;
+		board = null;
 		return bestMovableField;
 	}
 	public static int alphaBeta(int alpha, int beta, int depth, PlayerAdapter player, TreeNode<Board> node, boolean strengthHard) {
