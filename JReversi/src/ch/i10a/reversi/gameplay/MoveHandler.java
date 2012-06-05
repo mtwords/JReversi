@@ -17,6 +17,8 @@ import ch.i10a.reversi.gui.Field;
  */
 public class MoveHandler {
 
+	private static final boolean debug = false;
+
 	private static Field[][] fields;
 
 	/**
@@ -267,7 +269,7 @@ public class MoveHandler {
 		int check = -1;
 		Field bestMovableField = null;
 		Board board = PlayerManager.getActivePlayer().getBoard().clone();
-		System.out.println("========== active game board =========");
+//		System.out.println("========== active game board =========");
 		MoveHandler.printBoard(board, PlayerManager.getActivePlayer());
 		TreeNode<Board> root = new TreeNode<Board>(board, possibleFields);
 
@@ -292,7 +294,7 @@ public class MoveHandler {
 		return bestMovableField;
 	}
 	public static int alphaBeta(int alpha, int beta, int depth, PlayerAdapter player, TreeNode<Board> node, boolean strengthHard) {
-		System.out.println("alpha-beta: depth " + depth);
+//		System.out.println("alpha-beta: depth " + depth);
 		
 		Board actualBoard = node.getData().clone();
 
@@ -302,22 +304,23 @@ public class MoveHandler {
 		ArrayList<Field> hitFields = hitEnemyStones(f, player, true);
 		hitFields.add(f);
 		actualBoard = updateSimBoard(actualBoard, hitFields);
-		System.out.println("TestAfterUpdate");
+//		System.out.println("TestAfterUpdate");
 		printBoard(actualBoard, player);
-		System.out.println("----------------");
+//		System.out.println("----------------");
 		PlayerAdapter otherPlayer = PlayerManager.getOtherPlayer(player);
-		TreeNode<Board> child = new TreeNode<Board>(actualBoard.clone(), getPossibleFields(otherPlayer));
+		List<Field> possibleFields = getPossibleFields(otherPlayer);
+		TreeNode<Board> child = new TreeNode<Board>(actualBoard.clone(), possibleFields);
 		node.addChild(child);
 		
-		if (depth == 0 || calculateRestMoves(actualBoard) == 0 || getPossibleFields(otherPlayer).size() == 0) {
+		if (depth == 0 || calculateRestMoves(actualBoard) == 0 || possibleFields.size() == 0) {
 			if(strengthHard){
 				int value = calculateSituationHardStrength(actualBoard);
-				System.out.println("Strong Value " + value);
+//				System.out.println("Strong Value " + value);
 				return value; // heuristic of board
 			}
 			else{
 				int value = calculateSituationMediumStrength(actualBoard);
-				System.out.println("Medium Value " + value);
+//				System.out.println("Medium Value " + value);
 				return value; // heuristic of board
 			}
 			
@@ -333,7 +336,7 @@ public class MoveHandler {
 				child.setField(field.clone());
 				alpha = Math.max(alpha, alphaBeta(alpha, beta, depth - 1, PlayerManager.getOtherPlayer(player), child, strengthHard));
 				if (alpha >= beta) {
-					System.out.println("Beta Cut Off");
+//					System.out.println("Beta Cut Off");
 					return alpha; // beta cut-off
 				}
 			}
@@ -344,11 +347,16 @@ public class MoveHandler {
 				child.setField(field.clone());
 				beta = Math.min(beta, alphaBeta(alpha, beta, depth - 1, PlayerManager.getOtherPlayer(player), child, strengthHard));
 				if (alpha >= beta) {
-					System.out.println("Alpha Cut Off");
+//					System.out.println("Alpha Cut Off");
 					return beta; // beta cut-off
 				}
 			}
 		}
+		f = null;
+		hitFields = null;
+		child = null;
+		node = null;
+		actualBoard = null;
 		if (player == PlayerManager.getActivePlayer()){
 			return alpha;
 		}
@@ -383,14 +391,14 @@ public class MoveHandler {
 		//As long as we are only in the sweet sixteen (4x4 center of the board)
 		//Meaning we stand on no corners, edges or pre-edges
 		if(!checkForFourCornerFieldHits(board)&&!checkForFourEdgesFieldHits(board)&&!checkForFourPreEdgesFieldHits(board)){
-			System.out.println("BeginningValueCalculated");
+//			System.out.println("BeginningValueCalculated");
 			return getBeginningValue(board);
 		}
 		
 		//when the sweet sixteen are left (first stone out of the sweet sixteen)
 		//we enter the midgame
 		else if(movesLeft > 10){	
-			System.out.println("MidgameValueCalculated");
+//			System.out.println("MidgameValueCalculated");
 			return getMidgameValue(board);
 		}
 			//here the heuristic for the endgame kicks in
@@ -399,7 +407,7 @@ public class MoveHandler {
 			//we kick again the Medium Strenght calculation. Why?
 			//because at the end, it's best to have the most pieces on the
 			//board. ant that's exactly that the Medium Calculation does.
-			System.out.println("EndgameValueCalculated");
+//			System.out.println("EndgameValueCalculated");
 			return calculateSituationMediumStrength(board);
 		}
 		
@@ -968,6 +976,10 @@ public class MoveHandler {
 		System.out.println(s.toString());
 	}
 	public static void printBoard(Board board, PlayerI player){
+		if (!debug) {
+			return;
+		}
+
 		if (player == PlayerManager.getActivePlayer()) {
 			System.out.println("after HitEnemyStones own");
 		} else {
