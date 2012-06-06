@@ -60,10 +60,19 @@ public class ComputerPlayer extends PlayerAdapter {
 		}
 	}
 
+	/**
+	 * Returns the color of the computer player 
+	 * @return Color of the computer player
+	 */
 	@Override
 	public Color getColor() {
 		return color;
 	}
+	
+	/**
+	 * Returns the field value representation of the computer player 
+	 * @return integer representation of computer player
+	 */
 	public int getValue() {
 		return value;
 	}
