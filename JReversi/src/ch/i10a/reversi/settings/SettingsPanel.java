@@ -36,6 +36,12 @@ public class SettingsPanel extends JPanel {
 	}
 
 	// --------------- inner classes ----------------
+	/**
+	 * this is a representation of the view, which opponent is on.
+	 * choose between human and computer player.
+	 * Here, the choosing of the difficulty is implemented as well.
+	 * 
+	 */
 	private class OppositePanel extends JPanel {
 
 		public OppositePanel() {
@@ -51,6 +57,7 @@ public class SettingsPanel extends JPanel {
 			add(oppositeLabel);
 			add(difficultyLabel);
 
+			//opposite build (human)
 			humanOpposite = new JRadioButton("Human");
 			humanOpposite.addActionListener(new ActionListener(){
 
@@ -63,6 +70,7 @@ public class SettingsPanel extends JPanel {
 				}
 				
 			});
+			//opposite build (computer)
 			computerOpposite = new JRadioButton("Computer");
 			computerOpposite.addActionListener(new ActionListener(){
 
@@ -75,6 +83,8 @@ public class SettingsPanel extends JPanel {
 				}
 				
 			});
+			
+			//difficulty build (easy, medium, hard)
 			easyDifficulty = new JRadioButton("Easy");
 			mediumDifficulty = new JRadioButton("Medium");
 			hardDifficulty = new JRadioButton("Hard");
@@ -122,6 +132,10 @@ public class SettingsPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * here, the buttons to close and to save the game settings are implemented
+	 * 
+	 */
 	private class ButtonPanel extends JPanel {
 
 		// Buttons
