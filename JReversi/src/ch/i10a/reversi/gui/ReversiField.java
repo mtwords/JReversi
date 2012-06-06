@@ -78,7 +78,9 @@ public class ReversiField extends Field implements ActionListener {
 		t.start();
 	}
 	
-	
+	/**
+	 * here, the image to paint is chosen (update painting)
+	 */
 	private void chooseImageToPaint(int factor) {
 		int activePlayerValue = PlayerManager.getActivePlayer().getValue();
 		if (activePlayerValue * factor > 0) {
@@ -90,6 +92,7 @@ public class ReversiField extends Field implements ActionListener {
 	
 	/**
 	 * Returns the value of this field
+	 * 
 	 * @return int value of the field 
 	 */
 	public int getValue() {
@@ -98,6 +101,8 @@ public class ReversiField extends Field implements ActionListener {
 	
 	/**
 	 * Sets given value on this field
+	 * 
+	 * @param int value representation of this field
 	 */
 	public void setValue(int value) {
 		if (value < -1 || value > 1) {
@@ -108,6 +113,7 @@ public class ReversiField extends Field implements ActionListener {
 	
 	/**
 	 * Returns the row number of this field
+	 * 
 	 * @return int row number of the field 
 	 */
 	public int getRowNum() {
@@ -116,6 +122,7 @@ public class ReversiField extends Field implements ActionListener {
 	
 	/**
 	 * Returns the col number of this field
+	 * 
 	 * @return int col number of the field 
 	 */
 	public int getColNum() {
@@ -125,18 +132,37 @@ public class ReversiField extends Field implements ActionListener {
 	/**
 	 * Sets the possible hits that can be achieved by playing
 	 * this field
+	 * 
+	 * @param an ArrayList of all possible hits
 	 */
 	public void setPossibleHits(ArrayList<Field> possibleHitsCount) {
 		this.possibleHits = possibleHitsCount;
 	}
+	
+	/**
+	 * gets the possible hits that can be achieved by playing
+	 * this field
+	 * 
+	 * @return an ArrayList of all possible hits
+	 */
 	public ArrayList<Field> getPossibleHits() {
 		return possibleHits;
 	}
 
+	/**
+	 * checks if this particular field is animating
+	 * 
+	 * @return true if it is animating, false if not
+	 */
 	public boolean isAnimating() {
 		return animating;
 	}
 
+	/**
+	 * returns a string representation of this field
+	 * 
+	 * @return String stuffed with the values of this field
+	 */
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer("Field:\n");
@@ -151,6 +177,10 @@ public class ReversiField extends Field implements ActionListener {
 		return sb.toString();
 	}
 
+	/**
+	 * important actionPerformed method
+	 * all the update animation takes place here
+	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if (value == 0 || !animating) {
@@ -179,6 +209,10 @@ public class ReversiField extends Field implements ActionListener {
 		animating = false;
 	}
 
+	/**
+	 * method for animation that lets the stones shrink in a smooth manner
+	 * 
+	 */
 	private void shrinkStone() {
 		if (width % 2 == 0) {
 			x += 1;
@@ -188,6 +222,11 @@ public class ReversiField extends Field implements ActionListener {
 		height -= 1;
 		repaint();
 	}
+	
+	/**
+	 * method for animation that lets the stones grow in a smooth manner
+	 * 
+	 */
 	private void growStone() {
 		if (width % 2 == 0) {
 			x -= 1;
@@ -207,8 +246,13 @@ public class ReversiField extends Field implements ActionListener {
 			this.activePlayerValue = activePlayerValue;
 		}
 
+		/**
+		 * the run method that kicks out the animation for both black and white occupied fields
+		 * 
+		 */
 		@Override
 		public void run() {
+			//black painting
 			chooseImageToPaint(1);
 			while (width != 0) {
 				if (width % 2 == 0) {
@@ -218,12 +262,9 @@ public class ReversiField extends Field implements ActionListener {
 				width -= 1;
 				height -= 1;
 				repaint();
-				/*try {
-					Thread.sleep(5);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}*/
+
 			}
+			//white painting
 			chooseImageToPaint(-1);
 			while (width != 40) {
 				if (width % 2 == 0) {
@@ -233,17 +274,11 @@ public class ReversiField extends Field implements ActionListener {
 				width += 1;
 				height += 1;
 				repaint();
-				/*try {
-					Thread.sleep(5);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}*/
+
 			}
 
 			setValue(activePlayerValue);
 
-//			PlayerManager.playerLock.notify();
-//			notify();
 		}
 
 	}
