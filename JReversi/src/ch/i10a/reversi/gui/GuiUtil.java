@@ -16,7 +16,9 @@ public class GuiUtil {
 	/**
 	 * Constructs a Field label with the given x alignment text and
 	 * dynamic size dependent on the {@link ReversiField.WITH}
+	 * 
 	 * @param label: the text to be displayed
+	 * 
 	 * @return a JLabel with the given Text with Field-dependent size
 	 */
 	public static JLabel getXOrientedFieldLabel(String label) {
@@ -25,7 +27,9 @@ public class GuiUtil {
 	/**
 	 * Constructs a Field label with the given y alignment text and
 	 * dynamic size dependent on the {@link ReversiField.WITH}
+	 * 
 	 * @param label: the text to be displayed
+	 * 
 	 * @return a JLabel with the given Text with Field-dependent size
 	 */
 	public static JLabel getYOrientedFieldLabel(String label) {
@@ -33,7 +37,9 @@ public class GuiUtil {
 	}
 	/**
 	 * Constructs a Field label with the given text and sizes
+	 * 
 	 * @param label: the text to be displayed
+	 * 
 	 * @return a JLabel with the given Text sizes
 	 */
 	public static JLabel getLabel(String label, int sizeX, int sizeY) {
@@ -47,6 +53,11 @@ public class GuiUtil {
 		return l;
 	}
 
+	/**
+	 * Closes the ancestor window of cmp
+	 * 
+	 * @param Component cmp which has the ancestor window
+	 */
 	public static void closeAncestorWindow(Component cmp) {
 		Container parent = cmp.getParent();
 		while (parent != null) {
