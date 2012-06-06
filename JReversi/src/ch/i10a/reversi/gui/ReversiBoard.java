@@ -88,6 +88,7 @@ public class ReversiBoard extends Board implements ActionListener {
 	/**
 	 * sets the game fields to the values given in the parameter 
 	 *  
+	 *  @param ReversiField fields to set up
 	 */
 	public void setBoard(ReversiField fields[][]){
 		for (int i = 0; i < fields.length; i++) {
@@ -100,7 +101,8 @@ public class ReversiBoard extends Board implements ActionListener {
 	/**
 	 * Performs the move the player has choosen. This move is under
 	 * concurrency control.
-	 * @param field
+	 * 
+	 * @param field that does the move
 	 */
 	@Override
 	public void doMove(Field field) {
@@ -112,6 +114,10 @@ public class ReversiBoard extends Board implements ActionListener {
 		}
 	}
 
+	/**
+	 * this is the animation method. it uses the Timer method to get rid of 64 animation threads.
+	 * It paints the board in the new situation
+	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if (MoveHandler.isAnimating()) {
@@ -137,12 +143,22 @@ public class ReversiBoard extends Board implements ActionListener {
 	// ----------------- inner classes --------------------
 	private class MouseListener extends MouseAdapter {
 
+		/**
+		 * if a field on the board is clicked, the move has to be made / tried
+		 * 
+		 * @param the clicking event
+		 */
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			activeField = (ReversiField) e.getComponent();
 			doMove(activeField);
 		}
 
+		/**
+		 * if the mouse enters a field, it has to be painted yellow if a move is possible
+		 * 
+		 * @param the Mouse enter event
+		 */
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			super.mouseEntered(e);
@@ -158,6 +174,12 @@ public class ReversiBoard extends Board implements ActionListener {
 				activeField.repaint();
 			}
 		}
+		
+		/**
+		 * if the mouse exits a field of board, the normal circumstances take place again
+		 * 
+		 * @param the mouse exiting event
+		 */
 		@Override
 		public void mouseExited(MouseEvent e) {
 			super.mouseExited(e);
