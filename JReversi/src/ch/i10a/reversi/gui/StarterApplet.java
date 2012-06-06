@@ -90,6 +90,9 @@ public class StarterApplet extends JApplet {
 		start();
 	}
 
+	/**
+	 * Creation of the menu bar for the settings
+	 */
 	private JMenuBar createMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("Settings");
@@ -100,6 +103,9 @@ public class StarterApplet extends JApplet {
 		return menuBar;
 	}
 
+	/**
+	 * Creation of the container that holds the gameplay buttons
+	 */
 	private JPanel createButtonPanel() {
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
@@ -128,6 +134,10 @@ public class StarterApplet extends JApplet {
 		
 
 	// --------------- inner classes ------------------
+	
+	/**
+	 * this class just starts a new game via the ActionListener Interface
+	 */
 	private class StartNewGame implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -135,6 +145,11 @@ public class StarterApplet extends JApplet {
 		}
 	}
 
+	/**
+	 * this class plays draw via the ActionListener Interface.
+	 * It is offered to the opponent, and if accepted, a fancy animation
+	 * is going on.
+	 */
 	private class ActDraw implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -150,18 +165,23 @@ public class StarterApplet extends JApplet {
 			if (choice == JOptionPane.YES_OPTION) {
 				gameInfoPane.setDraw();
 
+				//if the game is over, those buttons may not be pressed anymore.
 				offerDrawButton.setEnabled(false);
 				surrenderButton.setEnabled(false);
 			}
 		}
 	}
-
+	/**
+	 * this class starts the surrender of the active player via the ActionListener Interface.
+	 * .
+	 */
 	private class SurrenderGame implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			//if the game is over, those buttons may not be pressed anymore.
 			offerDrawButton.setEnabled(false);
 			surrenderButton.setEnabled(false);
-
+			//the surrender function kicks in
 			gameInfoPane.surrender();
 		}
 	}
@@ -242,6 +262,9 @@ public class StarterApplet extends JApplet {
 			add(GuiUtil.getLabel(" ", 300, 5)); //Empty Label Delimiter
 		}
 
+		/**
+		 * after every move, the player stats have to be updated. this happens here
+		 */
 		public void updateInfo() {
 			PlayerAdapter player = PlayerManager.getActivePlayer();
 			PlayerAdapter opposite = PlayerManager.getOtherPlayer(player);
@@ -322,18 +345,37 @@ public class StarterApplet extends JApplet {
 			add(passLabel);
 		}
 
+		/**
+		 * the player Label has to be updated sometimes. Done with this
+		 * 
+		 * @param prefix for the player 1
+		 */
 		public void setPlayerLabelText(String prefix) {
 			playerLabel.setText(prefix + "Player 1");
 		}
 
+		/**
+		 * the stone count has to be updated sometimes. Done with this
+		 * 
+		 * @param integer of stones
+		 */
 		public void setStonesLabelText(int count){
 			stonesLabel.setText("Stones: " + count);
 		}
 
+		/**
+		 * if a player passes, this has to be displayed
+		 * 
+		 * @param String with the pass text in it
+		 */
 		public void setPassLabelText(String pass) {
 			passLabel.setText(pass);
 		}
 
+		/**
+		 * the last move for this player has to be displayed
+		 * 
+		 */
 		public void setLastMoveLabelText() {
 			moveLabel.setText("Last Move: " + board.getLastMove());
 		}
@@ -368,18 +410,37 @@ public class StarterApplet extends JApplet {
 			add(passLabel);
 		}
 
+		/**
+		 * the player Label has to be updated sometimes. Done with this
+		 * 
+		 * @param prefix for the player 2
+		 */
 		public void setPlayerLabelText(String prefix) {
 			playerLabel.setText(prefix + "Player 2");
 		}
 
+		/**
+		 * the stone count has to be updated sometimes. Done with this
+		 * 
+		 * @param integer of stones
+		 */
 		public void setStonesLabelText(int count){
 			stonesLabel.setText("Stones: " + count);
 		}
 
+		/**
+		 * if a player passes, this has to be displayed
+		 * 
+		 * @param String with the pass text in it
+		 */
 		public void setPassLabelText(String pass) {
 			passLabel.setText("");
 		}
 
+		/**
+		 * the last move for this player has to be displayed
+		 * 
+		 */
 		public void setLastMoveLabelText() {
 			moveLabel.setText("Last Move: " + board.getLastMove());
 		}
@@ -410,18 +471,25 @@ public class StarterApplet extends JApplet {
 			add(winnerInfo);
 		}
 		
+		/**
+		 * here, the redisplay of the gameInformation takes place
+		 * 
+		 */
 		public void paint(Graphics g) {
 			super.paint(g);	
 			if(!Openings.checkOpening(board.getMoves()).isEmpty()){
 				opening.setText("Opening: " + Openings.checkOpening(board.getMoves()));
 			}
 
+			//when a double pass happens or if there are no free fields, the game is over
 			if(!MoveHandler.checkForFreeFields() || PlayerManager.checkDoublePass()){
+				//then, those buttons may not be used no more
 				offerDrawButton.setEnabled(false);
 				surrenderButton.setEnabled(false);
 
 				gameInfo.setText("The game is over");
 
+				//who was the winner. It has to be displayed
 				if(PlayerManager.getBlackPlayer().getStonesCount() > PlayerManager.getWhitePlayer().getStonesCount()){
 					winnerInfo.setText("BLACK Won the Game!");
 				}
@@ -435,6 +503,10 @@ public class StarterApplet extends JApplet {
 			
 		}
 		
+		/**
+		 * the surrender method. If called and afterwards a repaint is pushed, a fancy animation kicks in.
+		 * 
+		 */
 		public void surrender(){
 			ReversiField [][] fields = new ReversiField[8][8];
 			for (int i = 0; i < fields.length; i++) {
@@ -444,12 +516,14 @@ public class StarterApplet extends JApplet {
 				}
 				
 			}
+			//if player2 surrenders, the field is filling with white stones
 			if(PlayerManager.getActivePlayer().getValue() == 1){
 				playerOne.setStonesLabelText(0);
 				playerTwo.setStonesLabelText(64);
 				PlayerManager.getBlackPlayer().setStonesCount(0);
 				PlayerManager.getWhitePlayer().setStonesCount(64);
 			}
+			//if player1 surrenders, the field is filling with black stones
 			else{
 				playerOne.setStonesLabelText(64);
 				playerTwo.setStonesLabelText(0);
@@ -462,7 +536,11 @@ public class StarterApplet extends JApplet {
 			repaint();
 		}
 		
-		/*If a draw is accepted, update every field and show the message about the draw */
+		/**
+		 * If a draw is accepted, update every field with a fancy animation and show the message about the draw.
+		 * the field representations are 32 black and 32 white
+		 * 
+		 */
 		public void setDraw(){
 			for (int i = 0; i < board.fields.length; i++) {
 				for (int j = 0; j < board.fields[i].length/2; j++) {
