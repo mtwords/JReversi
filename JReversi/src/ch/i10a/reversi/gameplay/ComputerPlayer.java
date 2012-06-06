@@ -23,7 +23,7 @@ public class ComputerPlayer extends PlayerAdapter {
 	/**
 	 * If a computer player has to be set up differently, use this constructor
 	 * 
-	 * @param Color color: the color to give the computer player, value: the field value for the computer player
+	 * @param Color color: the color to give the computer player, value: the field representation value for the computer player
 	 */
 	public ComputerPlayer(Color color, int value) {
 		this.color = color;
@@ -61,7 +61,7 @@ public class ComputerPlayer extends PlayerAdapter {
 	}
 
 	/**
-	 * Returns the color of the computer player 
+	 * Returns the color of the computer player (normally black)  
 	 * @return Color of the computer player
 	 */
 	@Override
