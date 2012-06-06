@@ -45,7 +45,7 @@ public class Board extends JPanel implements Cloneable {
 	}
 	
 	/**
-	 * Returns the last Move made in the game 
+	 * Getter: Returns the last Move made in the game 
 	 * 
 	 * @return the last made Move 
 	 */
