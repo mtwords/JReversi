@@ -32,6 +32,7 @@ public class Openings {
 	
 	/**
 	 * Returns the opening played 
+	 * 
 	 * @return String of the played opening 
 	 */
 	public static String checkOpening(MoveList<Move> moves) {
@@ -87,6 +88,7 @@ public class Openings {
 
 	/**
 	 * Returns the moves of the TigerOpening in South direction 
+	 * 
 	 * @return MoveList of Moves of the TigerOpening 
 	 */
 	private static MoveList<Move> initTigerOpeningSouth() {
@@ -107,6 +109,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the TigerOpening in East direction 
+	 * 
 	 * @return MoveList of Moves of the TigerOpening 
 	 */
 	private static MoveList<Move> initTigerOpeningEast() {
@@ -127,6 +130,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the TigerOpening in North direction 
+	 * 
 	 * @return MoveList of Moves of the TigerOpening 
 	 */
 	private static MoveList<Move> initTigerOpeningNorth() {
@@ -147,6 +151,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the TigerOpening in West direction 
+	 * 
 	 * @return MoveList of Moves of the TigerOpening 
 	 */
 	private static MoveList<Move> initTigerOpeningWest() {
@@ -167,6 +172,7 @@ public class Openings {
 
 	/**
 	 * Returns the moves of the RoseOpening in South direction 
+	 * 
 	 * @return MoveList of Moves of the RoseOpening 
 	 */
 	private static MoveList<Move> initRoseOpeningSouth() {
@@ -197,6 +203,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the RoseOpening in East direction 
+	 * 
 	 * @return MoveList of Moves of the RoseOpening 
 	 */
 	private static MoveList<Move> initRoseOpeningEast() {
@@ -227,6 +234,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the RoseOpening in North direction 
+	 * 
 	 * @return MoveList of Moves of the RoseOpening 
 	 */
 	private static MoveList<Move> initRoseOpeningNorth() {
@@ -257,6 +265,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the RoseOpening in West direction 
+	 * 
 	 * @return MoveList of Moves of the RoseOpening 
 	 */
 	private static MoveList<Move> initRoseOpeningWest() {
@@ -287,6 +296,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the BuffaloOpening in South direction 
+	 * 
 	 * @return MoveList of Moves of the BuffaloOpening 
 	 */
 	private static MoveList<Move> initBuffaloOpeningSouth() {
@@ -307,6 +317,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the BuffaloOpening in East direction 
+	 * 
 	 * @return MoveList of Moves of the BuffaloOpening 
 	 */
 	private static MoveList<Move> initBuffaloOpeningEast() {
@@ -327,6 +338,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the BuffaloOpening in North direction 
+	 * 
 	 * @return MoveList of Moves of the BuffaloOpening 
 	 */
 	private static MoveList<Move> initBuffaloOpeningNorth() {
@@ -347,6 +359,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the BuffaloOpening in West direction 
+	 * 
 	 * @return MoveList of Moves of the BuffaloOpening 
 	 */
 	private static MoveList<Move> initBuffaloOpeningWest() {
@@ -367,6 +380,7 @@ public class Openings {
 
 	/**
 	 * Returns the moves of the HeathOpening in South direction 
+	 * 
 	 * @return MoveList of Moves of the HeathOpening 
 	 */
 	private static MoveList<Move> initHeathOpeningSouth() {
@@ -387,6 +401,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the HeathOpening in East direction 
+	 * 
 	 * @return MoveList of Moves of the HeathOpening 
 	 */
 	private static MoveList<Move> initHeathOpeningEast() {
@@ -407,6 +422,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the HeathOpening in North direction 
+	 * 
 	 * @return MoveList of Moves of the HeathOpening 
 	 */
 	private static MoveList<Move> initHeathOpeningNorth() {
@@ -427,6 +443,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the HeathOpening in West direction 
+	 * 
 	 * @return MoveList of Moves of the HeathOpening 
 	 */
 	private static MoveList<Move> initHeathOpeningWest() {
@@ -447,6 +464,7 @@ public class Openings {
 
 	/**
 	 * Returns the moves of the InoueOpening in South direction 
+	 * 
 	 * @return MoveList of Moves of the InoueOpening 
 	 */
 	private static MoveList<Move> initInoueOpeningSouth() {
@@ -471,6 +489,7 @@ public class Openings {
 
 	/**
 	 * Returns the moves of the InoueOpening in East direction 
+	 * 
 	 * @return MoveList of Moves of the InoueOpening 
 	 */
 	private static MoveList<Move> initInoueOpeningEast() {
@@ -495,6 +514,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the InoueOpening in North direction 
+	 * 
 	 * @return MoveList of Moves of the InoueOpening 
 	 */
 	private static MoveList<Move> initInoueOpeningNorth() {
@@ -519,6 +539,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the InoueOpening in West direction 
+	 * 
 	 * @return MoveList of Moves of the InoueOpening 
 	 */
 	private static MoveList<Move> initInoueOpeningWest() {
@@ -543,6 +564,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the ShamanOpening in South direction 
+	 * 
 	 * @return MoveList of Moves of the ShamanOpening 
 	 */
 	private static MoveList<Move> initShamanOpeningSouth() {
@@ -567,6 +589,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the ShamanOpening in East direction 
+	 * 
 	 * @return MoveList of Moves of the ShamanOpening 
 	 */
 	private static MoveList<Move> initShamanOpeningEast() {
@@ -591,6 +614,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the ShamanOpening in North direction 
+	 * 
 	 * @return MoveList of Moves of the ShamanOpening 
 	 */
 	private static MoveList<Move> initShamanOpeningNorth() {
@@ -615,6 +639,7 @@ public class Openings {
 	
 	/**
 	 * Returns the moves of the ShamanOpening in West direction 
+	 * 
 	 * @return MoveList of Moves of the ShamanOpening 
 	 */
 	private static MoveList<Move> initShamanOpeningWest() {
