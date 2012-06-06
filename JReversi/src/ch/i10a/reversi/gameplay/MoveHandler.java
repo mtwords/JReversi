@@ -35,10 +35,10 @@ public class MoveHandler {
 	 * to avoid side-effects.
 	 * 
 	 * @param activeField the field on which the move is being performed.
+	 * 
+	 * @return ArrayList of fields that are beaten with the move that was done
 	 */
 	public synchronized static ArrayList<Field> doMove(Field activeField) {
-//	public static void doMove(Field activeField) {
-//		synchronized (PlayerManager.playerLock) {
 			PlayerI activePlayer = PlayerManager.getActivePlayer();
 			ArrayList<Field> hitFields = new ArrayList<Field>();
 
@@ -56,9 +56,15 @@ public class MoveHandler {
 			}
 
 			return hitFields;
-//		}
 	}
 
+	/**
+	 *  This method determines if a player can move. If he can, it collects the possible field hits.
+	 *  But if he can't the pass method is hit and it is checked if the following
+	 *  player can't move too. If both cannot move, the game is over (implemented in
+	 *  setDoublePass, which sets the flag for it)
+	 * 
+	 */
 	public static void checkIfNextPlayerIsPossibleToMove() {
 		if(!MoveHandler.checkWholeFieldHit()){
 			PlayerManager.setPass();
@@ -73,6 +79,11 @@ public class MoveHandler {
 		}
 	}
 
+	/**
+	 * this method checks if a field on the board is still animating
+	 * 
+	 * @return boolean, if the whole animation is complete
+	 */
 	public static boolean isAnimating() {
 		for (int i = 0; i < fields.length; i++) {
 			for (int j = 0; j < fields[i].length; j++) {
@@ -84,11 +95,24 @@ public class MoveHandler {
 		return false;
 	}
 
+	/**
+	 * Representation of hitEnemyStones with two parameters, which is necessary
+	 * for the not simulated hitEnemyStones method 
+	 * 
+	 * @param the field where the stone was played, the active Player via Interface PlayerI
+	 * 
+	 * @return ArrayList of Fields which stones are beaten
+	 */
 	public static ArrayList<Field> hitEnemyStones(Field field, PlayerI player){
 		return hitEnemyStones(field, player, false);
 	}
 	/**
-	 * Returns an ArrayList of Fields, which represents the beaten stones in all directions 
+	 * Returns an ArrayList of Fields, which represents the beaten stones in all directions.
+	 * Also updates the fields with the correspondent value. if only computing (simulation), the direct value is set.
+	 * if the hits are done for real, the doubled value is set for animation set up
+	 * 
+	 * @param the field where the stone was played, the active Player via Interface PlayerI, the boolean simulate for computing or realtime animation
+	 * 
 	 * @return ArrayList of Fields which stones are beaten
 	 */
 	public static ArrayList<Field> hitEnemyStones(Field field, PlayerI player, boolean simulate){
@@ -118,6 +142,7 @@ public class MoveHandler {
 	/**
 	 * Runs through the board and collects the possible 
 	 * fields to hit for every field.
+	 * 
 	 */
 	public static void collectingPossibleFieldHits() {
 		PlayerI activePlayer = PlayerManager.getActivePlayer();
@@ -236,6 +261,7 @@ public class MoveHandler {
 	/**
 	 * Checks if a free field is available on the board.
 	 * if not, the game is over. 
+	 * 
 	 * @return true if a free field is available, false if not 
 	 */
 	public static boolean checkForFreeFields(){
@@ -249,7 +275,13 @@ public class MoveHandler {
 		return false;
 	}
 
-	
+	/**
+	 * gives back a field that is played by the computer.
+	 * for the easiest difficulty, this is a random field out of the playable ones
+	 *  
+	 * 
+	 * @return Field that is played randomly
+	 */
 	public static Field getRandomMove() {
 		System.out.println("RandomMove");
 		List<Field> possibleFields = getPossibleFields(PlayerManager.getActivePlayer());
@@ -261,21 +293,45 @@ public class MoveHandler {
 		return null;
 	}
 	
+	/**
+	 * this method is the starting point for calculation of difficulty medium and hard.
+	 * The difficulty can be switched from medium to hard by seeting strengthHard to true.
+	 * the best move is then calculated by alpha-beta algorithm.
+	 * If the game is in the end phase, the depth of the alpha-beta calculation is altered 
+	 * to ten as we have enough memory then.
+	 *  
+	 * @param boolean strengthHard determines the heuristic calculated
+	 * 
+	 * @return Field that is played, determined by the alpha-beta algorithm
+	 */
 	public static Field getBestMove(boolean strengthHard) {
 		Field[][] activeGameFields = fields;
 	
+		//first of all, we have to collect all possible fields that can be played by the respective player
 		List<Field> possibleFields = getPossibleFields(PlayerManager.getActivePlayer());
+		
+		//initialisation of alpha and check (abstract for the alpha-beta cuts on this major level
 		int alpha = -Integer.MAX_VALUE; // not MIN_VALUE to invert it as beta
 		int check = -1;
+		
+		//the field will be written in this variable
 		Field bestMovableField = null;
+		
+		//to give down the playfield, we have to clone it. Elseway we simulate the moves on the actual board
 		Board board = PlayerManager.getActivePlayer().getBoard().clone();
+
 //		System.out.println("========== active game board =========");
 		MoveHandler.printBoard(board, PlayerManager.getActivePlayer());
+		
+		//creation of the node that is put in the alpha-beta algorithm
 		TreeNode<Board> root = new TreeNode<Board>(board, possibleFields);
 
+		//here, the iteration over the possible fields starts
 		for (Iterator<Field> iterator = possibleFields.iterator(); iterator.hasNext();) {
 			Field field = iterator.next();
 			root.setField(field.clone());
+			
+			//if we are in the endgame, the depth is increased
 			if(calculateRestMoves(board) < 10){
 				check = alphaBeta(-Integer.MAX_VALUE, Integer.MAX_VALUE, 8, PlayerManager.getActivePlayer(), root, strengthHard);
 			}
@@ -283,6 +339,7 @@ public class MoveHandler {
 				check = alphaBeta(-Integer.MAX_VALUE, Integer.MAX_VALUE, 3, PlayerManager.getActivePlayer(), root, strengthHard);
 			}
 			
+			//here the magic happens. The best field is chosen (in fact the one with the highest calculated value
 			if (check > alpha) {
 				alpha = check;
 				bestMovableField = field;
@@ -294,25 +351,49 @@ public class MoveHandler {
 		board = null;
 		return bestMovableField;
 	}
+	
+	/**
+	 * the recursive heart of the program. if the depth is 0, we reached a leaf and can calculate the value for the situation 
+	 * with the heuristic (which heuristic to take is determined by the boolean strengthHard). if we are not in the leaf, the
+	 * algorithm calculates minimums and maximums for the players and even cuts out unnecessary moves, thus saving memory
+	 *  
+	 * @param alpha is the value for the alpha cut, beta is the int value for the beta cut
+	 * @param PlayerAdapter Interface is needed to determine the player in charge for this move
+	 * @param TreeNode node is the played situation from the node above and the new field value to play along
+	 * @param boolean strengthHard determines the heuristic calculated
+	 * 
+	 * @return integer value that shows how good the prognose is for the played move
+	 */
 	public static int alphaBeta(int alpha, int beta, int depth, PlayerAdapter player, TreeNode<Board> node, boolean strengthHard) {
 //		System.out.println("alpha-beta: depth " + depth);
 		
 		Board actualBoard = node.getData().clone();
 
+		//the fields first have to be registered
 		registerFields(actualBoard.getFields());
 		Field f = node.getField();
+		
+		//the played field is allocated to f
 		f.setValue(player.getValue());
+		
+		//the hitted fields are updated for the actual situation by updating the board
 		ArrayList<Field> hitFields = hitEnemyStones(f, player, true);
 		hitFields.add(f);
 		actualBoard = updateSimBoard(actualBoard, hitFields);
 //		System.out.println("TestAfterUpdate");
 		printBoard(actualBoard, player);
 //		System.out.println("----------------");
+		
+		//for the calculation of the possible fields, a quick switch of players have to be made
 		PlayerAdapter otherPlayer = PlayerManager.getOtherPlayer(player);
 		List<Field> possibleFields = getPossibleFields(otherPlayer);
+		
+		//the board is cloned and put in the TreeNode structure to determine the further moves afterwards
 		TreeNode<Board> child = new TreeNode<Board>(actualBoard.clone(), possibleFields);
 		node.addChild(child);
 		
+		//if we are in a leaf, we have to calculate the value for the situation on this leaf
+		//a switch is made for hard or medium calculation
 		if (depth == 0 || calculateRestMoves(actualBoard) == 0 || possibleFields.size() == 0) {
 			if(strengthHard){
 				int value = calculateSituationHardStrength(actualBoard);
@@ -327,37 +408,48 @@ public class MoveHandler {
 			
 		}
 
-		
-		
+		//here it is iterated over all possible moves that can be made in this node's situation
 		for (Field field : child.getPossibleMoves()) {
+			//if the player in this node is the computer, do the maximizing
 			if (player == PlayerManager.getActivePlayer()) {
 				// sysouts
 				printBoard(actualBoard, player);
 				
+				//again the fields has to be cloned to save the original
 				child.setField(field.clone());
 				alpha = Math.max(alpha, alphaBeta(alpha, beta, depth - 1, PlayerManager.getOtherPlayer(player), child, strengthHard));
+				
+				//here, the beta pruning takes place according to presetting
 				if (alpha >= beta) {
 //					System.out.println("Beta Cut Off");
 					return alpha; // beta cut-off
 				}
 			}
+			//if the player in this node is the human, do the minimizing
 			else {
 				// sysouts
 				printBoard(actualBoard, player);
 
+				//again the fields has to be cloned to save the original
 				child.setField(field.clone());
 				beta = Math.min(beta, alphaBeta(alpha, beta, depth - 1, PlayerManager.getOtherPlayer(player), child, strengthHard));
+				
+				//here, the alpha pruning takes place according to presetting
 				if (alpha >= beta) {
 //					System.out.println("Alpha Cut Off");
 					return beta; // beta cut-off
 				}
 			}
 		}
+		
+		//to save (lots!!!) of memory, all the no more needed objects are nulled
 		f = null;
 		hitFields = null;
 		child = null;
 		node = null;
 		actualBoard = null;
+		
+		//here, depending on the active player, alpha or beta is returned.
 		if (player == PlayerManager.getActivePlayer()){
 			return alpha;
 		}
@@ -367,6 +459,14 @@ public class MoveHandler {
 		
 	}
 
+	/**
+	 * Here, the calculation for the difficulty medium takes place. mainly, it just counts the black and
+	 * white stones and adds them up against each other (go for the most possible stones of his own)
+	 *  
+	 * @param the board that has to be calculated
+	 * 
+	 * @return integer value that shows how good the prognose is for the given board
+	 */
 	private static int calculateSituationMediumStrength(Board board){
 		int situationValue = 0;
 		Field field[][] = board.getFields();
@@ -384,6 +484,16 @@ public class MoveHandler {
 		return situationValue;
 	}
 
+	/**
+	 * Here, the calculation for the difficulty hard takes place. it uses the methods getBeginningValue 
+	 * to calculate the beginning moves, the getMidgameValue to calculate the midgame values and the
+	 * method calculateSituationMediumStrength to calculate the endgame (as the medium calculation wants
+	 * to have the most stones on the field, this is perfectly suitable)
+	 *  
+	 * @param the board that has to be calculated
+	 * 
+	 * @return integer value that shows how good the prognose is for the given board
+	 */
 	private static int calculateSituationHardStrength(Board board){
 		int situationValue = 0;
 		Field field[][] = board.getFields();
@@ -416,6 +526,9 @@ public class MoveHandler {
 	
 	/**
 	 * gets the value for the time as everything is in the sweet sixteen
+	 * 
+	 * @param the board that has to be calculated
+	 * 
 	 * @return integer situation strength
 	 */
 	private static int getBeginningValue(Board board){
@@ -437,17 +550,26 @@ public class MoveHandler {
 		
 	}
 	
+	/**
+	 * calculates the value if the game is in midgame. several fields have special characters which are weighted
+	 * and therefore factorized into the calculation.
+	 * 
+	 * @param the board that has to be calculated
+	 * 
+	 * @return integer situation strength
+	 */
 	private static int getMidgameValue(Board board){
 		Field field[][] = board.getFields();
 		int situationValue = 0;
 		
-		int addFactorCorner = 40;//Corners are vital, so it is multiplicated with a high value
+		int addFactorCorner = 40;//Corners are vital, so it is added up with a high value
 		int addFactorDiagonalCorner = -20;//diagonal Corner fields are ugly to play, a little poisoning here
 		int addFactorPreCorner = -10;//playing just before the corner gives the opponent the possibility to get
-												//the corner, so a little poisoning as well.
+									//the corner, so a little poisoning as well.
 		int addFactorEdge = 20;//An edgeField gives a little advantage in the game
 		int addFactorPreEdge = -10;//placing before the edge gives the opponent a good possibility -> small poisoning value
 		
+		//we have to step over every field of the board
 		for (int i = 0; i < 8; i++) {			
 			for (int j = 0; j < 8; j++) {
 				//heuristic of midgame
@@ -821,6 +943,7 @@ public class MoveHandler {
 	
 	/**
 	 * Calculates, how many BlackStones are on the field
+	 * 
 	 * @return integer of black Stones on the field 
 	 */
 	private static int getNumberOfBlackStones(Board board){
@@ -840,6 +963,7 @@ public class MoveHandler {
 
 	/**
 	 * Calculates, how many moves can be made till the end of the game
+	 * 
 	 * @return integer of moves left
 	 */
 	private static int calculateRestMoves(Board board){
@@ -858,8 +982,9 @@ public class MoveHandler {
 	}
 	
 	/**
-	 * Checks if one of the four (16) corner Fields are hit
-	 * @return boolean true if a CornerField ist hit
+	 * Checks if one of the four (16) corner Fields are occupied (determination of midgame or endgame)
+	 * 
+	 * @return boolean true if a CornerField is occupied
 	 */
 	private static boolean checkForFourCornerFieldHits(Board board){
 		boolean cornerHit = false;
@@ -886,8 +1011,9 @@ public class MoveHandler {
 	}
 	
 	/**
-	 * Checks if one of the four Edges are hit
-	 * @return boolean true if an edge is hit
+	 * Checks if one of the four edges are occupied (determination of midgame or endgame)
+	 * 
+	 * @return boolean true if an edge is occupied
 	 */
 	private static boolean checkForFourEdgesFieldHits(Board board){
 		boolean edgeHit = false;
@@ -914,7 +1040,8 @@ public class MoveHandler {
 	}
 	
 	/**
-	 * Checks if the fields before the Edges are hit
+	 * Checks if the fields before the Edges are occupied
+	 * 
 	 * @return boolean true if an pre-edge is hit
 	 */
 	private static boolean checkForFourPreEdgesFieldHits(Board board){
@@ -941,6 +1068,15 @@ public class MoveHandler {
 		return preEdgeHit;
 	}
 	
+	/**
+	 * This method updates the simBoard with the given fields
+	 * 
+	 * @param board is the board to do the update to
+	 * 
+	 * @param fields is an Arraylist of Fields to get the update values
+	 * 
+	 * @return the updated board
+	 */
 	public static Board updateSimBoard(Board board, ArrayList<Field> fields){
 		Field origFields[][] = board.getFields();
 		for (int i = 0; i< fields.size(); i++){
@@ -950,7 +1086,15 @@ public class MoveHandler {
 		return board;
 	}
 
-	
+	/**
+	 * gets the possible fields to play on. determined by:
+	 * if a field is played and it hits other stones, it's good to play
+	 * but only if it is empty
+	 * 
+	 * @param PlayerI player Interface for determining of which player is on
+	 * 
+	 * @return a List of Fields that can be played by the respective player
+	 */
 	public static List<Field> getPossibleFields(PlayerI player) {
 		List<Field> possibleFields = new ArrayList<Field>();
 		for (int i = 0; i < 8; i++) {
@@ -968,6 +1112,9 @@ public class MoveHandler {
 
 
 	// -------------------- !!! helper methods !!! --------------------
+	/**
+	 * prints out the possible hits
+	 */
 	private static void printPossibleHits(List<Field> possibleHits) {
 		StringBuilder s = new StringBuilder();
 		for (Field field : possibleHits) {
@@ -976,6 +1123,10 @@ public class MoveHandler {
 		}
 		System.out.println(s.toString());
 	}
+	
+	/**
+	 * prints out the board situation, if the program is running in debug mode
+	 */
 	public static void printBoard(Board board, PlayerI player){
 		if (!debug) {
 			return;
@@ -1015,6 +1166,14 @@ public class MoveHandler {
 	
 	
 	// -------------------- !!! private methods !!! --------------------
+	
+	/**
+	 * collects all hits made with the given field and player on the actual board
+	 * 
+	 * @param field is the field played that made the hits possible, player is the player that played the move
+	 * 
+	 * @return an ArrayList of Fields that are hit by the move done in the field variable
+	 */
 	private static ArrayList<Field> getHits(Field field, PlayerI player) {
 		ArrayList<Field> hitFields = new ArrayList<Field>();
 		hitFields.addAll(hitBottomLeft(field, player));
@@ -1641,6 +1800,7 @@ public class MoveHandler {
 
 	/**
 	 * Returns an ArrayList of Fields, which represents the beaten stones in bottom direction 
+	 * 
 	 * @return ArrayList of Fields which stones are beaten
 	 */
 	
@@ -1659,6 +1819,7 @@ public class MoveHandler {
 
 	/**
 	 * Returns an ArrayList of Fields, which represents the beaten stones in bottom left direction 
+	 * 
 	 * @return ArrayList of Fields which stones are beaten
 	 */
 	
@@ -1676,6 +1837,7 @@ public class MoveHandler {
 	}
 	/**
 	 * Returns an ArrayList of Fields, which represents the beaten stones in left direction 
+	 * 
 	 * @return ArrayList of Fields which stones are beaten
 	 */
 	
@@ -1694,6 +1856,7 @@ public class MoveHandler {
 	
 	/**
 	 * Returns an ArrayList of Fields, which represents the beaten stones in top left direction 
+	 * 
 	 * @return ArrayList of Fields which stones are beaten
 	 */
 	
@@ -1712,6 +1875,7 @@ public class MoveHandler {
 	
 	/**
 	 * Returns an ArrayList of Fields, which represents the beaten stones in top direction 
+	 * 
 	 * @return ArrayList of Fields which stones are beaten
 	 */
 	
@@ -1729,7 +1893,8 @@ public class MoveHandler {
 	}
 	
 	/**
-	 * Returns an ArrayList of Fields, which represents the beaten stones in top right direction 
+	 * Returns an ArrayList of Fields, which represents the beaten stones in top right direction
+	 *  
 	 * @return ArrayList of Fields which stones are beaten
 	 */
 	
@@ -1748,6 +1913,7 @@ public class MoveHandler {
 	
 	/**
 	 * Returns an ArrayList of Fields, which represents the beaten stones in right direction 
+	 * 
 	 * @return ArrayList of Fields which stones are beaten
 	 */
 	
@@ -1765,6 +1931,7 @@ public class MoveHandler {
 	}
 	/**
 	 * Returns an ArrayList of Fields, which represents the beaten stones in bottom right direction 
+	 * 
 	 * @return ArrayList of Fields which stones are beaten
 	 */
 	
