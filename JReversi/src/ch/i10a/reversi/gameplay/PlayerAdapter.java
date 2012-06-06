@@ -20,6 +20,7 @@ public abstract class PlayerAdapter implements PlayerI {
 	/**
 	 * Updates the stones count by adding <code>count</code> to the actual
 	 * number of stones owned by this player.
+	 * 
 	 * @param count
 	 */
 	public void updateStonesCount(int count) {
@@ -28,15 +29,27 @@ public abstract class PlayerAdapter implements PlayerI {
 	/**
 	 * Updates the stones count by setting the
 	 * number of stones owned by this player.
+	 * 
 	 * @param count
 	 */
 	public void setStonesCount(int count){
 		stonesCount = count;
 	}
 
+	/**
+	 * setter for the board
+	 * 
+	 * @param board
+	 */
 	public void setBoard(Board board) {
 		this.board = board;
 	}
+	
+	/**
+	 * getter for the board
+	 * 
+	 * @return board
+	 */
 	public Board getBoard() {
 		return board;
 	}
