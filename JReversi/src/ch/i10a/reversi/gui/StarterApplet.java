@@ -321,7 +321,7 @@ public class StarterApplet extends JApplet {
 	 * Player One (Black Player)
 	 */
 	private class PlayerOneInfoPane extends JPanel {
-		JLabel playerLabel = GuiUtil.getLabel("Player 1",300, 1 * 25);
+		JLabel playerLabel = GuiUtil.getLabel("White Player",300, 1 * 25);
 		JLabel passLabel = GuiUtil.getLabel("", 300, 1*25);
 		JLabel stonesLabel = GuiUtil.getLabel("Stones: " + PlayerManager.getWhitePlayer().getStonesCount(), 300, 1*25);
 		JLabel moveLabel = GuiUtil.getLabel("Last Move: ", 300, 1*25);
@@ -351,7 +351,7 @@ public class StarterApplet extends JApplet {
 		 * @param prefix for the player 1
 		 */
 		public void setPlayerLabelText(String prefix) {
-			playerLabel.setText(prefix + "Player 1");
+			playerLabel.setText(prefix + "White Player");
 		}
 
 		/**
@@ -388,7 +388,7 @@ public class StarterApplet extends JApplet {
 	 */
 	private class PlayerTwoInfoPane extends JPanel {
 		
-		JLabel playerLabel = GuiUtil.getLabel("Player 2",300, 1 * 25);
+		JLabel playerLabel = GuiUtil.getLabel("Black Player",300, 1 * 25);
 		JLabel passLabel = GuiUtil.getLabel("", 300, 1*25);
 		JLabel stonesLabel = GuiUtil.getLabel("Stones: " + PlayerManager.getBlackPlayer().getStonesCount(), 300, 1*25);
 		JLabel moveLabel = GuiUtil.getLabel("Last Move: ", 300, 1*25);
@@ -416,7 +416,7 @@ public class StarterApplet extends JApplet {
 		 * @param prefix for the player 2
 		 */
 		public void setPlayerLabelText(String prefix) {
-			playerLabel.setText(prefix + "Player 2");
+			playerLabel.setText(prefix + "Black Player");
 		}
 
 		/**
