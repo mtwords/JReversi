@@ -8,7 +8,18 @@ Import into Eclipse IDE
 -----------------------
 Using Import Wizard: "File" -> "Import..." -> "Existings Projects into Workspace" then select root folder "JReversi"
 
+Importent notes
+---------------
+You should run the applet by using the following VM-Arguments:
+
+-Xmx512m -XX:+UseParallelGC
+
+You can achieve this by adding them to your launch configuration in the "arguments" tab, Section "VM arguments".
+
 Play the game
 --------------
-Start the StarterApplet
+Start the StarterApplet.
 
+Git-Hub link
+------------
+https://github.com/mtwords/JReversi
